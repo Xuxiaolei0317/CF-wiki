@@ -256,7 +256,7 @@
       
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
-    注意
+    问题
   </a>
   
 </li>
@@ -353,7 +353,7 @@
       
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
-    注意
+    问题
   </a>
   
 </li>
@@ -399,24 +399,11 @@
                 
                 
                 <h1 id="_1">编辑技巧<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<h2 id="_2">注意<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_2">问题<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ol>
-<li>
-<p>缩进，以下的内容中有两个tab，MathJax无法将其识别为多行公式，会变为一行。
-<div class="highlight"><pre><span></span><code>- 默认不使用编号
-    <span class="sb">```</span>latex
-    <span class="nv">$$</span>
-    <span class="se">\b</span>egin<span class="o">{</span>aligned<span class="o">}</span>
-    <span class="m">1</span> <span class="p">&amp;</span><span class="o">=</span> <span class="m">2</span> <span class="se">\\</span>
-    <span class="m">3</span> <span class="p">&amp;</span><span class="o">=</span> <span class="m">4</span>
-    <span class="se">\e</span>nd<span class="o">{</span>aligned<span class="o">}</span>
-    <span class="nv">$$</span>
-    <span class="sb">```</span>
-</code></pre></div></p>
-</li>
-<li>
-<p>代码块无法指定语言，如(Python).</p>
-</li>
+<li>在主题<code>rtd-dropdown</code>(需安装<code>mkdocs-rtd-dropdown</code>包)环境下，无法识别行间代码块，缩放功能和指定编程语言功能都失效。</li>
+<li>解决方案：
+切换为<code>material</code>主题(需安装<code>mkdocs-material</code>包)</li>
 </ol>
 <h2 id="_3">代码块<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>需要依赖模块：<code>pymdownx.inlinehilite</code></p>
