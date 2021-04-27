@@ -99,10 +99,15 @@
         </li>
     
       
+        <li class="toctree-l3">
+          <a class="toctree-l4" href="#_3">代码块</a>
+        </li>
+    
+      
           
 
   <li class="toctree-l3">
-    <a href="#_3">
+    <a href="#_4">
       数学公式
       <span class="toctree-expand"></span>
     </a>
@@ -115,7 +120,7 @@
     
       
         <li class="toctree-l4">
-          <a class="toctree-l5" href="#_4">多行公式</a>
+          <a class="toctree-l5" href="#_5">多行公式</a>
         </li>
     
     </ul>
@@ -182,39 +187,45 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="_1">编辑技巧</h1>
-<h2 id="_2">注意</h2>
+                <h1 id="_1">编辑技巧<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="_2">注意<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ol>
-<li>缩进，以下的内容中有两个tab，MathJax无法将其识别为多行公式，会变为一行。</li>
+<li>
+<p>缩进，以下的内容中有两个tab，MathJax无法将其识别为多行公式，会变为一行。
+<div class="highlight"><pre><span></span><code>- 默认不使用编号
+    <span class="sb">```</span>latex
+    <span class="nv">$$</span>
+    <span class="se">\b</span>egin<span class="o">{</span>aligned<span class="o">}</span>
+    <span class="m">1</span> <span class="p">&amp;</span><span class="o">=</span> <span class="m">2</span> <span class="se">\\</span>
+    <span class="m">3</span> <span class="p">&amp;</span><span class="o">=</span> <span class="m">4</span>
+    <span class="se">\e</span>nd<span class="o">{</span>aligned<span class="o">}</span>
+    <span class="nv">$$</span>
+    <span class="sb">```</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>代码块无法指定语言，如(Python).</p>
+</li>
 </ol>
-<pre><code class="language-shell">- 默认不使用编号
-    ```latex
-    $$
-    \begin{aligned}
-    1 &amp;= 2 \\
-    3 &amp;= 4
-    \end{aligned}
-    $$
-    ```
-</code></pre>
-<ol>
-<li>代码块无法指定语言，如(Python).</li>
-</ol>
-<h2 id="_3">数学公式</h2>
-<h3 id="_4">多行公式</h3>
+<h2 id="_3">代码块<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>需要依赖模块：<code>pymdownx.inlinehilite</code></p>
+<h2 id="_4">数学公式<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<h3 id="_5">多行公式<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <ul>
-<li>默认不使用编号</li>
-</ul>
-<pre><code>$$
+<li>
+<p>默认不使用编号
+<div class="highlight"><pre><span></span><code>$$
 \begin{aligned}
 1 &amp;= 2 \\
 3 &amp;= 4
 \end{aligned}
 $$
-</code></pre>
-<ul>
-<li>默认编号
-  改为<code>align</code></li>
+</code></pre></div></p>
+</li>
+<li>
+<p>默认编号
+  改为<code>align</code></p>
+</li>
 </ul>
               
             </div>
