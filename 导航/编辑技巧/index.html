@@ -94,10 +94,15 @@
     <ul class="subnav-l2 current">
     
       
+        <li class="toctree-l3">
+          <a class="toctree-l4" href="#_2">注意</a>
+        </li>
+    
+      
           
 
-  <li class="toctree-l3 current with-children">
-    <a href="#_2">
+  <li class="toctree-l3">
+    <a href="#_3">
       数学公式
       <span class="toctree-expand"></span>
     </a>
@@ -105,12 +110,12 @@
 
 
 
-  <li class="toctree-l3 current">
-    <ul class="subnav-l3 current">
+  <li class="toctree-l3">
+    <ul class="subnav-l3 toc-hidden">
     
       
         <li class="toctree-l4">
-          <a class="toctree-l5" href="#_3">多行公式</a>
+          <a class="toctree-l5" href="#_4">多行公式</a>
         </li>
     
     </ul>
@@ -178,23 +183,36 @@
             <div class="section">
               
                 <h1 id="_1">编辑技巧</h1>
-<h2 id="_2">数学公式</h2>
-<h3 id="_3">多行公式</h3>
+<h2 id="_2">注意</h2>
+<ol>
+<li>缩进，以下的内容中有两个tab，MathJax无法将其识别为多行公式，会变为一行。</li>
+</ol>
+<pre><code class="language-shell">- 默认不使用编号
+    ```latex
+    $$
+    \begin{aligned}
+    1 &amp;= 2 \\
+    3 &amp;= 4
+    \end{aligned}
+    $$
+    ```
+
+</code></pre>
+<h2 id="_3">数学公式</h2>
+<h3 id="_4">多行公式</h3>
 <ul>
-<li>
-<p>默认不使用编号
-  <code>latex
-  $$
-  \begin{aligned}
-  1 &amp;= 2 \\
-  3 &amp;= 4
-  \end{aligned}
-  $$</code></p>
-</li>
-<li>
-<p>默认编号
-  改为<code>align</code></p>
-</li>
+<li>默认不使用编号</li>
+</ul>
+<pre><code class="language-latex">$$
+\begin{aligned}
+1 &amp;= 2 \\
+3 &amp;= 4
+\end{aligned}
+$$
+</code></pre>
+<ul>
+<li>默认编号
+  改为<code>align</code></li>
 </ul>
               
             </div>
