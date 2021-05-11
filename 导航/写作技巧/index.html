@@ -846,12 +846,14 @@
 \end{document}
 </code></pre>
 <h3 id="_5">文章结构</h3>
-<p>在文档类<code>article</code>/<code>cetexart</code>中
-- <code>\section{·}</code>
-- <code>\subsection{·}</code>
-- <code>\subsubsection{·}</code>
-- <code>\paragraph{·}</code>
-- <code>\subparagraph{·}</code></p>
+<p>在文档类<code>article</code>/<code>cetexart</code>中</p>
+<ul>
+<li><code>\section{·}</code></li>
+<li><code>\subsection{·}</code></li>
+<li><code>\subsubsection{·}</code></li>
+<li><code>\paragraph{·}</code></li>
+<li><code>\subparagraph{·}</code></li>
+</ul>
 <h3 id="_6">文章目录</h3>
 <p>插入<code>\tableofcontents</code>，并用XeLaTeX编译<strong>两次</strong>。</p>
 <h3 id="_7">列表</h3>
@@ -880,9 +882,11 @@
 <p><code>\includegraphics[width = .8\textwidth]{a.jpg}</code>
 - <code>.8\textwidth</code>：表示页面宽度的百分之八十。</p>
 <h3 id="_12">浮动体</h3>
-<p>图像和表格通常需要占据大块空间，需要对<code>figure</code>和<code>table</code>环境进行设置，让其自动调整位置。
-- <code>htb</code>分别表示here, top, bottom，以h-t-b的顺序，使得latex尽量满足排在前面的浮动格式
-- 还可以使用<code>float</code>宏包的<code>H</code>选项，强制放在当前段落后。放不下的话，需要手动调整。</p>
+<p>图像和表格通常需要占据大块空间，需要对<code>figure</code>和<code>table</code>环境进行设置，让其自动调整位置。</p>
+<ul>
+<li><code>htb</code>分别表示here, top, bottom，以h-t-b的顺序，使得latex尽量满足排在前面的浮动格式</li>
+<li>还可以使用<code>float</code>宏包的<code>H</code>选项，强制放在当前段落后。放不下的话，需要手动调整。</li>
+</ul>
 <pre><code class="language-latex">\begin{figure}[htb]
 \centering
 \includegraphics{a.jpg}
@@ -926,9 +930,11 @@
 <p>参考：
 1. <a href="https://blog.csdn.net/weixin_43891208/article/details/105539799">如何使用Latex将四幅图跨栏排列</a></p>
 <h2 id="_14">插入表格</h2>
-<p>使用<code>tabular</code>环境
-- 第一行中，<code>|</code>表示列上的竖线，<code>l</code>,<code>c</code>,<code>r</code>表示该列是向左、居中还是向右对齐。
-- <code>\hline</code>表示横线，</p>
+<p>使用<code>tabular</code>环境</p>
+<ul>
+<li>第一行中，<code>|</code>表示列上的竖线，<code>l</code>,<code>c</code>,<code>r</code>表示该列是向左、居中还是向右对齐。</li>
+<li><code>\hline</code>表示横线，</li>
+</ul>
 <pre><code class="language-latex">\begin{tabular}{|l|c|r|}
  \hline
 操作系统&amp; 发行版&amp; 编辑器\\
