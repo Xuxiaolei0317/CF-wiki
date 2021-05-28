@@ -486,6 +486,46 @@
       
         <li class="md-nav__item">
   <a href="#_19" class="md-nav__link">
+    插入代码块
+  </a>
+  
+    <nav class="md-nav" aria-label="插入代码块">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    论文中的伪代码
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    程序代码
+  </a>
+  
+    <nav class="md-nav" aria-label="程序代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    多行
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_23" class="md-nav__link">
     版面设置
   </a>
   
@@ -493,7 +533,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_20" class="md-nav__link">
+  <a href="#_24" class="md-nav__link">
     页边距
   </a>
   
@@ -505,7 +545,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_21" class="md-nav__link">
+  <a href="#_25" class="md-nav__link">
     引用
   </a>
   
@@ -513,7 +553,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_22" class="md-nav__link">
+  <a href="#_26" class="md-nav__link">
     图片引用
   </a>
   
@@ -525,7 +565,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_23" class="md-nav__link">
+  <a href="#_27" class="md-nav__link">
     彩色文本框
   </a>
   
@@ -784,6 +824,46 @@
       
         <li class="md-nav__item">
   <a href="#_19" class="md-nav__link">
+    插入代码块
+  </a>
+  
+    <nav class="md-nav" aria-label="插入代码块">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_20" class="md-nav__link">
+    论文中的伪代码
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_21" class="md-nav__link">
+    程序代码
+  </a>
+  
+    <nav class="md-nav" aria-label="程序代码">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_22" class="md-nav__link">
+    多行
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_23" class="md-nav__link">
     版面设置
   </a>
   
@@ -791,7 +871,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_20" class="md-nav__link">
+  <a href="#_24" class="md-nav__link">
     页边距
   </a>
   
@@ -803,7 +883,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_21" class="md-nav__link">
+  <a href="#_25" class="md-nav__link">
     引用
   </a>
   
@@ -811,7 +891,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_22" class="md-nav__link">
+  <a href="#_26" class="md-nav__link">
     图片引用
   </a>
   
@@ -823,7 +903,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_23" class="md-nav__link">
+  <a href="#_27" class="md-nav__link">
     彩色文本框
   </a>
   
@@ -1029,21 +1109,64 @@
 <span class="nb">x,</span><span class="nv">\quad</span><span class="nb"> x&gt;</span><span class="m">0</span><span class="nb"></span>
 <span class="nv">\end</span><span class="nb">{cases} </span><span class="s">\]</span>
 </code></pre></div></p>
-<h2 id="_19">版面设置<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h2>
-<h3 id="_20">页边距<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
+<h2 id="_19">插入代码块<a class="headerlink" href="#_19" title="Permanent link">&para;</a></h2>
+<h3 id="_20">论文中的伪代码<a class="headerlink" href="#_20" title="Permanent link">&para;</a></h3>
+<h3 id="_21">程序代码<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h3>
+<h4 id="_22">多行<a class="headerlink" href="#_22" title="Permanent link">&para;</a></h4>
+<p><del>默认可以使用verbatim环境展示代码，</del> 通常使用<code>listings</code>包中的<code>lstlisting</code>环境来显示。</p>
+<p>导言区设置样式
+<div class="highlight"><pre><span></span><code><span class="k">\usepackage</span><span class="nb">{</span>listings<span class="nb">}</span> <span class="c">%导入包</span>
+
+<span class="k">\definecolor</span><span class="nb">{</span>codebrown<span class="nb">}{</span>rgb<span class="nb">}{</span>0.8,0.44,0.2<span class="nb">}</span>
+<span class="k">\definecolor</span><span class="nb">{</span>codegray<span class="nb">}{</span>rgb<span class="nb">}{</span>0.5,0.5,0.5<span class="nb">}</span>
+<span class="k">\definecolor</span><span class="nb">{</span>codepurple<span class="nb">}{</span>rgb<span class="nb">}{</span>0.58,0,0.82<span class="nb">}</span>
+<span class="k">\definecolor</span><span class="nb">{</span>backcolour<span class="nb">}{</span>rgb<span class="nb">}{</span>0.95,0.95,0.92<span class="nb">}</span>
+
+<span class="k">\lstdefinestyle</span><span class="nb">{</span>mystyle<span class="nb">}{</span>
+    backgroundcolor=<span class="k">\color</span><span class="nb">{</span>backcolour<span class="nb">}</span>,   
+    commentstyle=<span class="k">\color</span><span class="nb">{</span>codebrown<span class="nb">}</span>,
+    keywordstyle=<span class="k">\color</span><span class="nb">{</span>magenta<span class="nb">}</span>,
+    numberstyle=<span class="k">\tiny\color</span><span class="nb">{</span>codegray<span class="nb">}</span>,
+    stringstyle=<span class="k">\color</span><span class="nb">{</span>codepurple<span class="nb">}</span>,
+    basicstyle=<span class="k">\ttfamily\footnotesize</span>,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                 
+    <span class="c">% numbersep=5pt,</span>
+    <span class="c">% numbers=none,</span>
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    xleftmargin=0.1<span class="k">\textwidth</span>,
+    xrightmargin=0.1<span class="k">\textwidth</span>
+<span class="nb">}</span>
+<span class="k">\lstset</span><span class="nb">{</span>style=mystyle<span class="nb">}</span>
+</code></pre></div></p>
+<p>样例代码
+<div class="highlight"><pre><span></span><code><span class="k">\begin</span><span class="nb">{</span>lstlisting<span class="nb">}</span>[language=Python, title=XXX]
+    code...
+<span class="k">\end</span><span class="nb">{</span>lstlisting<span class="nb">}</span>
+</code></pre></div></p>
+<p>参考：<a href="https://www.overleaf.com/learn/latex/Code_listing">https://www.overleaf.com/learn/latex/Code_listing</a></p>
+<h2 id="_23">版面设置<a class="headerlink" href="#_23" title="Permanent link">&para;</a></h2>
+<h3 id="_24">页边距<a class="headerlink" href="#_24" title="Permanent link">&para;</a></h3>
 <p>使用<code>geometry</code>宏包。
 <div class="highlight"><pre><span></span><code><span class="k">\usepackage</span><span class="nb">{</span>geometry<span class="nb">}</span>
 <span class="c">% \geometry{papersize={20cm,15cm}} %设置页面大小</span>
 <span class="k">\geometry</span><span class="nb">{</span>left=1cm,right=2cm,top=3cm,bottom=4cm<span class="nb">}</span>
 </code></pre></div></p>
-<h2 id="_21">引用<a class="headerlink" href="#_21" title="Permanent link">&para;</a></h2>
-<h3 id="_22">图片引用<a class="headerlink" href="#_22" title="Permanent link">&para;</a></h3>
-<h2 id="_23">彩色文本框<a class="headerlink" href="#_23" title="Permanent link">&para;</a></h2>
+<h2 id="_25">引用<a class="headerlink" href="#_25" title="Permanent link">&para;</a></h2>
+<h3 id="_26">图片引用<a class="headerlink" href="#_26" title="Permanent link">&para;</a></h3>
+<h2 id="_27">彩色文本框<a class="headerlink" href="#_27" title="Permanent link">&para;</a></h2>
 <p>参考
 1. <a href="https://liam.page/2016/07/22/using-the-tcolorbox-package-to-create-a-new-theorem-environment/">LaTeX 黑魔法（一）：tcolorbox 宏包简明教程</a></p>
 <hr />
 <p>参考：
-1. <a href="https://liam.page/2014/09/08/latex-introduction/#TeX_%E5%AE%B6%E6%97%8F">一份其实很短的 LaTeX 入门文档</a> 强烈推荐！</p>
+1. <a href="https://liam.page/2014/09/08/latex-introduction/#TeX_%E5%AE%B6%E6%97%8F">一份其实很短的 LaTeX 入门文档</a> 强烈推荐！
+2. <a href="https://ctan.org/tex-archive/info/lshort/chinese">The Not So Short Introduction To LATEX (Chinese Edition), v6.02</a></p>
                 
               
               
