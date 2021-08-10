@@ -584,20 +584,34 @@
         
           <li class="md-nav__item">
   <a href="#_9" class="md-nav__link">
-    列操作
+    索引操作
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_10" class="md-nav__link">
-    保存和读取
+    行操作
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_11" class="md-nav__link">
+    列操作
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    保存和读取
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
     多表操作
   </a>
   
@@ -865,20 +879,34 @@
         
           <li class="md-nav__item">
   <a href="#_9" class="md-nav__link">
-    列操作
+    索引操作
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_10" class="md-nav__link">
-    保存和读取
+    行操作
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#_11" class="md-nav__link">
+    列操作
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    保存和读取
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
     多表操作
   </a>
   
@@ -1072,14 +1100,28 @@
 <h3 id="_8">数据统计<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <p>1.<code>df.describe()</code>: 查看每列的mean,sum, %.
 2.<code>df["column name"].value_counts()</code>: 查看指定列每个值出现的频数。</p>
-<h3 id="_9">列操作<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<h3 id="_9">索引操作<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<p>1.得到表中满足要求数据的索引，并将其从所有索引中去除。</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_index</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;watch_label&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="n">remain_index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">train_index</span><span class="p">)</span>
+</code></pre></div>
+<p>2.Index索引对象的集合操作
+- 交集: <code>intersection()</code>
+- 差集: <code>difference()</code>
+- 并集: <code>union()</code></p>
+<p>3.根据索引获得数据
+<div class="highlight"><pre><span></span><code><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="c1"># 行上根据索引获取数据</span>
+</code></pre></div></p>
+<h3 id="_10">行操作<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p>1.行采样: <code>df.sample(n=80000, replace=False, random_state=2021, axis=0)</code></p>
+<h3 id="_11">列操作<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
 <p>1.<code>eval</code>能使多个列进行四则运算和逻辑运算，结果产生为新的列: <code>df.eval("new_col_name = col_A_name or col_B_name")</code></p>
 <p>2.去除指定列: <code>df.drop("is_collect",axis=1)</code></p>
 <p>3.合并多个相同列的DataFrame: <code>pd.concat(df_list)</code></p>
-<h3 id="_10">保存和读取<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
-<p>1.保存: <code>df.to_csv("./history.csv")</code>
-2.读取: <code>df = pd.read_csv("a.csv", delimiter=",", index_col=0)</code></p>
-<h3 id="_11">多表操作<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<h3 id="_12">保存和读取<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<p>1.保存: <code>df.to_csv("./history.csv")</code></p>
+<p>2.读取: <code>df = pd.read_csv("a.csv", delimiter=",", index_col=0)</code></p>
+<h3 id="_13">多表操作<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
 <p>1.<code>merge</code>函数: <code>df_1</code>和<code>df_2</code>中都有<code>id</code>属性，以<code>df_1</code>为主表，将<code>df_2</code>对应的<code>id</code>的特征合并入<code>df_1</code>: <code>df_1 = pd.merge(df_1, df_2, how="left", on="id")</code></p>
                 
               
