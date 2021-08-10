@@ -280,6 +280,18 @@
   
   
     <li class="md-nav__item">
+      <a href="../../%E5%AF%BC%E8%88%AA/Docker/" class="md-nav__link">
+        Docker手册
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../%E5%AF%BC%E8%88%AA/%E5%86%99%E4%BD%9C%E6%8A%80%E5%B7%A7/" class="md-nav__link">
         写作技巧
       </a>
@@ -555,6 +567,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pandas" class="md-nav__link">
+    Pandas指南
+  </a>
+  
+    <nav class="md-nav" aria-label="Pandas指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    数据统计
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    列操作
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    保存和读取
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    多表操作
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -795,6 +848,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#pandas" class="md-nav__link">
+    Pandas指南
+  </a>
+  
+    <nav class="md-nav" aria-label="Pandas指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    数据统计
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    列操作
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    保存和读取
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    多表操作
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -974,6 +1068,19 @@
 <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </code></pre></div></p>
+<h2 id="pandas">Pandas指南<a class="headerlink" href="#pandas" title="Permanent link">&para;</a></h2>
+<h3 id="_8">数据统计<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>1.<code>df.describe()</code>: 查看每列的mean,sum, %.
+2.<code>df["column name"].value_counts()</code>: 查看指定列每个值出现的频数。</p>
+<h3 id="_9">列操作<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<p>1.<code>eval</code>能使多个列进行四则运算和逻辑运算，结果产生为新的列: <code>df.eval("new_col_name = col_A_name or col_B_name")</code></p>
+<p>2.去除指定列: <code>df.drop("is_collect",axis=1)</code></p>
+<p>3.合并多个相同列的DataFrame: <code>pd.concat(df_list)</code></p>
+<h3 id="_10">保存和读取<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p>1.保存: <code>df.to_csv("./history.csv")</code>
+2.读取: <code>df = pd.read_csv("a.csv", delimiter=",", index_col=0)</code></p>
+<h3 id="_11">多表操作<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>1.<code>merge</code>函数: <code>df_1</code>和<code>df_2</code>中都有<code>id</code>属性，以<code>df_1</code>为主表，将<code>df_2</code>对应的<code>id</code>的特征合并入<code>df_1</code>: <code>df_1 = pd.merge(df_1, df_2, how="left", on="id")</code></p>
                 
               
               
