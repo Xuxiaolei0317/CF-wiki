@@ -222,6 +222,18 @@
   
   
     <li class="md-nav__item">
+      <a href="../%E6%96%87%E6%A1%A3%E5%AF%BC%E8%88%AA/" class="md-nav__link">
+        文档导航
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../%E7%BC%96%E8%BE%91%E6%8A%80%E5%B7%A7/" class="md-nav__link">
         编辑技巧
       </a>
@@ -507,6 +519,13 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rm" class="md-nav__link">
+    将rm改为把文件放入回收站
+  </a>
   
 </li>
         
@@ -870,6 +889,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#rm" class="md-nav__link">
+    将rm改为把文件放入回收站
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1045,6 +1071,21 @@ ssl_verify: false
 </code></pre></div></p>
 <h4 id="5-jupyter-lab">5. 设置远程访问的Jupyter lab<a class="headerlink" href="#5-jupyter-lab" title="Permanent link">&para;</a></h4>
 <p>参考：<a href="https://zhuanlan.zhihu.com/p/64524822">https://zhuanlan.zhihu.com/p/64524822</a></p>
+<h3 id="rm">将rm改为把文件放入回收站<a class="headerlink" href="#rm" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">alias</span> <span class="nv">rm</span><span class="o">=</span>trash
+<span class="nb">alias</span> <span class="nv">rl</span><span class="o">=</span><span class="s1">&#39;ls ~/.local/share/Trash/files/&#39;</span>
+trash<span class="o">(){</span>
+    <span class="nv">del_date</span><span class="o">=</span><span class="sb">`</span>date +%Y%m%d%H%M%S<span class="sb">`</span>
+    <span class="c1"># 循环是因为可能rm多个文件</span>
+    <span class="k">for</span> arg <span class="k">in</span> <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+    <span class="k">do</span>
+       <span class="c1"># 这里将删除时间加入到文件名后是因为mv命令不能覆盖非空目录以及不能使用文件覆盖文件夹</span>
+       <span class="c1"># 加上时间就不会有同名的文件了</span>
+       mv <span class="nv">$arg</span> ~/.local/share/Trash/files/<span class="si">${</span><span class="nv">del_date</span><span class="si">}</span>-<span class="si">${</span><span class="nv">arg</span><span class="p">##*/</span><span class="si">}</span>
+    <span class="k">done</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>再使用<code>source ~/.bashrc</code>进行刷新。</p>
 <h2 id="_13">系统管理<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
 <h3 id="_14">创建用户和删除用户<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
 <p>参考：<a href="https://blog.csdn.net/weixin_44633882/article/details/115104794">https://blog.csdn.net/weixin_44633882/article/details/115104794</a></p>
