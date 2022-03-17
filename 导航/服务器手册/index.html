@@ -1005,6 +1005,9 @@
 <p>查看CPU型号
 <div class="highlight"><pre><span></span><code>cat /proc/cpuinfo <span class="p">|</span> grep <span class="s1">&#39;model name&#39;</span> <span class="p">|</span>uniq
 </code></pre></div></p>
+<p>查看显卡信息
+<div class="highlight"><pre><span></span><code>lspci <span class="p">|</span> grep -i nvidia
+</code></pre></div></p>
 <h3 id="_6">查看内存或硬盘空间<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
 <ul>
 <li>查看内存大小: <code>free -g</code></li>
