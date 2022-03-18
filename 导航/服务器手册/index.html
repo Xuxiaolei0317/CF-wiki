@@ -1102,17 +1102,26 @@ e.g.<code>conda create -n py36 python=3.6</code></p>
 <div class="highlight"><pre><span></span><code>conda create -n new --clone old
 </code></pre></div></p>
 <h4 id="4-conda">4. conda换源<a class="headerlink" href="#4-conda" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</a></p>
+</blockquote>
+<p>先确定<code>~/.condarc</code>文件存在，生成方式：<code>conda config --set show_channel_urls yes</code></p>
 <p>linux将<code>~/.condarc</code>改为以下的内容：
 <div class="highlight"><pre><span></span><code>channels:
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/Paddle/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/fastai/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
+  - defaults
 show_channel_urls: true
-ssl_verify: false
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
 </code></pre></div></p>
 <h4 id="5-jupyter-lab">5. 设置远程访问的Jupyter lab<a class="headerlink" href="#5-jupyter-lab" title="Permanent link">&para;</a></h4>
 <p>参考：<a href="https://zhuanlan.zhihu.com/p/64524822">https://zhuanlan.zhihu.com/p/64524822</a></p>
