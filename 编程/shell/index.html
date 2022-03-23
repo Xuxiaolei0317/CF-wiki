@@ -482,21 +482,21 @@ fi
 <p><strong>整数比较</strong>
 |符号|含义|做法|
 | ---- | ---- | ---- |
-|-eq | 等于 |if [ "<span><span class="MathJax_Preview">a" -eq "</span><script type="math/tex">a" -eq "</script></span>b" ] |
-|-ne | 不等于 | if [ "<span><span class="MathJax_Preview">a" -ne "</span><script type="math/tex">a" -ne "</script></span>b" ] |
-|-gt | 大于 | if [ "<span><span class="MathJax_Preview">a" -gt "</span><script type="math/tex">a" -gt "</script></span>b" ] |
-|-ge | 大于等于 | if [ "<span><span class="MathJax_Preview">a" -ge "</span><script type="math/tex">a" -ge "</script></span>b" ] |
-|-lt | 小于 | if [ "<span><span class="MathJax_Preview">a" -lt "</span><script type="math/tex">a" -lt "</script></span>b" ] |
-|-le | 小于等于 | if [ "<span><span class="MathJax_Preview">a" -le "</span><script type="math/tex">a" -le "</script></span>b" ] |
-|&lt;   | 小于(需要双括号) | (("<span><span class="MathJax_Preview">a" &lt; "</span><script type="math/tex">a" < "</script></span>b")) |
-|&lt;=  | 小于等于(需要双括号) | (("<span><span class="MathJax_Preview">a" &lt;= "</span><script type="math/tex">a" <= "</script></span>b")) |
-|&gt;   | 大于(需要双括号) | (("<span><span class="MathJax_Preview">a" &gt; "</span><script type="math/tex">a" > "</script></span>b")) |
-|&gt;=  | 大于等于(需要双括号) | (("<span><span class="MathJax_Preview">a" &gt;= "</span><script type="math/tex">a" >= "</script></span>b")) |</p>
+|-eq | 等于 |<code>if [ "$a" -eq "$b" ]</code> |
+|-ne | 不等于 | <code>if [ "$a" -ne "$b" ]</code> |
+|-gt | 大于 | <code>if [ "$a" -gt "$b" ]</code> |
+|-ge | 大于等于 | <code>if [ "$a" -ge "$b" ]</code> |
+|-lt | 小于 | <code>if [ "$a" -lt "$b" ]</code> |
+|-le | 小于等于 | <code>if [ "$a" -le "$b" ]</code> |
+|&lt;   | 小于(需要双括号) | <code>(("$a" &lt; "$b"))</code> |
+|&lt;=  | 小于等于(需要双括号) | <code>(("$a" &lt;= "$b"))</code> |
+|&gt;   | 大于(需要双括号) | <code>(("$a" &gt; "$b"))</code> |
+|&gt;=  | 大于等于(需要双括号) | <code>(("$a" &gt;= "$b"))</code> |</p>
 <p><strong>字符串比较</strong>
 |符号|含义|做法|
 | ---- | ---- | ---- |
-|= |等于 | if [ "<span><span class="MathJax_Preview">a" = "</span><script type="math/tex">a" = "</script></span>b" ] |
-|== |等于,与=等价 | if [ "<span><span class="MathJax_Preview">a" == "</span><script type="math/tex">a" == "</script></span>b" ] |</p>
+|= |等于 | <code>if [ "$a" = "$b" ]</code> |
+|== |等于,与=等价 | <code>if [ "$a" == "$b" ]</code> |</p>
 <h3 id="_4">飞行指南<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <h4 id="ab">字符串A在字符串B中<a class="headerlink" href="#ab" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="o">[[</span><span class="s2">&quot;*</span><span class="nv">$A</span><span class="s2">*&quot;</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="nv">$B</span><span class="s2">&quot;</span><span class="o">]]</span>
