@@ -8,9 +8,8 @@
       
       
       
-      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.1.3">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.7">
     
     
       
@@ -18,26 +17,28 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.e35208c4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.9d5733d3.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
         
       
     
     
     
       
+        
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
+
     
     
   </head>
@@ -51,7 +52,6 @@
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
   
     
-    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -68,7 +68,10 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+    
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="pocGuide" class="md-header__button md-logo" aria-label="pocGuide" data-md-component="logo">
       
@@ -101,19 +104,22 @@
       <label class="md-header__button md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
       </label>
-      
-<div class="md-search" data-md-component="search" role="dialog">
+      <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-      </button>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -130,11 +136,14 @@
     
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -206,10 +215,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
-      <label class="md-nav__link" for="__nav_3">
-        Guide
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Guide" data-md-level="1">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
@@ -218,6 +231,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -228,8 +242,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -240,8 +256,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -252,8 +270,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -264,8 +284,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -276,8 +298,10 @@
     </li>
   
 
+            
           
             
+              
   
   
     
@@ -299,6 +323,7 @@
       </a>
       
         
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -602,8 +627,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -614,8 +641,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -626,6 +655,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -646,10 +676,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
       
-      <label class="md-nav__link" for="__nav_4">
-        Programming
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Programming
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Programming" data-md-level="1">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
@@ -658,6 +692,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -668,6 +703,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -687,6 +723,7 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -995,76 +1032,77 @@
             <article class="md-content__inner md-typeset">
               
                 
-                
-                  <h1>服务器手册</h1>
-                
-                <h2 id="_1">系统和软件版本查看命令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<h3 id="_2">查看系统版本<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>cat /etc/issue
-</code></pre></div>
-<h3 id="_3">查看系统信息<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
-<p>包括主机名，操作系统版本，内核版本，系统架构。
-<div class="highlight"><pre><span></span><code>hostnamectl
-</code></pre></div></p>
-<h3 id="_4">查看内核版本<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>uname -a
-</code></pre></div>
-<h3 id="_5">查看设备信息<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+
+
+  <h1>服务器手册</h1>
+
+<h2 id="_1">系统和软件版本查看命令</h2>
+<h3 id="_2">查看系统版本</h3>
+<pre><code class="language-shell">cat /etc/issue
+</code></pre>
+<h3 id="_3">查看系统信息</h3>
+<p>包括主机名，操作系统版本，内核版本，系统架构。</p>
+<pre><code class="language-shell">hostnamectl
+</code></pre>
+<h3 id="_4">查看内核版本</h3>
+<pre><code class="language-shell">uname -a
+</code></pre>
+<h3 id="_5">查看设备信息</h3>
 <p>查看CPU个数</p>
-<div class="highlight"><pre><span></span><code>cat /proc/cpuinfo <span class="p">|</span> grep <span class="s2">&quot;physical id&quot;</span> <span class="p">|</span> uniq <span class="p">|</span> wc -l
-</code></pre></div>
-<p>查看CPU核数
-<div class="highlight"><pre><span></span><code>cat /proc/cpuinfo <span class="p">|</span> grep <span class="s2">&quot;cpu cores&quot;</span> <span class="p">|</span> uniq
-</code></pre></div></p>
-<p>查看CPU型号
-<div class="highlight"><pre><span></span><code>cat /proc/cpuinfo <span class="p">|</span> grep <span class="s1">&#39;model name&#39;</span> <span class="p">|</span>uniq
-</code></pre></div></p>
-<p>查看显卡信息
-<div class="highlight"><pre><span></span><code>lspci <span class="p">|</span> grep -i nvidia
-</code></pre></div></p>
-<h3 id="_6">查看内存或硬盘空间<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<pre><code class="language-shell">cat /proc/cpuinfo | grep &quot;physical id&quot; | uniq | wc -l
+</code></pre>
+<p>查看CPU核数</p>
+<pre><code class="language-shell">cat /proc/cpuinfo | grep &quot;cpu cores&quot; | uniq
+</code></pre>
+<p>查看CPU型号</p>
+<pre><code class="language-shell">cat /proc/cpuinfo | grep 'model name' |uniq
+</code></pre>
+<p>查看显卡信息</p>
+<pre><code class="language-shell">lspci | grep -i nvidia
+</code></pre>
+<h3 id="_6">查看内存或硬盘空间</h3>
 <ul>
 <li>查看内存大小: <code>free -g</code></li>
 <li>查看硬盘大小: <code>df -h</code></li>
 <li>查看当前文件夹大小: <code>du -sh</code></li>
 <li>查看当前文件夹下每个文件的大小: <code>du -h --max-depth=1</code></li>
 </ul>
-<h3 id="_7">下载数据<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<h3 id="_7">下载数据</h3>
 <p>curl指令（也可以下载其他后缀的文件）</p>
-<div class="highlight"><pre><span></span><code>curl -O https://www.example.com/foo/bar.html
-</code></pre></div>
-<p>参考：<a href="https://www.ruanyifeng.com/blog/2019/09/curl-reference.html">https://www.ruanyifeng.com/blog/2019/09/curl-reference.html</a></p>
-<h2 id="_8">常用指令<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
-<h3 id="nohup">nohup<a class="headerlink" href="#nohup" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>nohup /root/runoob.sh &amp;
-</code></pre></div>
-<h3 id="screen">screen<a class="headerlink" href="#screen" title="Permanent link">&para;</a></h3>
-<h4 id="attach">重启attach失败<a class="headerlink" href="#attach" title="Permanent link">&para;</a></h4>
+<pre><code class="language-shell">curl -O https://www.example.com/foo/bar.html
+</code></pre>
+<p>参考：https://www.ruanyifeng.com/blog/2019/09/curl-reference.html</p>
+<h2 id="_8">常用指令</h2>
+<h3 id="nohup">nohup</h3>
+<pre><code>nohup /root/runoob.sh &amp;
+</code></pre>
+<h3 id="screen">screen</h3>
+<h4 id="attach">重启attach失败</h4>
 <p>报错：<code>There is no screen to be resumed matching</code>
 解决方案：
-attach to a not detached screen session
-<div class="highlight"><pre><span></span><code>screen -xr [sessionName]
-</code></pre></div></p>
-<h3 id="bash">Bash指令<a class="headerlink" href="#bash" title="Permanent link">&para;</a></h3>
-<h4 id="_9">创建软链接<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h4>
+attach to a not detached screen session</p>
+<pre><code>screen -xr [sessionName]
+</code></pre>
+<h3 id="bash">Bash指令</h3>
+<h4 id="_9">创建软链接</h4>
 <p><code>ln -s</code>指令
-下面代码会将为python3.8创建一个软链接
-<div class="highlight"><pre><span></span><code>sudo ln -s /usr/bin/python3.8 /usr/bin.python
-</code></pre></div></p>
-<h4 id="alias">设置别名(alias)<a class="headerlink" href="#alias" title="Permanent link">&para;</a></h4>
+下面代码会将为python3.8创建一个软链接</p>
+<pre><code class="language-shell">sudo ln -s /usr/bin/python3.8 /usr/bin.python
+</code></pre>
+<h4 id="alias">设置别名(alias)</h4>
 <p>当命令很长时，可以设置一个简短的别名来使用。</p>
-<div class="highlight"><pre><span></span><code><span class="nb">alias</span> <span class="nv">act</span><span class="o">=</span><span class="s1">&#39;conda activate torch1.7&#39;</span>
-</code></pre></div>
+<pre><code class="language-shell">alias act='conda activate torch1.7'
+</code></pre>
 <p>查看已使用的别名</p>
-<div class="highlight"><pre><span></span><code><span class="nb">alias</span>
-</code></pre></div>
+<pre><code class="language-shell">alias
+</code></pre>
 <p>取消别名</p>
-<div class="highlight"><pre><span></span><code><span class="nb">unalias</span> act
-</code></pre></div>
-<h4 id="_10">永久设置别名<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h4>
+<pre><code class="language-shell">unalias act
+</code></pre>
+<h4 id="_10">永久设置别名</h4>
 <p>在<code>~/.bash_aliases</code>文件中（没有则创建），写入自定义的alias相关指令。</p>
-<h3 id="_11">网络<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
-<h4 id="_12">防火墙<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h4>
+<h3 id="_11">网络</h3>
+<h4 id="_12">防火墙</h4>
 <ul>
 <li>打开:<code>sudo ufw enable</code></li>
 <li>重启:<code>sudo ufw reload</code></li>
@@ -1072,59 +1110,59 @@ attach to a not detached screen session
 <li>查看本机端口使用情况:<code>sudo ufw status</code></li>
 <li>关闭指定端口:<code>sudo ufw delete allow enable</code></li>
 </ul>
-<h2 id="_13">常用设置<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
-<h2 id="ssh">服务器ssh无密码登录<a class="headerlink" href="#ssh" title="Permanent link">&para;</a></h2>
+<h2 id="_13">常用设置</h2>
+<h2 id="ssh">服务器ssh无密码登录</h2>
 <p>在本地的<code>~/.ssh</code>目录下，查看是否有<code>id_rsa</code> 和 <code>id_rsa.pub</code>两个文件。
 如果没有，则用<code>ssh-keygen -t rsa</code>生成。
 将本地<code>id_rsa.pub</code>中的内容复制到服务器<code>~/.ssh/authorized_keys</code>文件的尾部。（若没有该文件，则新建。）</p>
-<h3 id="pip">pip换源<a class="headerlink" href="#pip" title="Permanent link">&para;</a></h3>
-<p><div class="highlight"><pre><span></span><code><span class="nb">cd</span> ~
+<h3 id="pip">pip换源</h3>
+<pre><code class="language-shell">cd ~
 mkdir ~/.pip
-<span class="nb">cd</span> ~/.pip
+cd ~/.pip
 sudo vim ~/.pip/pip.conf
-</code></pre></div>
-在pip.conf中写入如下内容：</p>
-<div class="highlight"><pre><span></span><code>[global]
+</code></pre>
+<p>在pip.conf中写入如下内容：</p>
+<pre><code>[global]
 index-url = https://pypi.tuna.tsinghua.edu.cn/simple/ 
 [install]
 trusted-host = pypi.tuna.tsinghua.edu.cn
-</code></pre></div>
-<h3 id="pytorch">安装Pytorch<a class="headerlink" href="#pytorch" title="Permanent link">&para;</a></h3>
+</code></pre>
+<h3 id="pytorch">安装Pytorch</h3>
 <ul>
 <li>pytorch1.7.1 CUDA 11.0</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="n">conda</span> <span class="n">install</span> <span class="n">pytorch</span><span class="o">==</span><span class="mf">1.7.1</span> <span class="n">torchvision</span><span class="o">==</span><span class="mf">0.8.2</span> <span class="n">torchaudio</span><span class="o">==</span><span class="mf">0.7.2</span> <span class="n">cudatoolkit</span><span class="o">=</span><span class="mf">11.0</span> <span class="o">-</span><span class="n">c</span> <span class="n">pytorch</span>
-</code></pre></div>
-<p>参考：<a href="https://pytorch.org/get-started/previous-versions/">https://pytorch.org/get-started/previous-versions/</a></p>
-<h3 id="pythonpackage">python批量安装和package导出<a class="headerlink" href="#pythonpackage" title="Permanent link">&para;</a></h3>
+<p><code>python
+  conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11.0 -c pytorch</code></p>
+<p>参考：https://pytorch.org/get-started/previous-versions/</p>
+<h3 id="pythonpackage">python批量安装和package导出</h3>
 <ul>
 <li>导出：<code>pip freeze &gt; requirements.txt</code></li>
 <li>安装：<code>pip install -r requirements.txt</code></li>
 <li>卸载：<code>pip uninstall -r requirements.txt</code></li>
 </ul>
-<h3 id="conda">conda设置<a class="headerlink" href="#conda" title="Permanent link">&para;</a></h3>
-<h4 id="1-miniconda">1. 安装miniconda<a class="headerlink" href="#1-miniconda" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code>curl -O https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh
+<h3 id="conda">conda设置</h3>
+<h4 id="1-miniconda">1. 安装miniconda</h4>
+<pre><code class="language-shell">curl -O https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh
 sh Miniconda3-py38_4.9.2-Linux-x86_64.sh 
-</code></pre></div>
+</code></pre>
 <p>需要配置Python的环境变量，用vim打开<code>vim ~/.bashrc</code>。
 在尾部添加<code>export PATH=/opt/miniconda3/bin:$PATH</code>，保存退出。</p>
-<div class="highlight"><pre><span></span><code><span class="nb">source</span> ~/.bashrc
-</code></pre></div>
-<h4 id="2">2. 创建新环境<a class="headerlink" href="#2" title="Permanent link">&para;</a></h4>
+<pre><code class="language-shell">source ~/.bashrc
+</code></pre>
+<h4 id="2">2. 创建新环境</h4>
 <p><code>conda create -n &lt;env_name&gt; python=X.X</code>
 e.g.<code>conda create -n py36 python=3.6</code></p>
-<h4 id="3">3. 拷贝旧环境<a class="headerlink" href="#3" title="Permanent link">&para;</a></h4>
-<p>创建一个新环境，拷贝已有环境old：
-<div class="highlight"><pre><span></span><code>conda create -n new --clone old
-</code></pre></div></p>
-<h4 id="4-conda">4. conda换源<a class="headerlink" href="#4-conda" title="Permanent link">&para;</a></h4>
+<h4 id="3">3. 拷贝旧环境</h4>
+<p>创建一个新环境，拷贝已有环境old：</p>
+<pre><code>conda create -n new --clone old
+</code></pre>
+<h4 id="4-conda">4. conda换源</h4>
 <blockquote>
-<p><a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</a></p>
+<p>https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</p>
 </blockquote>
 <p>先确定<code>~/.condarc</code>文件存在，生成方式：<code>conda config --set show_channel_urls yes</code></p>
-<p>linux将<code>~/.condarc</code>改为以下的内容：
-<div class="highlight"><pre><span></span><code>channels:
+<p>linux将<code>~/.condarc</code>改为以下的内容：</p>
+<pre><code>channels:
   - defaults
 show_channel_urls: true
 default_channels:
@@ -1139,35 +1177,30 @@ custom_channels:
   pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-</code></pre></div></p>
-<h4 id="5-jupyter-lab">5. 设置远程访问的Jupyter lab<a class="headerlink" href="#5-jupyter-lab" title="Permanent link">&para;</a></h4>
-<p>参考：<a href="https://zhuanlan.zhihu.com/p/64524822">https://zhuanlan.zhihu.com/p/64524822</a></p>
-<h3 id="rm">将rm改为把文件放入回收站<a class="headerlink" href="#rm" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nb">alias</span> <span class="nv">rm</span><span class="o">=</span>trash
-<span class="nb">alias</span> <span class="nv">rl</span><span class="o">=</span><span class="s1">&#39;ls ~/.local/share/Trash/files/&#39;</span>
-trash<span class="o">(){</span>
-    <span class="nv">del_date</span><span class="o">=</span><span class="sb">`</span>date +%Y%m%d%H%M%S<span class="sb">`</span>
-    <span class="c1"># 循环是因为可能rm多个文件</span>
-    <span class="k">for</span> arg <span class="k">in</span> <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
-    <span class="k">do</span>
-       <span class="c1"># 这里将删除时间加入到文件名后是因为mv命令不能覆盖非空目录以及不能使用文件覆盖文件夹</span>
-       <span class="c1"># 加上时间就不会有同名的文件了</span>
-       mv <span class="nv">$arg</span> ~/.local/share/Trash/files/<span class="si">${</span><span class="nv">del_date</span><span class="si">}</span>-<span class="si">${</span><span class="nv">arg</span><span class="p">##*/</span><span class="si">}</span>
-    <span class="k">done</span>
-<span class="o">}</span>
-</code></pre></div>
+</code></pre>
+<h4 id="5-jupyter-lab">5. 设置远程访问的Jupyter lab</h4>
+<p>参考：https://zhuanlan.zhihu.com/p/64524822</p>
+<h3 id="rm">将rm改为把文件放入回收站</h3>
+<pre><code class="language-shell">alias rm=trash
+alias rl='ls ~/.local/share/Trash/files/'
+trash(){
+    del_date=`date +%Y%m%d%H%M%S`
+    # 循环是因为可能rm多个文件
+    for arg in &quot;$@&quot;
+    do
+       # 这里将删除时间加入到文件名后是因为mv命令不能覆盖非空目录以及不能使用文件覆盖文件夹
+       # 加上时间就不会有同名的文件了
+       mv $arg ~/.local/share/Trash/files/${del_date}-${arg##*/}
+    done
+}
+</code></pre>
 <p>再使用<code>source ~/.bashrc</code>进行刷新。</p>
-<h2 id="_14">系统管理<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h2>
-<h3 id="_15">创建用户和删除用户<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h3>
-<p>参考：<a href="https://blog.csdn.net/weixin_44633882/article/details/115104794">https://blog.csdn.net/weixin_44633882/article/details/115104794</a></p>
-<h2 id="win10">Win10安装<a class="headerlink" href="#win10" title="Permanent link">&para;</a></h2>
-<h3 id="texlivevscode">texlive+VSCode配置<a class="headerlink" href="#texlivevscode" title="Permanent link">&para;</a></h3>
-<p><a href="https://zhuanlan.zhihu.com/p/38178015">https://zhuanlan.zhihu.com/p/38178015</a></p>
-                
-              
-              
-                
-
+<h2 id="_14">系统管理</h2>
+<h3 id="_15">创建用户和删除用户</h3>
+<p>参考：https://blog.csdn.net/weixin_44633882/article/details/115104794</p>
+<h2 id="win10">Win10安装</h2>
+<h3 id="texlivevscode">texlive+VSCode配置</h3>
+<p>https://zhuanlan.zhihu.com/p/38178015</p>
 
               
             </article>
@@ -1176,12 +1209,12 @@ trash<span class="o">(){</span>
         
       </main>
       
-        
-<footer class="md-footer">
+        <footer class="md-footer">
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A6%82%E5%BF%B5%E5%9F%BA%E7%A1%80/" class="md-footer__link md-footer__link--prev" rel="prev">
+        
+        <a href="../%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%A6%82%E5%BF%B5%E5%9F%BA%E7%A1%80/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 计算机手册" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1196,7 +1229,8 @@ trash<span class="o">(){</span>
         </a>
       
       
-        <a href="../Docker/" class="md-footer__link md-footer__link--next" rel="next">
+        
+        <a href="../Docker/" class="md-footer__link md-footer__link--next" aria-label="Next: Docker手册" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
@@ -1214,14 +1248,15 @@ trash<span class="o">(){</span>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
-      <div class="md-footer-copyright">
-        
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
-        
-      </div>
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
       
     </div>
   </div>
@@ -1231,14 +1266,16 @@ trash<span class="o">(){</span>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.5e67fbfe.min.js"}</script>
     
     
-      <script src="../../assets/javascripts/bundle.4ea5477f.min.js"></script>
+      <script src="../../assets/javascripts/bundle.e87a5f81.min.js"></script>
       
-        <script src="../../mathjax-config.js"></script>
+        <script src="../../javascripts/mathjax.js"></script>
       
-        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>
