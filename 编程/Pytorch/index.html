@@ -14,7 +14,7 @@
     
     
       
-        <title>Tensorboard指南 - pocGuide</title>
+        <title>Pytorch - pocGuide</title>
       
     
     
@@ -59,7 +59,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tensorboard" class="md-skip">
+        <a href="#_1" class="md-skip">
           Skip to content
         </a>
       
@@ -89,7 +89,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Tensorboard指南
+              Pytorch
             
           </span>
         </div>
@@ -375,8 +375,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -386,15 +384,69 @@
       
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
-    代码模板
+    基础操作
+  </a>
+  
+    <nav class="md-nav" aria-label="基础操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tensor" class="md-nav__link">
+    在指定维度上将tensor复制
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    指定维度用该维度上的索引来选择元素
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pytorch" class="md-nav__link">
+    Pytorch保存模型与加载模型
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
+    冻结模型部分参数，训练部分参数
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tensorboard" class="md-nav__link">
+    Tensorboard指南
+  </a>
+  
+    <nav class="md-nav" aria-label="Tensorboard指南">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    代码模板
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     启动服务
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -411,8 +463,53 @@
               
                 
                 
-                <h1 id="tensorboard">Tensorboard指南<a class="headerlink" href="#tensorboard" title="Permanent link">&para;</a></h1>
-<h2 id="_1">代码模板<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+                  <h1>Pytorch</h1>
+                
+                <h2 id="_1">基础操作<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<h3 id="tensor">在指定维度上将tensor复制<a class="headerlink" href="#tensor" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>Tensor.repeat(*sizes)</code></li>
+<li>注意和np.repeat不同，</li>
+</ul>
+<p>例如：
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">x</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1"># tensor([[ 1,  2,  3,  1,  2,  3],</span>
+<span class="c1">#         [ 1,  2,  3,  1,  2,  3],</span>
+<span class="c1">#         [ 1,  2,  3,  1,  2,  3],</span>
+<span class="c1">#         [ 1,  2,  3,  1,  2,  3]])</span>
+</code></pre></div></p>
+<h3 id="_2">指定维度用该维度上的索引来选择元素<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>torch.gather(input, dim, index, *, sparse_grad=False, out=None)</code></li>
+</ul>
+<p><code>dim</code>表明我们确定了某个维度，索引矩阵是该维度上的索引，其他索引间是不会有交互的。</p>
+<p>假设输入矩阵为2维：
+- 根据<code>dim=0</code>选择元素：<code>out[i][j] = input[index[i][j]][j]</code></p>
+<p>则我们可以得到默认的<code>index</code>矩阵，<code>torch.gather(input,0,index)</code> 还是等于input.
+<div class="highlight"><pre><span></span><code><span class="p">[[</span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">],</span>
+ <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">],</span>
+ <span class="p">[</span><span class="mi">2</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">]]</span>
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]))</span>
+<span class="c1"># [[1 2], [3 2]]</span>
+</code></pre></div>
+<h2 id="pytorch">Pytorch保存模型与加载模型<a class="headerlink" href="#pytorch" title="Permanent link">&para;</a></h2>
+<p>保存更多的信息
+<div class="highlight"><pre><span></span><code><span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">({</span><span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="n">epochID</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>       
+            <span class="s1">&#39;state_dict&#39;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> 
+            <span class="s1">&#39;best_loss&#39;</span><span class="p">:</span> <span class="n">loss</span><span class="p">},</span>
+        <span class="s1">&#39;model.pth&#39;</span><span class="p">)</span>
+</code></pre></div></p>
+<h2 id="_3">冻结模型部分参数，训练部分参数<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c1"># 优化器</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="tensorboard">Tensorboard指南<a class="headerlink" href="#tensorboard" title="Permanent link">&para;</a></h2>
+<h3 id="_4">代码模板<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 
@@ -425,7 +522,7 @@ for n_iter in range(100):
     writer.add_scalar(&#39;Accuracy/test&#39;, np.random.random(), n_iter)
 </code></pre></div>
 <p>对于模型一次训练中一个Step需要输出多个结果，可以使用<code>add_scalars</code></p>
-<h2 id="_2">启动服务<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="_5">启动服务<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <p>默认保存目录是<code>runs</code></p>
 <p><div class="highlight"><pre><span></span><code>tensorboard --logdir<span class="o">=</span>runs
 </code></pre></div>
