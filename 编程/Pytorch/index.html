@@ -440,22 +440,42 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pytorch" class="md-nav__link">
+    Pytorch保存模型与加载模型
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    冻结模型部分参数，训练部分参数
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pytorch" class="md-nav__link">
-    Pytorch保存模型与加载模型
+  <a href="#_4" class="md-nav__link">
+    模型创建
+  </a>
+  
+    <nav class="md-nav" aria-label="模型创建">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nnsequentialmodule" class="md-nav__link">
+    nn.Sequential()手动添加module
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    冻结模型部分参数，训练部分参数
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -468,14 +488,14 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     代码模板
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     启动服务
   </a>
   
@@ -535,21 +555,40 @@ x.repeat(4, 2)
 torch.gather(t, 0, torch.tensor([[0, 0], [1, 0]]))
 # [[1 2], [3 2]]
 </code></pre>
-<h2 id="pytorch">Pytorch保存模型与加载模型</h2>
+<h3 id="pytorch">Pytorch保存模型与加载模型</h3>
 <p>保存更多的信息</p>
 <pre><code class="language-python">torch.save({'epoch': epochID + 1,       
             'state_dict': model.state_dict(), 
             'best_loss': loss},
         'model.pth')
 </code></pre>
-<h2 id="_3">冻结模型部分参数，训练部分参数</h2>
+<h3 id="_3">冻结模型部分参数，训练部分参数</h3>
 <pre><code class="language-python">for p in self.parameters():
     p.requires_grad = False
 # 优化器
 optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=0.001)
 </code></pre>
+<h2 id="_4">模型创建</h2>
+<h3 id="nnsequentialmodule">nn.Sequential()手动添加module</h3>
+<p><code>nn.Sequential(*modules)</code>中的<code>Module</code>会按照<code>str(位置索引)</code>作为name.</p>
+<pre><code class="language-python">model = nn.Sequential(
+          nn.Conv2d(1,20,5),
+          nn.ReLU(),
+          nn.Conv2d(20,64,5),
+          nn.ReLU()
+        )
+print(list(model.modules()))
+# -------- 上下两种代码功能相同。
+model1 = nn.Sequential()
+model1.add_module(str(len(model1)), nn.Conv2d(1,20,5))
+model1.add_module(str(len(model1)), nn.ReLU())
+model1.add_module(str(len(model1)), nn.Conv2d(20,64,5))
+model1.add_module(str(len(model1)), nn.ReLU())
+
+print(list(model1.modules()))
+</code></pre>
 <h2 id="tensorboard">Tensorboard指南</h2>
-<h3 id="_4">代码模板</h3>
+<h3 id="_5">代码模板</h3>
 <pre><code>from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 
@@ -563,7 +602,7 @@ for n_iter in range(100):
 
 </code></pre>
 <p>对于模型一次训练中一个Step需要输出多个结果，可以使用<code>add_scalars</code></p>
-<h3 id="_5">启动服务</h3>
+<h3 id="_6">启动服务</h3>
 <p>默认保存目录是<code>runs</code></p>
 <pre><code class="language-shell">tensorboard --logdir=runs
 </code></pre>
