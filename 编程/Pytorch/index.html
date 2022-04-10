@@ -59,7 +59,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#pytorch" class="md-skip">
           Skip to content
         </a>
       
@@ -419,6 +419,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#pytorch" class="md-nav__link">
+    安装Pytorch
+  </a>
+  
+    <nav class="md-nav" aria-label="安装Pytorch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pytorch_1" class="md-nav__link">
+    安装旧版Pytorch
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
     基础操作
   </a>
@@ -441,7 +461,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#pytorch" class="md-nav__link">
+  <a href="#pytorch_2" class="md-nav__link">
     Pytorch保存模型与加载模型
   </a>
   
@@ -522,6 +542,15 @@
 
   <h1>Pytorch</h1>
 
+<h2 id="pytorch">安装Pytorch</h2>
+<h3 id="pytorch_1">安装旧版Pytorch</h3>
+<p>版本：<code>Pytorch 0.3.1</code></p>
+<pre><code class="language-shell">conda create -n py2.7 python=2.7
+pip install https://download.pytorch.org/whl/cpu/torch-0.3.1-cp27-cp27mu-linux_x86_64.whl
+pip install torchvision==0.2.1
+</code></pre>
+<p>其他<code>torch</code>的版本可以到https://download.pytorch.org/whl/cpu/torch_stable.html</p>
+<p>参考：https://blog.csdn.net/github_38140310/article/details/94574967</p>
 <h2 id="_1">基础操作</h2>
 <h3 id="tensor">在指定维度上将tensor复制</h3>
 <ul>
@@ -555,7 +584,7 @@ x.repeat(4, 2)
 torch.gather(t, 0, torch.tensor([[0, 0], [1, 0]]))
 # [[1 2], [3 2]]
 </code></pre>
-<h3 id="pytorch">Pytorch保存模型与加载模型</h3>
+<h3 id="pytorch_2">Pytorch保存模型与加载模型</h3>
 <p>保存更多的信息</p>
 <pre><code class="language-python">torch.save({'epoch': epochID + 1,       
             'state_dict': model.state_dict(), 
