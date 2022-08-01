@@ -1,0 +1,12 @@
+site_name: CF Wiki
+
+nav:
+    - 主页: index.md
+    - A_Activity: A_Activity.md
+    - B_Activity: B_Activity.md
+
+theme:
+    name: readthedocs
+    highlightjs: true
+    hljs_languages: zh_CN
+    locale: zh_CN
