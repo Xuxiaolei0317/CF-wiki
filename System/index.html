@@ -63,7 +63,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#mission-pass-plus">Mission Pass Plus</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#mission-pass_1">mission pass解锁弹窗</a>
+    <li class="toctree-l2"><a class="reference internal" href="#mission-pass_1">mission pass购买界面作弊</a>
     </li>
     </ul>
                 </li>
@@ -97,7 +97,7 @@
               
                 <h1 id="_1">系统活动</h1>
 <h2 id="mission-pass">Mission Pass</h2>
-<pre style="color: red;"><code>需要重置mission pass时，可以直接将Season数据改为上个赛季进游戏即可
+<pre><code>需要重置mission pass时，可以直接将Season数据改为上个赛季进游戏即可
 </code></pre>
 <p><code>Exp 0</code>：经验值<br />
 <code>Level 0</code>：等级<br />
@@ -131,19 +131,20 @@ Prize 数据是这种类型，
 <code>Booster Multi [2, 2.5]</code>：mission star booster的倍率<br />
 <code>Chest exp 0</code>：mission pass宝箱经验</p>
 <h2 id="mission-pass-plus">Mission Pass Plus</h2>
-<p>season 0
-level 0
-exp 0
-mission_pass_plus_type 0
-mission_pass_plus_prize_data {}
-available_reward_data []
-chest_exp 0
-chest_level 0
-chest_prize_data {}
-last_mp_plus_type 0</p>
-<h2 id="mission-pass_1">mission pass解锁弹窗</h2>
+<p><code>season 0</code>：赛季<br />
+<code>level 0</code>：等级<br />
+<code>exp 0</code>：经验值<br />
+<code>mission_pass_plus_type 0</code>：0未解锁，1 or 2 or 3 or 4解锁<br />
+<code>mission_pass_plus_prize_data {}</code>：与普通Mission Pass数据一样<br />
+<code>available_reward_data []</code>：与普通Mission Pass数据一样<br />
+<code>chest_exp 0</code>：super pass 宝箱经验
+<code>chest_level 0</code>：super pass 宝箱等级
+<code>chest_prize_data {}</code>：super pass 宝箱奖励
+<code>last_mp_plus_type 0</code>：上赛季 super pass 激活数据</p>
+<h2 id="mission-pass_1">mission pass购买界面作弊</h2>
 <p><img alt="解锁弹窗配置" src="../images/S_mission_pass_boost.png" />  </p>
 <pre><code>在后台修改对应字段配置，可以切换不同状态的解锁弹窗
+共有5种状态！
 </code></pre>
               
             </div>
