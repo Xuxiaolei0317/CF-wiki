@@ -16,10 +16,9 @@ For full documentation visit [mkdocs.org](https://www.mkdocs.org).
         index.md  # The documentation homepage.
         ...       # Other markdown pages, images and other files. -->
 
-# [新手基金](quest.md).
-# [winner 活动](first.md).
 # [A级活动](A_Activity.md).
 # [B级活动](B_Activity.md).
-# [C级活动](first.md).
-# [活动配置](first.md).
-# [系统配置](first.md).
+# [C级活动](C_Activity.md).
+# [活动配置](Activity.md).
+# [系统配置](System.md).
+# [新手](quest.md).
