@@ -38,18 +38,19 @@
 `Chest exp 0`：mission pass宝箱经验
 
 ## Mission Pass Plus
-season 0
-level 0
-exp 0
-mission_pass_plus_type 0
-mission_pass_plus_prize_data {}
-available_reward_data []
-chest_exp 0
-chest_level 0
-chest_prize_data {}
-last_mp_plus_type 0
+`season 0`：赛季  
+`level 0`：等级  
+`exp 0`：经验值  
+`mission_pass_plus_type 0`：0未解锁，1 or 2 or 3 or 4解锁  
+`mission_pass_plus_prize_data {}`：与普通Mission Pass数据一样  
+`available_reward_data []`：与普通Mission Pass数据一样  
+`chest_exp 0`：super pass 宝箱经验
+`chest_level 0`：super pass 宝箱等级
+`chest_prize_data {}`：super pass 宝箱奖励
+`last_mp_plus_type 0`：上赛季 super pass 激活数据
 
-## mission pass解锁弹窗
+## mission pass购买界面作弊
 ![解锁弹窗配置](images/S_mission_pass_boost.png)  
     
     在后台修改对应字段配置，可以切换不同状态的解锁弹窗
+    共有5种状态！
