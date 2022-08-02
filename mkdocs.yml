@@ -6,7 +6,10 @@ nav:
     - B_Activity: B_Activity.md
 
 theme:
+    # name: readthedocs
     name: readthedocs
     highlightjs: true
-    hljs_languages: zh_CN
+    # hljs_languages: zh_CN
     locale: zh_CN
+
+# site_url: https://gitee.com/xuxiaolei317_admin/cf-wiki/docs/index.md
