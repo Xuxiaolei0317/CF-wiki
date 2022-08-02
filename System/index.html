@@ -59,11 +59,11 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="./">系统配置</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#mission-pass-sql">Mission Pass Sql</a>
+    <li class="toctree-l2"><a class="reference internal" href="#mission-pass">Mission Pass</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#mission-pass-plus-sql">Mission Pass Plus Sql</a>
+    <li class="toctree-l2"><a class="reference internal" href="#mission-pass-plus">Mission Pass Plus</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#mission-pass">mission pass解锁弹窗</a>
+    <li class="toctree-l2"><a class="reference internal" href="#mission-pass_1">mission pass解锁弹窗</a>
     </li>
     </ul>
                 </li>
@@ -96,7 +96,9 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="_1">系统活动</h1>
-<h2 id="mission-pass-sql">Mission Pass Sql</h2>
+<h2 id="mission-pass">Mission Pass</h2>
+<pre><code>需要重置mission pass时，可以直接将Season数据改为上个赛季进游戏即可
+</code></pre>
 <p><code>Exp 0</code>：经验值<br />
 <code>Level 0</code>：等级<br />
 <code>Season 0</code>：赛季<br />
@@ -108,7 +110,7 @@
 a = [i for i in range(101)] #迭代0 ~ 100
 </code></pre>
 <p><code>Free Pass Prize {}</code>：free奖励数据<br />
-<code>Mission Pass Prize {}</code>：free奖励数据  </p>
+<code>Mission Pass Prize {}</code>：pass奖励数据  </p>
 <pre><code>{"0": [0],"1": [0] ,"2": [0]~ "100": [0]} 
 Prize 数据是这种类型，
 "0" : 代表着0~100级，
@@ -116,13 +118,19 @@ Prize 数据是这种类型，
 </code></pre>
 <p><code>Store Info {}</code>
 <code>Free Player Flag 0</code>
-<code>Time Limited Prize []</code>
-<code>Chest Level 0</code>
-<code>Chest Prize {}</code>
-<code>Boosters [0, 0]</code>
-<code>Booster Multi [2, 2.5]</code>
-<code>Chest exp 0</code></p>
-<h2 id="mission-pass-plus-sql">Mission Pass Plus Sql</h2>
+<code>Time Limited Prize []</code>：限时奖励</p>
+<pre><code>由10个 [0,0,0] list组成
+第一位为1时，代表该限时奖励已解锁
+第二位为1时，代表该限时奖励已领取
+第三位为时间戳，该限时奖励的倒计时
+例：[1, 1, 1659628802]
+</code></pre>
+<p><code>Chest Level 0</code>：mission pass宝箱等级<br />
+<code>Chest Prize {}</code>：mission pass宝箱奖励<br />
+<code>Boosters [0, 0]</code>：mission star booster的倒计时<br />
+<code>Booster Multi [2, 2.5]</code>：mission star booster的倍率<br />
+<code>Chest exp 0</code>：mission pass宝箱经验</p>
+<h2 id="mission-pass-plus">Mission Pass Plus</h2>
 <p>season 0
 level 0
 exp 0
@@ -133,7 +141,7 @@ chest_exp 0
 chest_level 0
 chest_prize_data {}
 last_mp_plus_type 0</p>
-<h2 id="mission-pass">mission pass解锁弹窗</h2>
+<h2 id="mission-pass_1">mission pass解锁弹窗</h2>
 <p><img alt="解锁弹窗配置" src="../images/S_mission_pass_boost.png" />  </p>
 <pre><code>在后台修改对应字段配置，可以切换不同状态的解锁弹窗
 </code></pre>
