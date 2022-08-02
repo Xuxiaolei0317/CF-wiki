@@ -2,11 +2,12 @@ site_name: CF Wiki
 
 nav:
     - 主页: index.md
-    - A_Activity: A_Activity.md
-    - C_Activity: C_Activity.md
-    - 活动配置: Activity.md
-    - 系统配置: System.md
     - 新手: quest.md
+    - 系统: System.md
+    - A级活动: A_Activity.md
+    - B级活动: B_Activity.md
+    - C级活动: C_Activity.md
+    - 活动配置: Activity.md
 
 theme:
     # name: readthedocs
@@ -15,4 +16,4 @@ theme:
     # hljs_languages: zh_CN
     locale: zh_CN
 
-# site_url: https://gitee.com/xuxiaolei317_admin/cf-wiki/docs/index.md
+site_url: https://xuxiaolei0317.github.io/CF-wiki/

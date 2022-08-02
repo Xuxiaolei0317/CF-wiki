@@ -54,3 +54,16 @@
     
     在后台修改对应字段配置，可以切换不同状态的解锁弹窗
     共有5种状态！
+
+## 广告用户
+### Persona
+`purchase_type: 1`
+`new_ad_3h_counter 12`
+`new_ad_soc_premium_ts 0`
+`new_ad_pachinko_premium_ts 0`
+`new_ad_atw_ts 0`
+`new_ad_b_token_ts 1640923072`
+`new_ad_wheel_multi_fq 1`
+`new_ad_wheel_multi_dm`
+`new_ad_wheel_multi_hm`
+`new_ad_hm_multi_count 3`
