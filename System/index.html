@@ -59,6 +59,12 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="./">系统配置</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#mission-pass-sql">Mission Pass Sql</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mission-pass-plus-sql">Mission Pass Plus Sql</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mission-pass">mission pass解锁弹窗</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -89,7 +95,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="_1">系统配置</h1>
+                <h1 id="_1">系统活动</h1>
+<h2 id="mission-pass-sql">Mission Pass Sql</h2>
+<p><code>Exp 0</code>：经验值<br />
+<code>Level 0</code>：等级<br />
+<code>Season 0</code>：赛季<br />
+<code>Mission Pass Type 0</code>：0未解锁，1 or 2 or 3 or 4解锁<br />
+<code>Available Free Reward []</code>：free level 数据<br />
+<code>Available High Reward []</code>：pass level 数据</p>
+<pre><code>level 数据初始 [0] 有个0级的, 升到5级显示[0,1,2,3,4,5]
+下面是python的迭代 0 ~ 100
+a = [i for i in range(101)] #迭代0 ~ 100
+</code></pre>
+<p><code>Free Pass Prize {}</code>：free奖励数据<br />
+<code>Mission Pass Prize {}</code>：free奖励数据  </p>
+<pre><code>{"0": [0],"1": [0] ,"2": [0]~ "100": [0]} 
+Prize 数据是这种类型，
+"0" : 代表着0~100级，
+[0] : 奖励领取状态 [0] 未领取, [1] 已领取
+</code></pre>
+<p><code>Store Info {}</code>
+<code>Free Player Flag 0</code>
+<code>Time Limited Prize []</code>
+<code>Chest Level 0</code>
+<code>Chest Prize {}</code>
+<code>Boosters [0, 0]</code>
+<code>Booster Multi [2, 2.5]</code>
+<code>Chest exp 0</code></p>
+<h2 id="mission-pass-plus-sql">Mission Pass Plus Sql</h2>
+<p>season 0
+level 0
+exp 0
+mission_pass_plus_type 0
+mission_pass_plus_prize_data {}
+available_reward_data []
+chest_exp 0
+chest_level 0
+chest_prize_data {}
+last_mp_plus_type 0</p>
+<h2 id="mission-pass">mission pass解锁弹窗</h2>
+<p><img alt="解锁弹窗配置" src="../images/S_mission_pass_boost.png" />  </p>
+<pre><code>在后台修改对应字段配置，可以切换不同状态的解锁弹窗
+</code></pre>
               
             </div>
           </div><footer>
