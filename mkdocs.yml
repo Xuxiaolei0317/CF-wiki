@@ -3,7 +3,10 @@ site_name: CF Wiki
 nav:
     - 主页: index.md
     - A_Activity: A_Activity.md
-    - B_Activity: B_Activity.md
+    - C_Activity: C_Activity.md
+    - 活动配置: Activity.md
+    - 系统配置: System.md
+    - 新手: quest.md
 
 theme:
     # name: readthedocs
