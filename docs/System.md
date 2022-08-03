@@ -51,19 +51,21 @@
 
 ## mission pass购买界面作弊
 ![解锁弹窗配置](images/S_mission_pass_boost.png)  
-    
-    在后台修改对应字段配置，可以切换不同状态的解锁弹窗
-    共有5种状态！
 
-## 广告用户
-### Persona
-`purchase_type: 1`
-`new_ad_3h_counter 12`
-`new_ad_soc_premium_ts 0`
-`new_ad_pachinko_premium_ts 0`
-`new_ad_atw_ts 0`
-`new_ad_b_token_ts 1640923072`
-`new_ad_wheel_multi_fq 1`
-`new_ad_wheel_multi_dm`
-`new_ad_wheel_multi_hm`
-`new_ad_hm_multi_count 3`
+    在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
+
+## Persona 广告用户
+
+    LL 广告用户为真正0付费玩家广告用户
+    HH-OO 用户有固定逻辑才会开启广告
+    
+`purchase_type: 1`：（HH广告用户 = 1 ，LL广告用户 = 2 ， OO广告用户 = 3）  
+`new_ad_3h_counter 12`：  
+`new_ad_soc_premium_ts 0`：soc广告倒计时  
+`new_ad_pachinko_premium_ts 0`：博青哥广告倒计时  
+`new_ad_atw_ts 0`：atw广告倒计时  
+`new_ad_b_token_ts 0`：B级token 广告倒计时  
+`new_ad_wheel_multi_fq 1`：  
+`new_ad_wheel_multi_dm`：  
+`new_ad_wheel_multi_hm`：  
+`new_ad_hm_multi_count 3`：  

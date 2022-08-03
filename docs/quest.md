@@ -1,10 +1,12 @@
 # Quest
-level等级到达4级时，触发新手quest！
+
+    level等级到达 4 级时，触发新手quest！
 
 `first_quest_end_ts`: 新手quest结束时间（修改为过去时间戳可跨过新手quest）
 
 ## 新手基金
-level等级到达3级时，触发新手基金活动！
+
+    level等级到达 3 级时，触发新手基金活动！
 
 ![新手基金数据](images/Q_novice.png)
 

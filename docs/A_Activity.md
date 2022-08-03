@@ -1,8 +1,9 @@
 # A Activity
-## STAMP
+## STAMPS
     描述
 
 ![邮票作弊button](images/A_stamp_button.png)
+## Genie 灯神
 
 ## BYD
 ![byd data](images/A_byd.png)
