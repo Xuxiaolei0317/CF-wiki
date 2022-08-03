@@ -9,8 +9,15 @@ nav:
     - C级活动: C_Activity.md
     - 活动配置: Activity.md
 
+# theme:
+#     name: mkdocs
+#     highlightjs: true
+#     hljs_languages:
+#         - zh_CN
+#     locale: zh_CN
+
 theme:
-    name: mkdocs
+    name: readthedocs
     highlightjs: true
     hljs_languages:
         - zh_CN
