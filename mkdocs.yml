@@ -10,10 +10,10 @@ nav:
     - 活动配置: Activity.md
 
 theme:
-    # name: readthedocs
-    name: readthedocs
+    name: mkdocs
     highlightjs: true
-    # hljs_languages: zh_CN
+    hljs_languages:
+        - zh_CN
     locale: zh_CN
 
-site_url: https://xuxiaolei0317.github.io/CF-wiki/
+# site_url: https://xuxiaolei0317.github.io/CF-wiki/
