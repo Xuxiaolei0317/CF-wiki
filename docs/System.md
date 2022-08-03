@@ -65,7 +65,5 @@
 `new_ad_pachinko_premium_ts 0`：博青哥广告倒计时  
 `new_ad_atw_ts 0`：atw广告倒计时  
 `new_ad_b_token_ts 0`：B级token 广告倒计时  
-`new_ad_wheel_multi_fq 1`：  
-`new_ad_wheel_multi_dm`：  
-`new_ad_wheel_multi_hm`：  
-`new_ad_hm_multi_count 3`：  
+`new_ad_wheel_multi_fq 1`：影响的新手做完任务之后奖励金币的数量   
+`new_ad_hm_multi_count 3`：影响的是看广告的奖励  
