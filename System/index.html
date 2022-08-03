@@ -105,7 +105,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">广告用户</a>
+            <li class="nav-item" data-level="2"><a href="#persona" class="nav-link">Persona 广告用户</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -164,21 +164,20 @@ Prize 数据是这种类型，
 <code>last_mp_plus_type 0</code>：上赛季 super pass 激活数据</p>
 <h2 id="mission-pass_1">mission pass购买界面作弊</h2>
 <p><img alt="解锁弹窗配置" src="../images/S_mission_pass_boost.png" />  </p>
-<pre><code>在后台修改对应字段配置，可以切换不同状态的解锁弹窗
-共有5种状态！
+<pre><code>在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
 </code></pre>
-<h2 id="_2">广告用户</h2>
-<h3 id="persona">Persona</h3>
-<p><code>purchase_type: 1</code>
-<code>new_ad_3h_counter 12</code>
-<code>new_ad_soc_premium_ts 0</code>
-<code>new_ad_pachinko_premium_ts 0</code>
-<code>new_ad_atw_ts 0</code>
-<code>new_ad_b_token_ts 1640923072</code>
-<code>new_ad_wheel_multi_fq 1</code>
-<code>new_ad_wheel_multi_dm</code>
-<code>new_ad_wheel_multi_hm</code>
-<code>new_ad_hm_multi_count 3</code></p></div>
+<h2 id="persona">Persona 广告用户</h2>
+<pre><code>LL 广告用户为真正0付费玩家广告用户
+HH-OO 用户有固定逻辑才会开启广告
+</code></pre>
+<p><code>purchase_type: 1</code>：（HH广告用户 = 1 ，LL广告用户 = 2 ， OO广告用户 = 3）<br />
+<code>new_ad_3h_counter 12</code>：<br />
+<code>new_ad_soc_premium_ts 0</code>：soc广告倒计时<br />
+<code>new_ad_pachinko_premium_ts 0</code>：博青哥广告倒计时<br />
+<code>new_ad_atw_ts 0</code>：atw广告倒计时<br />
+<code>new_ad_b_token_ts 0</code>：B级token 广告倒计时<br />
+<code>new_ad_wheel_multi_fq 1</code>：影响的新手做完任务之后奖励金币的数量 <br />
+<code>new_ad_hm_multi_count 3</code>：影响的是看广告的奖励  </p></div>
             </div>
         </div>
 
