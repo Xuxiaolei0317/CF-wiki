@@ -137,20 +137,21 @@ Prize 数据是这种类型，
 "0" : 代表着0~100级，
 [0] : 奖励领取状态 [0] 未领取, [1] 已领取
 </code></pre>
-<p><code>Store Info {}</code>
-<code>Free Player Flag 0</code>
-<code>Time Limited Prize []</code>：限时奖励</p>
-<pre><code>由10个 [0,0,0] list组成
-第一位为1时，代表该限时奖励已解锁
-第二位为1时，代表该限时奖励已领取
-第三位为时间戳，该限时奖励的倒计时
-例：[1, 1, 1659628802]
+<p><code>Store Info {}</code><br />
+<code>Free Player Flag 0</code><br />
+<code>Time Limited Prize []</code>：限时奖励  </p>
+<pre><code>限时奖励:
+    由10个 [0,0,0] list组成
+    第一位为1时，代表该限时奖励已解锁
+    第二位为1时，代表该限时奖励已领取
+    第三位为时间戳，该限时奖励的倒计时
+    例：[1, 1, 1659628802]
 </code></pre>
 <p><code>Chest Level 0</code>：mission pass宝箱等级<br />
 <code>Chest Prize {}</code>：mission pass宝箱奖励<br />
 <code>Boosters [0, 0]</code>：mission star booster的倒计时<br />
 <code>Booster Multi [2, 2.5]</code>：mission star booster的倍率<br />
-<code>Chest exp 0</code>：mission pass宝箱经验</p>
+<code>Chest exp 0</code>：mission pass宝箱经验  </p>
 <h2 id="mission-pass-plus">Mission Pass Plus</h2>
 <p><code>season 0</code>：赛季<br />
 <code>level 0</code>：等级<br />
@@ -158,10 +159,10 @@ Prize 数据是这种类型，
 <code>mission_pass_plus_type 0</code>：0未解锁，1 or 2 or 3 or 4解锁<br />
 <code>mission_pass_plus_prize_data {}</code>：与普通Mission Pass数据一样<br />
 <code>available_reward_data []</code>：与普通Mission Pass数据一样<br />
-<code>chest_exp 0</code>：super pass 宝箱经验
-<code>chest_level 0</code>：super pass 宝箱等级
-<code>chest_prize_data {}</code>：super pass 宝箱奖励
-<code>last_mp_plus_type 0</code>：上赛季 super pass 激活数据</p>
+<code>chest_exp 0</code>：super pass 宝箱经验<br />
+<code>chest_level 0</code>：super pass 宝箱等级<br />
+<code>chest_prize_data {}</code>：super pass 宝箱奖励<br />
+<code>last_mp_plus_type 0</code>：上赛季 super pass 激活数据  </p>
 <h2 id="mission-pass_1">mission pass购买界面作弊</h2>
 <p><img alt="解锁弹窗配置" src="../images/S_mission_pass_boost.png" />  </p>
 <pre><code>在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
