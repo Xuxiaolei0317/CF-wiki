@@ -21,33 +21,35 @@
     Prize 数据是这种类型，
     "0" : 代表着0~100级，
     [0] : 奖励领取状态 [0] 未领取, [1] 已领取
-`Store Info {}`
-`Free Player Flag 0`
-`Time Limited Prize []`：限时奖励
+`Store Info {}`  
+`Free Player Flag 0`  
+`Time Limited Prize []`：限时奖励  
 
-    由10个 [0,0,0] list组成
-    第一位为1时，代表该限时奖励已解锁
-    第二位为1时，代表该限时奖励已领取
-    第三位为时间戳，该限时奖励的倒计时
-    例：[1, 1, 1659628802]
+    限时奖励:
+        由10个 [0,0,0] list组成
+        第一位为1时，代表该限时奖励已解锁
+        第二位为1时，代表该限时奖励已领取
+        第三位为时间戳，该限时奖励的倒计时
+        例：[1, 1, 1659628802]
 
 `Chest Level 0`：mission pass宝箱等级  
 `Chest Prize {}`：mission pass宝箱奖励  
 `Boosters [0, 0]`：mission star booster的倒计时  
 `Booster Multi [2, 2.5]`：mission star booster的倍率  
-`Chest exp 0`：mission pass宝箱经验
+`Chest exp 0`：mission pass宝箱经验  
 
 ## Mission Pass Plus
+
 `season 0`：赛季  
 `level 0`：等级  
 `exp 0`：经验值  
 `mission_pass_plus_type 0`：0未解锁，1 or 2 or 3 or 4解锁  
 `mission_pass_plus_prize_data {}`：与普通Mission Pass数据一样  
 `available_reward_data []`：与普通Mission Pass数据一样  
-`chest_exp 0`：super pass 宝箱经验
-`chest_level 0`：super pass 宝箱等级
-`chest_prize_data {}`：super pass 宝箱奖励
-`last_mp_plus_type 0`：上赛季 super pass 激活数据
+`chest_exp 0`：super pass 宝箱经验  
+`chest_level 0`：super pass 宝箱等级  
+`chest_prize_data {}`：super pass 宝箱奖励  
+`last_mp_plus_type 0`：上赛季 super pass 激活数据  
 
 ## mission pass购买界面作弊
 ![解锁弹窗配置](images/S_mission_pass_boost.png)  
@@ -59,7 +61,7 @@
     LL 广告用户为真正0付费玩家广告用户
     HH-OO 用户有固定逻辑才会开启广告
     
-`purchase_type: 1`：（HH广告用户 = 1 ，LL广告用户 = 2 ， OO广告用户 = 3）  
+`purchase_type: 1`：（HH广告用户 = 1 ，LL广告用户 = 2 ， OO广告用户 = 3）0=非  
 `new_ad_3h_counter 12`：  
 `new_ad_soc_premium_ts 0`：soc广告倒计时  
 `new_ad_pachinko_premium_ts 0`：博青哥广告倒计时  

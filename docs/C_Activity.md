@@ -18,6 +18,6 @@
 5. 修改数据 （Activity: Lucky Winner I/II 的 deadline 修改为当前时间）
 6. 登录
 7. 下掉活动（最多等待约30s，活动配置完全刷新）
-8. 点击 Admin 上 a 按钮
+8. 点击 Admin 上 set today begin 按钮
 
 <!-- ![mkdocs](images/bingo_ad_img05.png) -->

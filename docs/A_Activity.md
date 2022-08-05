@@ -4,7 +4,30 @@
 
 ![邮票作弊button](images/A_stamp_button.png)
 ## Genie 灯神
-
+    data:
+        {"genie_bonus_a": 
+            {"available": 0, 
+             "task_type": 11, 
+             "game_prize": {}, 
+             "level": 0, 
+             "season": 0, 
+             "current": 0, 
+             "game_disconnection": {}, 
+             "reset_ts": 1659672000, 
+             "target_special": 0, 
+             "target": 6}, 
+             
+         "genie_bonus_b": 
+            {"available": 1, 
+             "task_type": 10, 
+             "game_prize": {}, 
+             "level": 0, 
+             "season": 0, 
+             "current": 0, 
+             "game_disconnection": {}, 
+             "reset_ts": 1659585600, 
+             "target_special": 0, 
+             "target": 6}}
 ## BYD
 ![byd data](images/A_byd.png)
 

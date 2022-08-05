@@ -79,7 +79,7 @@ code {
     padding: 2px 5px;
     background: #fff;
     border: solid 1px #e1e4e5;
-    color: #333;
+    color: rgba(223, 90, 57, 0.925);
     white-space: pre-wrap;
     word-wrap: break-word;
 }
