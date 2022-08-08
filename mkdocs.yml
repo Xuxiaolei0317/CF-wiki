@@ -8,6 +8,7 @@ nav:
     - B级活动: B_Activity.md
     - C级活动: C_Activity.md
     - 活动配置: Activity.md
+    - Inbox: inbox.md
 
 theme:
     name: mkdocs

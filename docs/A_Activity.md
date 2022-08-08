@@ -3,7 +3,7 @@
     描述
 
 ![邮票作弊button](images/A_stamp_button.png)
-## Genie 灯神
+### Genie 灯神
     data:
         {"genie_bonus_a": 
             {"available": 0, 
@@ -16,7 +16,7 @@
              "reset_ts": 1659672000, 
              "target_special": 0, 
              "target": 6}, 
-             
+
          "genie_bonus_b": 
             {"available": 1, 
              "task_type": 10, 

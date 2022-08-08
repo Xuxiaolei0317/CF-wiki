@@ -191,3 +191,6 @@ Scene Guide
 multi_commodities
 Free Wand
 detect times
+
+
+[活动配置](Activity.md)
