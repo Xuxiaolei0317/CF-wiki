@@ -105,7 +105,11 @@
 
 <h1 id="lucky-winner">lucky winner</h1>
 <p>[注意]：<code>修改数据时一定要修改正确后再登录</code></p>
-<p><img alt="Activity: Lucky Winner I/II" src="../images/C_lucky_winner.png" /></p>
+<p><img alt="Activity: Lucky Winner I/II" src="../images/C_lucky_winner.png" /><br />
+<code>[Tickets]:</code>彩票数量<br />
+<code>[Deadline：]</code>活动倒计时<br />
+<code>Lucky Winner type：</code>对应某个 Lucky Winner 活动的值<br />
+<code>[reset_lucky_winner_collected]</code>：清除Lucky Winner活动的中奖状态</p>
 <h3 id="_1">登录收奖</h3>
 <ol>
 <li>配上活动</li>
@@ -113,7 +117,7 @@
 <li>下线</li>
 <li>联系后端发奖</li>
 <li>修改数据<ol>
-<li>（Activity: Lucky Winner I/II 的 <code>[Deadline]</code> 修改为当前时间）</li>
+<li>（<code>Activity: Lucky Winner I/II</code> 的 <code>[Deadline]</code> 修改为当前时间）</li>
 <li>点击 <code>[set First login today]</code> 按钮</li>
 </ol>
 </li>
@@ -126,13 +130,15 @@
 <li>完成购买得到tickets</li>
 <li>下线</li>
 <li>联系后端发奖</li>
-<li>修改数据 （<code>Activity: Lucky Winner I/II 的 deadline 修改为当前时间</code>）</li>
+<li>修改数据 （<code>Activity: Lucky Winner I/II</code> 的 <code>[Deadline]</code> 修改为当前时间）</li>
 <li>登录</li>
 <li>下掉活动（最多等待约30s，活动配置完全刷新）</li>
-<li>点击 Admin 上 <code>[set today begin]</code> 按钮</li>
-</ol>
-<p>服务器发奖后，活动中心会展示活动并显示中奖状态！<br />
-   点击 <code>[reset_lucky_winner_collected]</code> 可以清除活动中心的中奖状态显示</p></div>
+<li>
+<p>点击 Admin 上 <code>[set today begin]</code> 按钮  </p>
+<p>服务器发奖后，活动中心会展示Lucky Winner活动的<code>中奖状态</code>！<br />
+   点击 <code>Activity: Lucky Winner I/II</code> 的<code>[reset_lucky_winner_collected]</code> 可以清除活动中心的中奖状态显示</p>
+</li>
+</ol></div>
             </div>
         </div>
 
