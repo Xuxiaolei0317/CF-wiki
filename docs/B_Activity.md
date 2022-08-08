@@ -191,6 +191,33 @@ Scene Guide
 multi_commodities
 Free Wand
 detect times
+## B Activity Choice
+Season 194
+Choice blast
+Token Stash []
+Last B Name bingo
+B token buy times 0
+B token buy price 49.99
+B token last reset ts 1659492306
+Guide 6
+Dash collected [0, 0, 0]
+b guide {"bingo": {"10": 1, "15": 1, "14": 1, "17": 1, "16": 1, "19": 1, "18": 1, "1": 1, "3": 1, "2": 1, "5": 1, "4": 1, "7": 1, "6": 1, "9": 1, "8": 1}, "rocket": 6, "cooking": 8, "mow": {"P2": 1, "P3": 1, "P1": 1, "P6": 1, "P7": 1, "P4": 1, "P5": 1, "P8": 1, "P9": 1}, "makeover": {"p2": 1, "p3": 1, "p1": 1, "p4": 1}, "archer": 6, "tower": 5, "blast": 0, "journey": 3}
+Max Store Purchase 2300
+B Last Season {"bingo": 180, "archer": 180, "cooking": 180, "mow": 180, "journey": 180, "blast": 194}
 
+## B Ranking
+Scores 0
+Season 194
+Ranking Level 2
+Last Season 193
+Last Ranking Level 2
+Need Collect 0
+Migration Flag 1
+Disconnection {"ranking_level": 2, "last_season": 193, "name": "b_activity", "coins": 648000000000, "place": 0, "reward_type": 1, "has_prize": 1}
 
+## b_store_manager
+season 194
+buy_times {"24": 1, "25": 5, "26": 2, "27": 3, "20": 3, "21": 2, "22": 3, "23": 5, "28": 3, "29": 1, "1": 10, "3": 5, "2": 1, "5": 4, "4": 6, "7": 3, "6": 5, "9": 2, "8": 2, "11": 3, "10": 1, "13": 2, "12": 1, "15": 3, "14": 2, "17": 4, "16": 3, "19": 2, "18": 3, "31": 10, "30": 4}
+discount_store_data {"11": [1, 1, 180], "25": [5, 5, 135], "17": [1, 1, 175], "16": [1, 1, 200], "23": [1, 1, 108], "28": [1, 1, 180], "4": [6, 6, 45], "7": [1, 1, 90]}
+guide 0
 [活动配置](Activity.md)
