@@ -7,15 +7,15 @@
         
         
         
-        <link rel="shortcut icon" href="/img/favicon.ico">
-        <title>CF Wiki</title>
-        <link href="/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/font-awesome.min.css" rel="stylesheet">
-        <link href="/css/base.css" rel="stylesheet">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Inbox - CF Wiki</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
 
-        <script src="/js/jquery-1.10.2.min.js" defer></script>
-        <script src="/js/bootstrap.min.js" defer></script>
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/zh_CN.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
@@ -24,7 +24,7 @@
     <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href="/.">CF Wiki</a>
+                <a class="navbar-brand" href="..">CF Wiki</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
@@ -35,28 +35,28 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="navitem">
-                                <a href="/." class="nav-link">主页</a>
+                                <a href=".." class="nav-link">主页</a>
                             </li>
                             <li class="navitem">
-                                <a href="/quest/" class="nav-link">新手</a>
+                                <a href="../quest/" class="nav-link">新手</a>
                             </li>
                             <li class="navitem">
-                                <a href="/System/" class="nav-link">系统</a>
+                                <a href="../System/" class="nav-link">系统</a>
                             </li>
                             <li class="navitem">
-                                <a href="/A_Activity/" class="nav-link">A级活动</a>
+                                <a href="../A_Activity/" class="nav-link">A级活动</a>
                             </li>
                             <li class="navitem">
-                                <a href="/B_Activity/" class="nav-link">B级活动</a>
+                                <a href="../B_Activity/" class="nav-link">B级活动</a>
                             </li>
                             <li class="navitem">
-                                <a href="/C_Activity/" class="nav-link">C级活动</a>
+                                <a href="../C_Activity/" class="nav-link">C级活动</a>
                             </li>
                             <li class="navitem">
-                                <a href="/Activity/" class="nav-link">活动配置</a>
+                                <a href="../Activity/" class="nav-link">活动配置</a>
                             </li>
-                            <li class="navitem">
-                                <a href="/inbox/" class="nav-link">Inbox</a>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Inbox</a>
                             </li>
                         </ul>
 
@@ -66,6 +66,16 @@
                                 <i class="fa fa-search"></i> 搜索
                             </a>
                         </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../Activity/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> 上一张
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    下一张 <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                     </ul>
                 </div>
             </div>
@@ -73,15 +83,28 @@
 
         <div class="container">
             <div class="row">
-
-    <div class="row-fluid">
-      <div id="main-content" class="span12">
-        <h1 id="404-page-not-found" style="text-align: center">404</h1>
-        <p style="text-align: center"><strong>找不到页面</strong></p>
-      </div>
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="目录">
+            <span class="fa fa-angle-down"></span>
+        </button>
     </div>
 
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#inbox" class="nav-link">Inbox</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
 
+<h1 id="inbox">Inbox</h1>
+<p><img alt="inbox" src="../images/S_inbox.png" /></p></div>
             </div>
         </div>
 
@@ -90,11 +113,11 @@
             <p>用<a href="https://www.mkdocs.org/">MkDocs</a>建立的文档。</p>
         </footer>
         <script>
-            var base_url = "/",
+            var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="/js/base.js" defer></script>
-        <script src="/search/main.js" defer></script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
