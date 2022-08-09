@@ -7,52 +7,53 @@
 `last Logout`：账号最后一次下线时间<br>
 `Lounge Points`: 高级房点数<br>
 `Lounge Ts`:高级房倒计时<br>
-`Free Lounge Points`:<br>
-`ranking_level` 4<br>
-`b_season` 164<br>
-`level_burst_bug_flag`<br>
-`lounge_reward_points` 0<br>
-`ooc_coin_count` 84<br>
-`last_ranking_level` 4<br>
-`pick_bonus_disconnection` []<br>
-`mp last season purchase` [mission pass debug](#mission-pass-debug)<br><br>
-`mp current season purchase` 3<br>
-`user status` 3<br>
-`first_quest_end_ts`：[新手基金](quest.md)<br>
+`Free Lounge Points`:：待确认<br>
+`ranking_level`：排行榜房间等级<br>
+`b_season`：当前B级赛季<br>
+`level_burst_bug_flag`：待确认<br>
+`lounge_reward_points`：待确认<br>
+`ooc_coin_count`：总付费次数<br>
+`last_ranking_level`：上次排行榜房间<br>
+`pick_bonus_disconnection`：pick_bonus 断线数据<br>
+`mp last season purchase`：上赛季的MP解锁状态<br>
+`mp current season purchase`：当前赛季的MP解锁状态<br>
+`user status`：默认值为:`0`，改成`3`后，自身r level不会随购买变动了<br>
+`first_quest_end_ts`：[新手期倒计时](quest.md)<br>
 `user_icon_id`：正在使用的头像ID<br>
-`nick_name` XXL 10666<br>
-`inbox bonus ts` 1659756669<br>
-`store_free_bonus_ts` 1649972625<br>
-`lounge_reward_coef` 165<br>
-`starter_kit_normal`<br>
+`nick_name`：游戏内编辑的name<br>
+`inbox bonus ts`：待确认<br>
+`store_free_bonus_ts`：待确认<br>
+`lounge_reward_coef`：待确认<br>
+`starter_kit_normal`：待确认<br>
 `icon_list` 已拥有的头像ID list<br>
-`vip_points` 3372907<br>
+`vip_points`：VIP点数<br>
 `flag6`：国内ip进不去游戏时，将此数据改成`10`<br>
-`store_bonus_prompt_ts` 1659856557<br>
-`client_resources_flag` []<br>
-`first_quest_finish_prize` {}<br>
-`weekend_tournament_ranking_level` 1<br>
-`weekend_tournament_last_ranking_level` 1<br>
+`store_bonus_prompt_ts`：待确认<br>
+`client_resources_flag`：待确认<br>
+`first_quest_finish_prize`：新手期奖励<br>
+`weekend_tournament_ranking_level`：周末锦标赛，排行榜房间<br>
+`weekend_tournament_last_ranking_level`：周末锦标赛，上次排行榜房间<br>
 `tc_bonus_flag` {}<br>
-`lobby_list` [0, 8]<br>
-`current_lobby_ui_id` 0<br>
+`lobby_list：[0, 8]`：拥有的大厅UI<br>
+`current_lobby_ui_id`：当前使用的大厅UI<br>
 `tc_challenge_end_ts` 0<br>
-`last_b_season` 194<br>
-`max_purchase` 200<br>
-`selected_favourite_theme` [233, 239, 276, 181, 248, 122, 191]<br>
-`first_get_b_token` {"bingo": 0, "rocket": 0, "cooking": 0, "mow": 0, "makeover": 0, "archer": 1, "tower": 0, "blast": 0, "journey": 0}<br>
-`first_play_b_system` {"bingo": 0, "gof": 0, "rocket": 0, "cooking": 0, "mow": 0, "makeover": 0, "journey": 0, "archer": 1, "tower": 0, "blast": 0}
-`lounge_guide` {"p2": 1, "p3": 1, "p1": 1, "p6": 1, "p7": 1, "p4": 1, "p8": 1, "free_pass": 1}<br>
-`lounge_free_collected` 1<br>
-`lounge_transform_info` {}<br>
-`mp_send_free_booster_flag` 0<br>
-`novice_end_first_login` [新手基金](quest.md)<br>
-`novice_reward` [新手基金](quest.md)<br>
-`novice_end_time` [新手基金](quest.md)<br>
+`last_b_season`：最后一次的B级赛季<br>
+`max_purchase`：最高付费金额<br>
+`selected_favourite_theme`：喜欢主题的list<br>
+`first_get_b_token`：B级免费token的领取状态<br>
+`first_play_b_system`：B级九选一的选中游玩状态<br>
+`lounge_guide`：高级房引导<br>
+`lounge_free_collected`：高级房引导中的free pass卡领取状态<br>
+`lounge_transform_info`：待确认<br>
+`mp_send_free_booster_flag`：待确认<br>
+`novice_end_first_login`：[新手基金](quest.md)<br>
+`novice_reward`：[新手基金](quest.md)<br>
+`novice_end_time`：[新手基金](quest.md)<br>
 `store_stamp_count` lucky chames的数量<br>
-`lounge_store_week_ts` 1660276800<br>
-`mp_buy_bundle_season` 46<br>
-`stamp_easter_egg_ts` 0<br>
+`lounge_store_week_ts`：待确认<br>
+`mp_buy_bundle_season`：待确认<br>
+`stamp_easter_egg_ts`：待确认<br>
+
 
 ## frenzy_vault
 a_data [6394, 335, 80]<br>

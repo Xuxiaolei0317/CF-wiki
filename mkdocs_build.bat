@@ -1,0 +1,1 @@
+mkdocs build -d E:\CF_Wiki
