@@ -1,6 +1,5 @@
 # 系统
 ## 个人数据
-
 `Last Login Date`: 账号最后一次login时间戳<br>
 `First Login`: 账号创建时间<br>
 `Last Login`: 账号最后一次login时间<br>
@@ -56,12 +55,41 @@
 
 
 ## frenzy_vault
-a_data [6394, 335, 80]<br>
-[`archer`,`bingo`,`blast`,`cooking`,`gof`,`journey`,`rocket`,`sail`,`tower`,`mow`]<br> 
-[`349`, `355`, `1404`, `5062`, `0`, `601`, `1109`, `400`, `51`, `303`, `28`, `321`]<br>
-`b_store_data` {"`b_store`": 65385, "is_get_lucky_loot": 1}<br>
-chips 45091<br>
-frenzy_spin 974
+
+[archer , bingo, blast , cooking , gof , journey , rocket , sail , tower , mow]<br>
+[ 3490  , 3550 , 1404  , 5062    , 0   , 601     , 1109   , 400  , 51    , 303]对应上面B级的token数量<br>
+
+b_store_data {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}
+`chips`：第二货币数量<br>
+`frenzy_spin`：邮票里frenzy spin的次数<br>
+
+## Mission
+`Reset Ts`：待确认<br>
+`Wheel Collected`：待确认<br>
+`Mission Points`：待确认<br>
+`Index`：待确认<br>
+`Type`：待确认<br>
+`Target`：待确认<br>
+`Current`：待确认<br>
+`Target Special`：待确认<br>
+`Target M7 Special`：待确认<br>
+`Target M7 Retry`：待确认<br>
+`Wager`：待确认<br>
+`Index_prize`：待确认<br>
+`Avg Bet`：待确认<br>
+`Disconnection`：待确认<br>
+`Wheel Extra Chance`：待确认<br>
+`Wheel Unused Chance`：待确认<br>
+`Guide`：待确认<br>
+`Glory Mission Reset Ts`：待确认<br>
+`Glory Mission Type`：待确认<br>
+`Glory Mission Target`：待确认<br>
+`Glory Mission Current`：待确认<br>
+`Glory Mission Wager`：待确认<br>
+`Glory Mission Prize`：待确认<br>
+`box_collected`：待确认<br>
+`Glory Mission Finish Flag`：待确认<br>
+`Glory Mission Unlock Flag`：待确认<br>
 
 ## Mission Pass
 
@@ -74,7 +102,7 @@ frenzy_spin 974
 `Available Free Reward []`：free level 数据<br>
 `Available High Reward []`：pass level 数据
 
-    level 数据初始 [0] 有个0级的, 升到5级显示[0,1,2,3,4,5]
+    Reward level 数据初始 [0] 有个0级的, 升到5级显示[0,1,2,3,4,5]
     下面是python的迭代 0 ~ 100
     a = [i for i in range(101)] #迭代0 ~ 100
 `Free Pass Prize {}`：free奖励数据<br>
@@ -113,13 +141,160 @@ frenzy_spin 974
 ![解锁弹窗配置](images/S_mission_pass_boost.png)<br>
 
     在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
+    
+## Smash Egg
+`Gold Hammer Status`：待确认<br>
+`Gold Hammer Extra`：待确认<br>
+`Gold Hammer Disconnection`：待确认<br>
+`Gold Hammer Flag`：待确认<br>
+`Silver Hammer Status`：待确认<br>
+`Silver Hammer Extra`：待确认<br>
+`Silver Hammer Disconnection`：待确认<br>
+`Silver Hammer Flag`：待确认<br>
+`Hammer Reset Ts`：待确认<br>
+`Old Player Flag`  ：待确认<br>
+`Gold Shell Pos LIst`  ：待确认<br>
+`Gold Shell Win List`  ：待确认<br>
+`Gold Shell Round`：待确认<br>
+`Gold Shell Pick`：待确认<br>
+`Gold Shell Status`：待确认<br>
+`Silver Shell Pos LIst`：待确认<br>
+`Silver Shell Win List`：待确认<br>
+`Silver Shell Round`：待确认<br>
+`Silver Shell Pick`：待确认<br>
+`Silver Shell Status`：待确认<br>
+`Special Chips Purchased`：待确认<br>
+`Reset Feature Ts`：待确认<br>
+
+## Blazing Challenge
+EXP:：待确认<br>
+Level:：待确认<br>
+Season:：待确认<br>
+Season End:：待确认<br>
+Missions:：待确认<br>
+Mission End:：待确认<br>
+Prizes:：待确认<br>
+Bonus Game Disconnection:：待确认<br>
+Ranking Prize Disconnection:：待确认<br>
+Avg Bet:：待确认<br>
+Mini Theme Next Time:：待确认<br>
+EXP Activity 31002:：待确认<br>
+END Time Activity 31002:：待确认<br>
+Boosters:：待确认<br>
+Commodities:：待确认<br>
+History Rank:：待确认<br>
+
+
+## Mansion Quest
+name
+stars
+room
+room mission
+finish current phase
+mission
+disconnection room mission
+home_phase
+boosters_data
+skip_card
+mission_stage_data
+flash tag
+stage prize
+房间奖励数据
+当前房间奖励
+房间奖励断线数据
+新主题任务
+新主题idx
+
+## Mansion Quest Ranking
+mq tid
+round index
+round points
+round target
+season
+mansion lv
+mission
+round prize
+rank prize
+
+## level_up_party
+index
+tasks
+reset_ts
+has_game
+bet
+first_flag
+today_ts
+common_game
+
+## Login Bonus
+week count
+week type
+week base coins
+month count
+month type
+month base coins
+last login
+has checked in
+month status
+ab flag
+
+## Weekend Tournament
+store_booster_ts
+store_booster_multi
+daily_bonus_booster_ts
+daily_bonus_booster_multi
+medal_booster
+is_collected
+season
+race
+points
+end_ts
+disconnection
+ranking_level
+last_ranking_level
+wt_season
+last_send_inbox_ts
+
+## Coupon New
+Store Coupon Id
+Store Coupon List
+Piggy Coupon Id
+Piggy Coupon list
+coupon_7days_no_purchase_last_get_ts
+Emerald Coupon Id
+Emerald Coupon List
+Chips Bank Coupon Id
+Chips Bank Coupon List
+
+## inbox sp product
+last_sp_store_end_ts
+sp_piggy_product
+sp_store_product
+last_sp_piggy_end_ts
+
+## Lobby Bonus
+Megaball Progress
+SoC Progress
+Multiplier
+Golden Multiplier
+Turbo ts
+Instant ts
+Soc Count
+Turbo Speedy ts
+Last Multipler ts
+Slot Blast ts
+
+## 
+
+## 
+
+## 
 
 ## Persona 广告用户
 
     LL 广告用户为真正0付费玩家广告用户
     HH-OO 用户有固定逻辑才会开启广告
     
-
 `purchase_type: 1`：（HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 `new_ad_3h_counter 12`：<br>
 `new_ad_soc_premium_ts 0`：soc广告倒计时<br>

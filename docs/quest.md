@@ -4,6 +4,12 @@
 
 `first_quest_end_ts`: 新手quest结束时间（修改为过去时间戳可跨过新手quest）
 
+## first_quest
+_task_index
+_prize_index
+_task_list
+_prize_list
+
 ## 新手基金
 
     level等级到达 3 级时，触发新手基金活动！

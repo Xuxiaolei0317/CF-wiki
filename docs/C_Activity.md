@@ -1,6 +1,11 @@
 [sflt]:images/sflt.png 
 [stb]:images/stb.png "set today begin"
 [rlwc]:images/rlwc.png "reset_lucky_winner_collected"
+
+## Spin Up Boost
+`progress`:super spin up 积累次数
+
+
 # lucky winner
    [注意]：`修改数据时一定要修改正确后再登录`
 
