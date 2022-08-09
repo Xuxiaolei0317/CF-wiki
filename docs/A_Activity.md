@@ -41,10 +41,10 @@
 
 `Byd byd_start_ts:`:  <br>
 `Byd chest_exp:`：<br>
-`Byd is_collected:`：BYD全建筑集齐收奖<br>
+`Byd is_collected:`：BYD全建筑集齐收奖状态 `0` or `1`<br>
 `BYD current_season`：BYD赛季 <br>
-`BYD gallery`:  <br>
-`BYD_rank_building`:  <br>
+`BYD gallery [[], []]`:历史建筑完成度，每个`[]`内相当于一个`Byd items_data`数据<br>
+`BYD_rank_building`：摩天大楼经验值<br>
 ## ATW
 ![atw data](images/A_atw.png)
 
