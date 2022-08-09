@@ -31,15 +31,20 @@
 ## BYD
 ![byd data](images/A_byd.png)
 
-`Byd free_chest_ts:`:  
-`Byd chest_data:`:  
-`Byd items_data:`:  
-`Byd byd_start_ts:`:  
-`Byd chest_exp:`:  
-`Byd is_collected:`:  
-`BYD current_season`:  
-`BYD gallery`:  
-`BYD_rank_building`:  
+`Byd free_chest_ts:`：首次免费领取建筑道具的时间戳<br>
+`Byd chest_data:`：[`Common`:1, `Rare`:1, `Epic`:1, `Legendary`:1]BYD道具数量<br>
+`Byd items_data:`：BYD建筑数据<br>
+
+    Byd items_data:
+        [[建筑1],[建筑2],[建筑3],[建筑4],[.....],[建筑9]]共9个建筑
+        [建筑等级,建筑总经验,建筑宝箱领取时间]：一个建筑的数据
+
+`Byd byd_start_ts:`:  <br>
+`Byd chest_exp:`：<br>
+`Byd is_collected:`：BYD全建筑集齐收奖<br>
+`BYD current_season`：BYD赛季 <br>
+`BYD gallery`:  <br>
+`BYD_rank_building`:  <br>
 ## ATW
 ![atw data](images/A_atw.png)
 
