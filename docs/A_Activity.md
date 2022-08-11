@@ -1,5 +1,5 @@
-# A Activity
-## STAMPS
+<!-- # A Activity -->
+# STAMPS
     描述
 
 ![邮票作弊button](images/A_stamp_button.png)
@@ -28,7 +28,7 @@
              "reset_ts": 1659585600, 
              "target_special": 0, 
              "target": 6}}
-## BYD
+# BYD
 ![byd data](images/A_byd.png)
 
 `Byd free_chest_ts:`：首次免费领取建筑道具的时间戳<br>
@@ -45,7 +45,7 @@
 `BYD current_season`：BYD赛季 <br>
 `BYD gallery [[], []]`:历史赛季建筑完成度，每个`[]`内相当于一个赛季的`Byd items_data`数据<br>
 `BYD_rank_building`：摩天大楼经验值<br>
-## ATW
+# ATW
 ![atw data](images/A_atw.png)
 
 `guide`：新手引导<br>

@@ -1,4 +1,3 @@
-# 系统
 ## 个人数据
 `Last Login Date`: 账号最后一次login时间戳<br>
 `First Login`: 账号创建时间<br>
@@ -59,7 +58,7 @@
 [archer , bingo, blast , cooking , gof , journey , rocket , sail , tower , mow]<br>
 [ 3490  , 3550 , 1404  , 5062    , 0   , 601     , 1109   , 400  , 51    , 303]对应上面B级的token数量<br>
 
-b_store_data {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}
+`b_store_data` {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}
 `chips`：第二货币数量<br>
 `frenzy_spin`：邮票里frenzy spin的次数<br>
 
