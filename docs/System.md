@@ -1,8 +1,8 @@
 ## 个人数据
 `Last Login Date`: 账号最后一次login时间戳<br>
 `First Login`: 账号创建时间<br>
-`Last Login`: 账号最后一次login时间<br>
-`last Logout`：账号最后一次下线时间<br>
+`Last Login`: 账号上次一次login时间<br>
+`last Logout`：账号上次下线时间<br>
 `Lounge Points`: 高级房点数<br>
 `Lounge Ts`:高级房倒计时<br>
 `Free Lounge Points`:：待确认<br>
@@ -20,7 +20,7 @@
 `user_icon_id`：正在使用的头像ID<br>
 `nick_name`：游戏内编辑的name<br>
 `inbox bonus ts`：待确认<br>
-`store_free_bonus_ts`：待确认<br>
+`store_free_bonus_ts`：store bonus的收奖倒计时，改成过去式时间戳，可重置<br>
 `lounge_reward_coef`：待确认<br>
 `starter_kit_normal`：待确认<br>
 `icon_list` 已拥有的头像ID list<br>
@@ -51,7 +51,9 @@
 `lounge_store_week_ts`：待确认<br>
 `mp_buy_bundle_season`：待确认<br>
 `stamp_easter_egg_ts`：待确认<br>
-
+`no_adv_return_end`：7天内免费看广告的结束时间戳<br>
+`total_purchase `：用户的全部付费相加<br>
+`another_first_quest_flag`：[新手ABtest](quest.md)<br>
 
 ## frenzy_vault
 

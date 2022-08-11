@@ -1,10 +1,11 @@
 # Quest
 
     level等级到达 4 级时，触发新手quest！
-    新手ABtest：ID 的十位数，奇数为A组，偶数为B组
-    
-`first_quest_end_ts`: 新手quest结束时间（修改为过去时间戳可跨过新手quest）
+    新手ABtest：ID 的十位数，奇数为:A组对照组，偶数为:B组实验组
 
+    
+`first_quest_end_ts`: 新手quest结束时间（修改为过去时间戳可跨过新手quest）<br>
+`another_first_quest_flag`：新手ABtest,`0`是对照组,`1`是实验组<br>
 ## first_quest
 
     A组用户：完成新手quest 或者倒计时结束跨过新手期
