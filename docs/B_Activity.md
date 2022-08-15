@@ -191,19 +191,20 @@ Scene Guide
 multi_commodities
 Free Wand
 detect times
+
 ## B Activity Choice
-Season 194
-Choice blast
-Token Stash []
-Last B Name bingo
-B token buy times 0
-B token buy price 49.99
-B token last reset ts 1659492306
-Guide 6
-Dash collected [0, 0, 0]
-b guide {"bingo": {"10": 1, "15": 1, "14": 1, "17": 1, "16": 1, "19": 1, "18": 1, "1": 1, "3": 1, "2": 1, "5": 1, "4": 1, "7": 1, "6": 1, "9": 1, "8": 1}, "rocket": 6, "cooking": 8, "mow": {"P2": 1, "P3": 1, "P1": 1, "P6": 1, "P7": 1, "P4": 1, "P5": 1, "P8": 1, "P9": 1}, "makeover": {"p2": 1, "p3": 1, "p1": 1, "p4": 1}, "archer": 6, "tower": 5, "blast": 0, "journey": 3}
-Max Store Purchase 2300
-B Last Season {"bingo": 180, "archer": 180, "cooking": 180, "mow": 180, "journey": 180, "blast": 194}
+Season 194<br>
+Choice blast<br>
+Token Stash []<br>
+Last B Name bingo<br>
+B token buy times 0<br>
+B token buy price 49.99<br>
+B token last reset ts 1659492306<br>
+Guide 6<br>
+Dash collected [0, 0, 0]<br>
+b guide {"bingo": {"10": 1, "15": 1, "14": 1, "17": 1, "16": 1, "19": 1, "18": 1, "1": 1, "3": 1, "2": 1, "5": 1, "4": 1, "7": 1, "6": 1, "9": 1, "8": 1}, "rocket": 6, "cooking": 8, "mow": {"P2": 1, "P3": 1, "P1": 1, "P6": 1, "P7": 1, "P4": 1, "P5": 1, "P8": 1, "P9": 1}, "makeover": {"p2": 1, "p3": 1, "p1": 1, "p4": 1}, "archer": 6, "tower": 5, "blast": 0, "journey": 3}<br>
+Max Store Purchase 2300<br>
+B Last Season {"bingo": 180, "archer": 180, "cooking": 180, "mow": 180, "journey": 180, "blast": 194}<br>
 
 ## B Ranking
 Scores 0

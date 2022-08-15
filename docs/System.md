@@ -13,6 +13,16 @@
 `ooc_coin_count`：总付费次数<br>
 `last_ranking_level`：上次排行榜房间<br>
 `pick_bonus_disconnection`：pick_bonus 断线数据<br>
+`new_b_used`：待确认<br>
+`old_b_used`：待确认<br>
+`next_today_begin`：待确认<br>
+`next_first_login`：待确认<br>
+`stamp_round`：待确认<br>
+`bc_avg_bet_ls`：待确认<br>
+`behaviour_data_bug_fix`：待确认<br>
+`mistery_bank_breaker_flag`：待确认<br>
+`over_mp_chest_user_start_ts`：待确认<br>
+`last_birthday`: 改成`[0,0,0]`可触发生日周年弹窗<br>
 `mp last season purchase`：上赛季的MP解锁状态<br>
 `mp current season purchase`：当前赛季的MP解锁状态<br>
 `user status`：默认值为:`0`，改成`3`后，自身r level不会随购买变动了<br>
@@ -38,6 +48,7 @@
 `last_b_season`：最后一次的B级赛季<br>
 `max_purchase`：最高付费金额<br>
 `selected_favourite_theme`：喜欢主题的list<br>
+`supplement_chips_status`: 改成`0`重置第二货币用尽促销<br>
 `first_get_b_token`：B级免费token的领取状态<br>
 `first_play_b_system`：B级九选一的选中游玩状态<br>
 `lounge_guide`：高级房引导<br>
@@ -56,40 +67,40 @@
 `another_first_quest_flag`：[新手ABtest](quest.md)<br>
 
 ## frenzy_vault
-`a_data` ：[6394, 335, 80]<br>
+<!-- `a_data` ：[6394, 335, 80]<br> -->
 [archer,bingo,blast,cooking,gof,journey,rocket,sail,tower,mow] <br>
 [330, 355, 1404, 5062, 0, 601, 1109, 400, 51, 303, 28, 321]：对应B级的token数量<br>
 `c_data` ：[]<br>
 `a_type` ：[]<br>
 `b_store_data` {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}<br>
-`c_type` ：[]<br>
+<!-- `c_type` ：[]<br> -->
 `chips`：第二货币数量<br>
 `frenzy_spin`：邮票里frenzy spin的次数<br>
 
 ## Mission
 `Reset Ts`：mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
-`Wheel Collected`：领奖状态<br>
-`Mission Points`：进度值<br>
-`Index`：第几个任务<br>
-`Type`：当前任务的Type<br>
-`Target`：当前任务的目标<br>
-`Current`：当前任务的Type<br>
+`Wheel Collected`：Mission Points领奖状态<br>
+`Mission Points`：Mission Points点数<br>
+`Index`：第几个mission任务<br>
+`Type`：当前mission任务的Type<br>
+`Target`：当前mission任务的目标值<br>
+`Current`：当前mission任务的进度值<br>
 `Target Special`：待确认<br>
 `Target M7 Special`：待确认<br>
 `Target M7 Retry`：待确认<br>
 `Wager`：待确认<br>
-`Index_prize`：待确认<br>
+`Index_prize`：当前mission任务的奖励数据<br>
 `Avg Bet`：待确认<br>
-`Disconnection`：待确认<br>
+`Disconnection`：断线数据<br>
 `Wheel Extra Chance`：待确认<br>
 `Wheel Unused Chance`：待确认<br>
-`Guide`：待确认<br>
+`Guide`：引导<br>
 `Glory Mission Reset Ts`：待确认<br>
-`Glory Mission Type`：待确认<br>
-`Glory Mission Target`：待确认<br>
-`Glory Mission Current`：待确认<br>
+`Glory Mission Type`：当前HONOR Mission任务的Type<br>
+`Glory Mission Target`：当前HONOR Mission任务的目标值<br>
+`Glory Mission Current`：当前HONOR Mission任务的进度值<br>
 `Glory Mission Wager`：待确认<br>
-`Glory Mission Prize`：待确认<br>
+`Glory Mission Prize`：当前HONOR Mission任务的奖励数据<br>
 `box_collected`：待确认<br>
 `Glory Mission Finish Flag`：待确认<br>
 `Glory Mission Unlock Flag`：待确认<br>
@@ -146,15 +157,15 @@
     在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
     
 ## Smash Egg
-`Gold Hammer Status`：待确认<br>
-`Gold Hammer Extra`：待确认<br>
-`Gold Hammer Disconnection`：待确认<br>
-`Gold Hammer Flag`：待确认<br>
-`Silver Hammer Status`：待确认<br>
-`Silver Hammer Extra`：待确认<br>
-`Silver Hammer Disconnection`：待确认<br>
-`Silver Hammer Flag`：待确认<br>
-`Hammer Reset Ts`：待确认<br>
+`Gold Hammer Status`：每天领取金锤子的数量<br>
+`Gold Hammer Extra`：购买金锤子的数量<br>
+`Gold Hammer Disconnection`：断线数据<br>
+`Gold Hammer Flag`：`1` = 已经砸过蛋了，`0` = 未砸蛋<br>
+`Silver Hammer Status`：每天领取银锤子的数量<br>
+`Silver Hammer Extra`：购买银锤子的数量<br>
+`Silver Hammer Disconnection`：断线数据<br>
+`Silver Hammer Flag`：`1` = 已经砸过蛋了，`0` = 未砸蛋<br>
+<!-- `Hammer Reset Ts`：待确认<br>
 `Old Player Flag`  ：待确认<br>
 `Gold Shell Pos LIst`  ：待确认<br>
 `Gold Shell Win List`  ：待确认<br>
@@ -167,7 +178,7 @@
 `Silver Shell Pick`：待确认<br>
 `Silver Shell Status`：待确认<br>
 `Special Chips Purchased`：待确认<br>
-`Reset Feature Ts`：待确认<br>
+`Reset Feature Ts`：待确认<br> -->
 
 ## Blazing Challenge
 EXP:：待确认<br>
@@ -189,118 +200,127 @@ History Rank:：待确认<br>
 
 
 ## Mansion Quest
-name
-stars
-room
-room mission
-finish current phase
-mission
-disconnection room mission
-home_phase
-boosters_data
-skip_card
-mission_stage_data
-flash tag
-stage prize
-房间奖励数据
-当前房间奖励
-房间奖励断线数据
-新主题任务
-新主题idx
+name：待确认<br>
+stars：待确认<br>
+room：待确认<br>
+room mission：待确认<br>
+finish current phase：待确认<br>
+mission：待确认<br>
+disconnection room mission：待确认<br>
+home_phase：待确认<br>
+boosters_data：待确认<br>
+skip_card：待确认<br>
+mission_stage_data：待确认<br>
+flash tag：待确认<br>
+stage prize：待确认<br>
+房间奖励数据：待确认<br>
+当前房间奖励：待确认<br>
+房间奖励断线数据：待确认<br>
+新主题任务：待确认<br>
+新主题idx：待确认<br>
 
 ## Mansion Quest Ranking
-mq tid
-round index
-round points
-round target
-season
-mansion lv
-mission
-round prize
-rank prize
+mq tid：待确认<br>
+round index：待确认<br>
+round points：待确认<br>
+round target：待确认<br>
+season：待确认<br>
+mansion lv：待确认<br>
+mission：待确认<br>
+round prize：待确认<br>
+rank prize：待确认<br>
 
 ## level_up_party
-index
-tasks
-reset_ts
-has_game
-bet
-first_flag
-today_ts
-common_game
+index：待确认<br>
+tasks：待确认<br>
+reset_ts：待确认<br>
+has_game：待确认<br>
+bet：待确认<br>
+first_flag：待确认<br>
+today_ts：待确认<br>
+common_game：待确认<br>
 
 ## Login Bonus
-week count
-week type
-week base coins
-month count
-month type
-month base coins
-last login
-has checked in
-month status
-ab flag
+week count：待确认<br>
+week type：待确认<br>
+week base coins：待确认<br>
+month count：待确认<br>
+month type：待确认<br>
+month base coins：待确认<br>
+last login：待确认<br>
+has checked in：待确认<br>
+month status：待确认<br>
+ab flag：待确认<br>
 
 ## Weekend Tournament
-store_booster_ts
-store_booster_multi
-daily_bonus_booster_ts
-daily_bonus_booster_multi
-medal_booster
-is_collected
-season
-race
-points
-end_ts
-disconnection
-ranking_level
-last_ranking_level
-wt_season
-last_send_inbox_ts
+store_booster_ts：待确认<br>
+store_booster_multi：待确认<br>
+daily_bonus_booster_ts：待确认<br>
+daily_bonus_booster_multi：待确认<br>
+medal_booster：待确认<br>
+is_collected：待确认<br>
+season：待确认<br>
+race：待确认<br>
+points：待确认<br>
+end_ts：待确认<br>
+disconnection：待确认<br>
+ranking_level：待确认<br>
+last_ranking_level：待确认<br>
+wt_season：待确认<br>
+last_send_inbox_ts：待确认<br>
 
 ## Coupon New
-Store Coupon Id
-Store Coupon List
-Piggy Coupon Id
-Piggy Coupon list
-coupon_7days_no_purchase_last_get_ts
-Emerald Coupon Id
-Emerald Coupon List
-Chips Bank Coupon Id
-Chips Bank Coupon List
+`Store Coupon Id`: 手动清除list内coupon时，此数据改`-1`：待确认<br>
+`Store Coupon List`：待确认<br>
+`Piggy Coupon Id`：待确认<br>
+`Piggy Coupon list`
+`coupon_7days_no_purchase_last_get_ts`：待确认<br>
+`Emerald Coupon Id`：待确认<br>
+`Emerald Coupon List`：待确认<br>
+`Chips Bank Coupon Id`：待确认<br>
+`Chips Bank Coupon List`：待确认<br>
+
+## Discount coupon
+`Store Discount Coupon Id` -1：待确认<br>
+`Store Discount Coupon List` []：待确认<br>
 
 ## inbox sp product
-last_sp_store_end_ts
-sp_piggy_product
-sp_store_product
-last_sp_piggy_end_ts
+last_sp_store_end_ts：待确认<br>
+sp_piggy_product：待确认<br>
+sp_store_product：待确认<br>
+last_sp_piggy_end_ts：待确认<br>
 
 ## Lobby Bonus
-Megaball Progress
-SoC Progress
-Multiplier
-Golden Multiplier
-Turbo ts
-Instant ts
-Soc Count
-Turbo Speedy ts
-Last Multipler ts
-Slot Blast ts
+Megaball Progress：待确认<br>
+SoC Progress：待确认<br>
+Multiplier：待确认<br>
+Golden Multiplier：待确认<br>
+Turbo ts：待确认<br>
+Instant ts：待确认<br>
+Soc Count：待确认<br>
+Turbo Speedy ts：待确认<br>
+Last Multipler ts：待确认<br>
+Slot Blast ts：待确认<br>
 
 ## Purchase: Piggy Bank (New)
-Piggy Bank Balance: 2897736360080
-Piggy Price LV: 5
-Piggy Config LV: 5
-Piggy Bank Down LV: 0
-Piggy Bank Up LV: 1
-Piggy Bank Max Days: 0
-Piggy First Purchase: 1
-Piggy Bank AB Test: 0
-Piggy Bank Data Migration:
+`Piggy Bank Balance`: 当前bank数量<br>
+`Piggy Price LV`: 价格等级<br>
+`Piggy Config LV`: 配置等级<br>
+`Piggy Bank Down LV`: 降档（0=不降，1=降一档，2=降两档）最大2<br>
+`Piggy Bank Up LV`: 升档（0=不降，1=降一档，2=降两档）最大2<br>
+`Piggy Bank Max Days`: 未登录天数（7天降价）<br>
+`Piggy First Purchase`: 1<br>
+`Piggy Bank AB Test`: 0<br>
+`Piggy Bank Data Migration`:<br>
 
-## 
+## Emerald Bank
+`Emerald Bank`: 当前bank数量<br>
+`Config Level`: 配置等级<br>
+`Price Level`: 价格等级<br>
+`Level up`: 升档（0=不降，1=降一档，2=降两档）最大2<br>
+`Level Down`: 降档（0=不降，1=降一档，2=降两档）最大2<br>
+`Max Days`: 未登录天数（7天降价）<br>
 
-## 
 
 ## Persona 广告用户
 
