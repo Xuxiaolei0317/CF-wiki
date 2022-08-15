@@ -31,7 +31,6 @@
 
 ![Activity: Lucky Winner I/II](images/C_lucky_winner.png "lucky_winner数据图")  
 
-
 `[Tickets]`：彩票数量<br>
 `[Deadline]`：活动倒计时<br>
 `[Lucky Winner type]`：对应某个 Lucky Winner 活动的值<br>

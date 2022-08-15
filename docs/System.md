@@ -43,12 +43,12 @@
 `lounge_guide`：高级房引导<br>
 `lounge_free_collected`：高级房引导中的free pass卡领取状态<br>
 `lounge_transform_info`：待确认<br>
-`mp_send_free_booster_flag`：待确认<br>
+`mp_send_free_booster_flag`：赠送免费的mission star booster弹窗<br>
 `novice_end_first_login`：[新手基金](quest.md)<br>
 `novice_reward`：[新手基金](quest.md)<br>
 `novice_end_time`：[新手基金](quest.md)<br>
 `store_stamp_count` lucky chames的数量<br>
-`lounge_store_week_ts`：待确认<br>
+`lounge_store_week_ts`：lounge兑换商店道具刷新倒计时<br>
 `mp_buy_bundle_season`：待确认<br>
 `stamp_easter_egg_ts`：待确认<br>
 `no_adv_return_end`：7天内免费看广告的结束时间戳<br>
@@ -56,22 +56,24 @@
 `another_first_quest_flag`：[新手ABtest](quest.md)<br>
 
 ## frenzy_vault
-
-[archer , bingo, blast , cooking , gof , journey , rocket , sail , tower , mow]<br>
-[ 3490  , 3550 , 1404  , 5062    , 0   , 601     , 1109   , 400  , 51    , 303]对应上面B级的token数量<br>
-
-`b_store_data` {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}
+`a_data` ：[6394, 335, 80]<br>
+[archer,bingo,blast,cooking,gof,journey,rocket,sail,tower,mow] <br>
+[330, 355, 1404, 5062, 0, 601, 1109, 400, 51, 303, 28, 321]：对应B级的token数量<br>
+`c_data` ：[]<br>
+`a_type` ：[]<br>
+`b_store_data` {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}<br>
+`c_type` ：[]<br>
 `chips`：第二货币数量<br>
 `frenzy_spin`：邮票里frenzy spin的次数<br>
 
 ## Mission
-`Reset Ts`：待确认<br>
-`Wheel Collected`：待确认<br>
-`Mission Points`：待确认<br>
-`Index`：待确认<br>
-`Type`：待确认<br>
-`Target`：待确认<br>
-`Current`：待确认<br>
+`Reset Ts`：mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
+`Wheel Collected`：领奖状态<br>
+`Mission Points`：进度值<br>
+`Index`：第几个任务<br>
+`Type`：当前任务的Type<br>
+`Target`：当前任务的目标<br>
+`Current`：当前任务的Type<br>
 `Target Special`：待确认<br>
 `Target M7 Special`：待确认<br>
 `Target M7 Retry`：待确认<br>
