@@ -34,6 +34,7 @@
 `Byd free_chest_ts:`：首次免费领取建筑道具的时间戳<br>
 `Byd chest_data:`：[`Common`:1, `Rare`:1, `Epic`:1, `Legendary`:1] BYD道具数量<br>
 `Byd items_data:`：BYD建筑数据<br>
+![byd level](images/A_byd_level.png)
 
         BYD建筑数据:
             [[建筑1],[建筑2],[建筑3],[建筑4],[.....],[建筑9]]共9个建筑

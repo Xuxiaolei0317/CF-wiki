@@ -3,10 +3,14 @@
 `First Login`: 账号创建时间<br>
 `Last Login`: 账号上次一次login时间<br>
 `last Logout`：账号上次下线时间<br>
+`Level`: 等级<br>
+`VIP`: VIP等级<br>
+`Credits`: 拥有的`coins`数量<br>
 `Lounge Points`: 高级房点数<br>
 `Lounge Ts`:高级房倒计时<br>
 `Free Lounge Points`:：待确认<br>
 `ranking_level`：排行榜房间等级<br>
+`is_admin`: 为`3`时是可以手动调整r level的等级；为`0`时是模仿真实用户登录情况<br>
 `b_season`：当前B级赛季<br>
 `level_burst_bug_flag`：待确认<br>
 `lounge_reward_points`：待确认<br>
@@ -63,7 +67,7 @@
 `mp_buy_bundle_season`：待确认<br>
 `stamp_easter_egg_ts`：待确认<br>
 `no_adv_return_end`：7天内免费看广告的结束时间戳<br>
-`total_purchase `：用户的全部付费相加<br>
+`total_purchase `：用户的全部付费额<br>
 `another_first_quest_flag`：[新手ABtest](quest.md)<br>
 
 ## frenzy_vault
@@ -253,42 +257,42 @@ month status：待确认<br>
 ab flag：待确认<br>
 
 ## Weekend Tournament
-store_booster_ts：待确认<br>
-store_booster_multi：待确认<br>
-daily_bonus_booster_ts：待确认<br>
-daily_bonus_booster_multi：待确认<br>
-medal_booster：待确认<br>
-is_collected：待确认<br>
-season：待确认<br>
-race：待确认<br>
-points：待确认<br>
-end_ts：待确认<br>
-disconnection：待确认<br>
-ranking_level：待确认<br>
-last_ranking_level：待确认<br>
+`store_booster_ts`：待确认<br>
+`store_booster_multi`：待确认<br>
+`daily_bonus_booster_ts`：待确认<br>
+`daily_bonus_booster_multi`：待确认<br>
+`medal_booster`：待确认<br>
+`is_collected`：待确认<br>
+`season`：待确认<br>
+`race`：待确认<br>
+`points`：待确认<br>
+`end_ts`：待确认<br>
+`disconnection`：待确认<br>
+`ranking_level`：待确认<br>
+`last_ranking_level`：待确认<br>
 wt_season：待确认<br>
 last_send_inbox_ts：待确认<br>
 
 ## Coupon New
-`Store Coupon Id`: 手动清除list内coupon时，此数据改`-1`：待确认<br>
-`Store Coupon List`：待确认<br>
-`Piggy Coupon Id`：待确认<br>
-`Piggy Coupon list`
+`Store Coupon Id`: 手动清除list内coupon时，此数据改`-1`<br>
+`Store Coupon List`：inbox内的`Store coupon`<br>
+`Piggy Coupon Id`: 手动清除list内coupon时，此数据改`-1`<br>
+`Piggy Coupon list`：inbox内的`Money bank coupon`<br>
 `coupon_7days_no_purchase_last_get_ts`：待确认<br>
-`Emerald Coupon Id`：待确认<br>
-`Emerald Coupon List`：待确认<br>
-`Chips Bank Coupon Id`：待确认<br>
-`Chips Bank Coupon List`：待确认<br>
+`Emerald Coupon Id`: 手动清除list内coupon时，此数据改`-1`<br>
+`Emerald Coupon List`：inbox内的`Emerald coupon`<br>
+`Chips Bank Coupon Id`: 手动清除list内coupon时，此数据改`-1`<br>
+`Chips Bank Coupon List`：inbox内的`Emerald bank coupon`<br>
 
 ## Discount coupon
-`Store Discount Coupon Id` -1：待确认<br>
-`Store Discount Coupon List` []：待确认<br>
+`Store Discount Coupon Id`：手动清除list内coupon时，此数据改`-1`<br>
+`Store Discount Coupon List`：inbox内的`降价coupon`的list<br>
 
 ## inbox sp product
-last_sp_store_end_ts：待确认<br>
-sp_piggy_product：待确认<br>
-sp_store_product：待确认<br>
-last_sp_piggy_end_ts：待确认<br>
+`last_sp_store_end_ts`：inbox内Money bank促销，倒计时间戳<br>
+`sp_piggy_product`：inbox内商店促销：`0`没有，`1`有<br>
+`sp_store_product`：inbox内Money bank促销：`0`没有，`1`有<br>
+`last_sp_piggy_end_ts`：inbox商店促销，倒计时间戳<br>
 
 ## Lobby Bonus
 Megaball Progress：待确认<br>
