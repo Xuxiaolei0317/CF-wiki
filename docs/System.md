@@ -71,9 +71,11 @@
 `another_first_quest_flag`：[新手ABtest](quest.md)<br>
 
 ## frenzy_vault
-<!-- `a_data` ：[6394, 335, 80]<br> -->
-[archer,bingo,blast,cooking,gof,journey,rocket,sail,tower,mow] <br>
-[330, 355, 1404, 5062, 0, 601, 1109, 400, 51, 303, 28, 321]：对应B级的token数量<br>
+`a_data` ：[`BYD`, `STAMP`, `ATW`] 3个A级道具的puzzle碎片数量<br>
+`b_prop_list`: 对应B级的token数量
+
+        [archer,bingo,blast,cooking,gof,journey,rocket,sail,tower,mow]
+        [330, 355, 1404, 5062, 0, 601, 1109, 400, 51, 303, 28, 321]
 `c_data` ：[]<br>
 `a_type` ：[]<br>
 `b_store_data` {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}<br>
@@ -133,9 +135,12 @@
 `Time Limited Prize []`：限时奖励<br>
 
     限时奖励:
-        由10个 [0,0,0] list组成，第一位为1时，代表该限时奖励已解锁，
-        第二位为1时，代表该限时奖励已领取，第三位为时间戳，该限时奖励的倒计时
         例：[1, 1, 1659628802]
+        由10个 [0,0,0] list组成，每个代表每10级后面的那个限时奖励，list都值为0时，该限时奖励未触发，
+        第一位和第二位为1时，该限时奖励已触发，
+        第一位和第二位为2时，该限时奖励已完成，
+        第一位和第二位为-1时，该限时奖励已过期，
+        第三位为时间戳，触发限时奖励倒计时开始
 `Chest Level 0`：mission pass宝箱等级<br>
 `Chest Prize {}`：mission pass宝箱奖励<br>
 `Boosters [0, 0]`：mission star booster的倒计时<br>
@@ -328,8 +333,10 @@ Slot Blast ts：待确认<br>
 
 ## Persona 广告用户
 
-    LL 广告用户为真正0付费玩家广告用户
-    HH-OO 用户有固定逻辑才会开启广告
+- LL 广告用户为真正0付费玩家广告用户
+    - LL用户 ID % 181 % 2 == 0 没有插屏广告 == 1 有插屏广告 
+    - AC AB Test 的 [abtest_adv_return](Activity.md/#c)里加上自己的ID
+- HH-OO 用户有固定逻辑才会开启广告
     
 `purchase_type: 1`：（HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 `new_ad_3h_counter 12`：<br>

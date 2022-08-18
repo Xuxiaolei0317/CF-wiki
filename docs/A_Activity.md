@@ -1,6 +1,8 @@
 <!-- # A Activity -->
 # STAMPS
     描述
+# STAMPS
+    描述
 
 ![邮票作弊button](images/A_stamp_button.png)
 ### Genie 灯神
