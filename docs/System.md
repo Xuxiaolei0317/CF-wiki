@@ -8,7 +8,7 @@
 `Credits`: 拥有的`coins`数量<br>
 `Lounge Points`: 高级房点数<br>
 `Lounge Ts`:高级房倒计时<br>
-`Free Lounge Points`:：待确认<br>
+`Free Lounge Points`：待确认<br>
 `ranking_level`：排行榜房间等级<br>
 `is_admin`: 为`3`时是可以手动调整r level的等级；为`0`时是模仿真实用户登录情况<br>
 `b_season`：当前B级赛季<br>
@@ -29,7 +29,7 @@
 `last_birthday`: 改成`[0,0,0]`可触发生日周年弹窗<br>
 `mp last season purchase`：上赛季的MP解锁状态<br>
 `mp current season purchase`：当前赛季的MP解锁状态<br>
-`user status`：默认值为:`0`，改成`3`后，自身r level不会随购买变动了<br>
+`user status`：待确认<br>
 `first_quest_end_ts`：[新手期倒计时](quest.md)<br>
 `user_icon_id`：正在使用的头像ID<br>
 `nick_name`：游戏内编辑的name<br>
@@ -113,7 +113,7 @@
 
 ## Mission Pass
 
-    需要重置mission pass时，可以直接将Season数据改为上个赛季进游戏即可<br>
+    需要重置mission pass时，可以直接将Season数据改为上个赛季进游戏<br>
 
 `Exp 0`：经验值<br>
 `Level 0`：等级<br>
@@ -190,34 +190,34 @@
 `Reset Feature Ts`：待确认<br> -->
 
 ## Blazing Challenge
-EXP:：待确认<br>
-Level:：待确认<br>
-Season:：待确认<br>
-Season End:：待确认<br>
-Missions:：待确认<br>
-Mission End:：待确认<br>
-Prizes:：待确认<br>
-Bonus Game Disconnection:：待确认<br>
-Ranking Prize Disconnection:：待确认<br>
-Avg Bet:：待确认<br>
-Mini Theme Next Time:：待确认<br>
-EXP Activity 31002:：待确认<br>
-END Time Activity 31002:：待确认<br>
-Boosters:：待确认<br>
-Commodities:：待确认<br>
-History Rank:：待确认<br>
+`EXP`：经验值<br>
+`Level`：等级<br>
+`Season`：赛季<br>
+`Season End`：赛季结束倒计时<br>
+`Missions`：待确认<br>
+`Mission End`：待确认<br>
+`Prizes`：奖励<br>
+`Bonus Game Disconnection`：小游戏断线数据<br>
+`Ranking Prize Disconnection`：排行榜断线数据<br>
+`Avg Bet`：待确认<br>
+`Mini Theme Next Time`：待确认<br>
+`EXP Activity 31002`：待确认<br>
+`END Time Activity 31002`：待确认<br>
+`Boosters`：火力值booster<br>
+`Commodities`：待确认<br>
+`History Rank`：历史上榜记录<br>
 
 
 ## Mansion Quest
-name：待确认<br>
-stars：待确认<br>
-room：待确认<br>
-room mission：待确认<br>
-finish current phase：待确认<br>
-mission：待确认<br>
-disconnection room mission：待确认<br>
-home_phase：待确认<br>
-boosters_data：待确认<br>
+`name`：待确认<br>
+`stars`：星星数量<br>
+`room`：待确认<br>
+`room mission`：待确认<br>
+`finish current phase`：待确认<br>
+`mission`：待确认<br>
+`disconnection room mission`：待确认<br>
+`home_phase`：待确认<br>
+`boosters_data`：待确认<br>
 skip_card：待确认<br>
 mission_stage_data：待确认<br>
 flash tag：待确认<br>
@@ -240,7 +240,7 @@ round prize：待确认<br>
 rank prize：待确认<br>
 
 ## level_up_party
-index：待确认<br>
+index：第几个进度<br>
 tasks：待确认<br>
 reset_ts：待确认<br>
 has_game：待确认<br>
@@ -262,19 +262,19 @@ month status：待确认<br>
 ab flag：待确认<br>
 
 ## Weekend Tournament
-`store_booster_ts`：待确认<br>
+`store_booster_ts`：周末锦标赛store booster加成倒计时<br>
 `store_booster_multi`：待确认<br>
 `daily_bonus_booster_ts`：待确认<br>
 `daily_bonus_booster_multi`：待确认<br>
 `medal_booster`：待确认<br>
 `is_collected`：待确认<br>
-`season`：待确认<br>
+`season`：赛季<br>
 `race`：待确认<br>
-`points`：待确认<br>
-`end_ts`：待确认<br>
-`disconnection`：待确认<br>
-`ranking_level`：待确认<br>
-`last_ranking_level`：待确认<br>
+`points`：周末锦标赛点数<br>
+`end_ts`：周末锦标赛结束倒计时<br>
+`disconnection`：断线数据<br>
+`ranking_level`：周末锦标赛排行榜等级<br>
+`last_ranking_level`：上次周末锦标赛排行榜等级<br>
 wt_season：待确认<br>
 last_send_inbox_ts：待确认<br>
 
@@ -300,16 +300,16 @@ last_send_inbox_ts：待确认<br>
 `last_sp_piggy_end_ts`：inbox商店促销，倒计时间戳<br>
 
 ## Lobby Bonus
-Megaball Progress：待确认<br>
-SoC Progress：待确认<br>
-Multiplier：待确认<br>
-Golden Multiplier：待确认<br>
-Turbo ts：待确认<br>
-Instant ts：待确认<br>
-Soc Count：待确认<br>
-Turbo Speedy ts：待确认<br>
-Last Multipler ts：待确认<br>
-Slot Blast ts：待确认<br>
+`Megaball Progress`：待确认<br>
+`SoC Progress`：待确认<br>
+`Multiplier`：待确认<br>
+`Golden Multiplier`：待确认<br>
+`Turbo ts`：待确认<br>
+`Instant ts`：待确认<br>
+`Soc Count`：待确认<br>
+`Turbo Speedy ts`：待确认<br>
+`Last Multipler ts`：待确认<br>
+`Slot Blast ts`：待确认<br>
 
 ## Purchase: Piggy Bank (New)
 `Piggy Bank Balance`: 当前bank数量<br>
@@ -330,7 +330,29 @@ Slot Blast ts：待确认<br>
 `Level Down`: 降档（0=不降，1=降一档，2=降两档）最大2<br>
 `Max Days`: 未登录天数（7天降价）<br>
 
+## Welcome Home
+`daily_prize`: <br>
+`daily_prize_end_ts`: 每日奖励倒计时<br>
+`end_ts`: 回归任务倒计时<br>
+`fresh_ts_ls`: 任务解锁数据<br>
 
+- [[1661140799, 1], [1661140799, 1], [1661140799, 1], [1661399999, 0], [1661486399, 0]]
+
+`mission_list`: 任务数据<br>
+
+    一个任务的dict :
+        {"collected": 0,         # 任务奖励领取状态
+        "progress": [0, 30],    # 进度和目标值
+        "delta_points": 10,     # 任务的回归点数
+        "mission_type": 22,     # 任务type值
+        "prize_config": {"b_token": [3, 3, 3, 3, 3, 3, 3, 3, [360, 0, 0], 3, 3, 3]}}, # 任务奖励
+    每天6个任务，[{任务1 dict},{任务2 dict},{任务3 dict},{任务4 dict},{任务5 dict}，{任务6 dict}]
+    共5天，[[第1天],[第2天],[第3天],[第4天],[第5天]]
+      
+`points`: 回归点数<br>
+`prize_list`: 回归点数奖励<br>
+`guide`: 引导步数<br>
+`daily_prize_count`: 每日奖励宝箱领取状态<br>
 ## Persona 广告用户
 
 - LL 广告用户为真正0付费玩家广告用户
