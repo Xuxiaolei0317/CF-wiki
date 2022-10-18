@@ -94,28 +94,28 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
+            <li class="nav-item" data-level="1"><a href="#c-activity" class="nav-link">C activity</a>
+              <ul class="nav flex-column">
             <li class="nav-item" data-level="2"><a href="#spin-up-boost" class="nav-link">Spin Up Boost</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
             <li class="nav-item" data-level="2"><a href="#repeat-win" class="nav-link">Repeat Win</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
             <li class="nav-item" data-level="2"><a href="#repeat-win-plus" class="nav-link">Repeat Win Plus</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
             <li class="nav-item" data-level="2"><a href="#jackpot-again" class="nav-link">Jackpot Again</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
             <li class="nav-item" data-level="2"><a href="#boosted-win" class="nav-link">Boosted Win</a>
               <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
             
@@ -128,32 +128,35 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
+<h1 id="c-activity">C activity</h1>
+<pre><code>`在Admin网站修改任何数据，一定要确定好 “服务器端口” 选择的对不对！！！`
+</code></pre>
 <h2 id="spin-up-boost">Spin Up Boost</h2>
-<p><code>progress</code>：super spin up 积累次数<br></p>
+<p><code>progress</code>: super spin up 积累次数<br></p>
 <h2 id="repeat-win">Repeat Win</h2>
-<p><code>Repeat Win: 60000000</code>：赢钱数量<br>
-<code>Deadline: 2022-08-10</code>：倒计时，<code>改成过去式的时间戳，可以重置活动数据并收奖</code><br></p>
+<p><code>Repeat Win: 60000000</code>: 赢钱数量<br>
+<code>Deadline: 2022-08-10</code>: 倒计时，<code>改成过去式的时间戳，可以重置活动数据并收奖</code><br></p>
 <h2 id="repeat-win-plus">Repeat Win Plus</h2>
-<p><code>Repeat Win Plus: 0</code>：赢钱数量<br>
-<code>Deadline: 1660190399</code>：倒计时，<code>改成过去式的时间戳，可以重置活动数据并收奖</code><br>
-<code>Uper Limit: 1055700000</code>：奖励上限值<br>
+<p><code>Repeat Win Plus: 0</code>: 赢钱数量<br>
+<code>Deadline: 1660190399</code>: 倒计时，<code>改成过去式的时间戳，可以重置活动数据并收奖</code><br>
+<code>Uper Limit: 1055700000</code>: 奖励上限值<br>
 <code>Repeat Aid 20102</code></p>
 <h2 id="jackpot-again">Jackpot Again</h2>
-<p><code>Total Win: 0</code>：赢钱数量<br>
-<code>Limit Times: 0</code>：奖励上限值<br>
-<code>End Time: 0</code>：倒计时，<code>改成过去式的时间戳，可以重置活动数据并收奖</code><br></p>
+<p><code>Total Win: 0</code>: 赢钱数量<br>
+<code>Limit Times: 0</code>: 奖励上限值<br>
+<code>End Time: 0</code>: 倒计时，<code>改成过去式的时间戳，可以重置活动数据并收奖</code><br></p>
 <h2 id="boosted-win">Boosted Win</h2>
-<p><code>Boosted Win: 0</code>：赢钱数量<br>
-<code>Boosted Win Ratio: 0%</code>：赢钱后乘以的倍率<br>
-<code>Boosted Win Limit: 0</code>：奖励上限值<br>
-<code>Deadline: 0</code>：倒计时，<code>改成过去式的时间戳，可以重置活动数据并收奖</code><br></p>
+<p><code>Boosted Win: 0</code>: 赢钱数量<br>
+<code>Boosted Win Ratio: 0%</code>: 赢钱后乘以的倍率<br>
+<code>Boosted Win Limit: 0</code>: 奖励上限值<br>
+<code>Deadline: 0</code>: 倒计时，<code>改成过去式的时间戳，可以重置活动数据并收奖</code><br></p>
 <h1 id="lucky-winner">lucky winner</h1>
-<p>[注意]：<code>修改数据时一定要修改正确后再登录</code></p>
-<p><img alt="Activity: Lucky Winner I/II" src="../images/C_lucky_winner.png" title="lucky_winner数据图" />  </p>
-<p><code>[Tickets]</code>：彩票数量<br>
-<code>[Deadline]</code>：活动倒计时<br>
-<code>[Lucky Winner type]</code>：对应某个 Lucky Winner 活动的值<br>
-<img alt="rlwc" src="../images/rlwc.png" title="reset_lucky_winner_collected" />：清除Lucky Winner活动的中奖状态</p>
+<!-- ![Activity: Lucky Winner I/II](images/C_lucky_winner.png "lucky_winner数据图")   -->
+
+<p><code>Tickets</code>: 彩票数量<br>
+<code>Deadline</code>: 活动倒计时<br>
+<code>Lucky Winner type</code>: 对应某个 Lucky Winner 活动的值<br>
+<img alt="rlwc" src="../images/rlwc.png" title="reset_lucky_winner_collected" />: 清除Lucky Winner活动的中奖状态</p>
 <h3 id="1">1.登录收奖</h3>
 <ol>
 <li>配上活动</li>
@@ -161,7 +164,7 @@
 <li>下线</li>
 <li>联系后端发奖</li>
 <li>修改数据<ol>
-<li>（<code>Activity: Lucky Winner I/II</code> 的 <code>[Deadline]</code> 修改为当前时间）</li>
+<li>（<code>Activity: Lucky Winner I/II</code> 的 <code>Deadline</code> 修改为当前时间）</li>
 <li>点击 <img alt="sflt" src="../images/sflt.png" /> 按钮</li>
 </ol>
 </li>
@@ -174,7 +177,7 @@
 <li>完成购买得到tickets</li>
 <li>下线</li>
 <li>联系后端发奖</li>
-<li>修改数据 （<code>Activity: Lucky Winner I/II</code> 的 <code>[Deadline]</code> 修改为当前时间）</li>
+<li>修改数据 （<code>Activity: Lucky Winner I/II</code> 的 <code>Deadline</code> 修改为当前时间）</li>
 <li>登录</li>
 <li>下掉活动（最多等待约30s，活动配置完全刷新）</li>
 <li>点击 Admin 的 <img alt="stb" src="../images/stb.png" title="set today begin" /> 按钮  </li>
@@ -186,7 +189,7 @@
 
         <footer class="col-md-12">
             <hr>
-            <p>用<a href="https://www.mkdocs.org/">MkDocs</a>建立的文档。</p>
+            <p>CF 内部使用请勿外传</p>
         </footer>
         <script>
             var base_url = "..",

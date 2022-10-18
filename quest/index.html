@@ -115,18 +115,20 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
+<pre><code>`在Admin网站修改任何数据，一定要确定好 “服务器端口” 选择的对不对！！！`
+</code></pre>
 <h1 id="quest">Quest</h1>
 <pre><code>level等级到达 4 级时，触发新手quest！
-新手ABtest：ID 的十位数，奇数为:A组对照组，偶数为:B组实验组
+新手ABtest: ID 的十位数，奇数为:A组对照组，偶数为:B组实验组
 </code></pre>
 <p><code>first_quest_end_ts</code>: 新手quest结束时间（修改为过去时间戳可跨过新手quest）<br>
-<code>another_first_quest_flag</code>：新手ABtest,<code>0</code>是对照组,<code>1</code>是实验组<br></p>
+<code>another_first_quest_flag</code>: 新手ABtest,<code>0</code>是对照组,<code>1</code>是实验组<br></p>
 <h2 id="first_quest">first_quest</h2>
-<pre><code>A组用户：完成新手quest 或者倒计时结束跨过新手期
+<pre><code>A组用户: 完成新手quest 或者倒计时结束跨过新手期
 </code></pre>
-<p><code>_task_index</code>：当前所在第几个主题位置，从0开始<br>
-<code>_prize_index</code>：当前所在第几个主题后的奖励位置，从0开始<br>
-<code>_task_list</code>：6个主题的数据<br></p>
+<p><code>_task_index</code>: 已完成第几个主题，从0开始,完成一关就 + 1<br>
+<code>_prize_index</code>: 已经收取第几个主题后的奖励，从0开始,领取一个奖励就 + 1<br>
+<code>_task_list</code>: 6个主题的数据<br></p>
 <pre><code>共有6个主题，前3个主题2个任务，后3个主题3个任务
 [{"tid": 122, # 主题id
   "tasks": [ # 主题对应的任务
@@ -144,15 +146,15 @@
 
 {"tid": 242}], # 未进入的主题显示状态
 </code></pre>
-<p><code>_prize_list</code>：6个奖励的数据<br></p>
+<p><code>_prize_list</code>: 6个奖励的数据<br></p>
 <h2 id="another-first-quest">Another First Quest</h2>
-<pre><code>B组用户：倒计时结束跨过新手期，且quest关卡无尽轮次
+<pre><code>B组用户: 倒计时结束跨过新手期，且quest关卡无尽轮次
 </code></pre>
-<p><code>prize_index</code>：当前所在第几个主题后的奖励位置，从0开始<br>
-<code>prize_list</code>：6个奖励的数据<br>
-<code>round</code>：quest通关轮次<br>
-<code>task_index</code>：当前所在第几个主题位置，从0开始<br>
-<code>task_list</code>：6个主题的数据<br></p>
+<p><code>prize_index</code>: 已经收取第几个主题后的奖励，从0开始,领取一个奖励就 + 1<br>
+<code>prize_list</code>: 6个奖励的数据<br>
+<code>round</code>: quest通关轮次<br>
+<code>task_index</code>: 已完成第几个主题，从0开始,完成一关就 + 1<br>
+<code>task_list</code>: 6个主题的数据<br></p>
 <pre><code>共有6个主题，前3个主题2个任务，后3个主题3个任务
 [{"tid": 122, # 主题id
   "tasks": [ # 主题对应的任务
@@ -169,6 +171,31 @@
     "bet": 60000}, # 当前主题默认的bet
 
 {"tid": 242}], # 未进入的主题显示状态
+</code></pre>
+<p>全部主题完成的数据: </p>
+<pre><code>[
+    {"tid": 122, "tasks": [
+        {"tid": 122, "current": 30, "type": 1, "target": 30}, 
+        {"tid": 122, "current": 1800000, "type": 6, "target": 1800000}], "bet": 60000}, 
+    {"tid": 255, "tasks": [
+        {"tid": 255, "current": 15, "type": 4, "target": 15}, 
+        {"tid": 255, "current": 7500000, "type": 6, "target": 7500000}], "bet": 100000}, 
+    {"tid": 276, "tasks": [
+        {"tid": 276, "current": 30, "type": 4, "target": 30}, 
+        {"tid": 276, "current": 30000000, "type": 2, "target": 30000000}], "bet": 300000}, 
+    {"tid": 239, "tasks": [
+        {"tid": 239, "current": 80, "type": 1, "target": 80}, 
+        {"tid": 239, "current": 24000000, "type": 6, "target": 24000000}, 
+        {"tid": 239, "current": 18000000, "type": 2, "target": 18000000}], "bet": 360000}, 
+    {"tid": 242, "tasks": [
+        {"tid": 242, "current": 100, "type": 1, "target": 100}, 
+        {"tid": 242, "current": 20, "type": 4, "target": 20}, 
+        {"tid": 242, "current": 80000000, "type": 6, "target": 80000000}], "bet": 750000}, 
+    {"tid": 261, "tasks": [
+        {"tid": 261, "current": 150, "type": 1, "target": 150}, 
+        {"tid": 261, "current": 2, "type": 3, "target": 2}, 
+        {"tid": 261, "current": 175000000, "type": 6, "target": 175000000}], "bet": 1000000}
+]
 </code></pre>
 <h2 id="_1">新手基金</h2>
 <pre><code>level等级到达 3 级时，触发新手基金活动！
@@ -182,7 +209,7 @@
 
         <footer class="col-md-12">
             <hr>
-            <p>用<a href="https://www.mkdocs.org/">MkDocs</a>建立的文档。</p>
+            <p>CF 内部使用请勿外传</p>
         </footer>
         <script>
             var base_url = "..",

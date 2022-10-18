@@ -94,7 +94,17 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
+            <li class="nav-item" data-level="1"><a href="#a-activity" class="nav-link">A activity</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
             <li class="nav-item" data-level="1"><a href="#stamps" class="nav-link">STAMPS</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#stamps_1" class="nav-link">STAMPS</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -113,8 +123,13 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<!-- # A Activity -->
+<h1 id="a-activity">A activity</h1>
+<pre><code>`在Admin网站修改任何数据，一定要确定好 “服务器端口” 选择的对不对！！！`
+</code></pre>
 <h1 id="stamps">STAMPS</h1>
+<pre><code>描述
+</code></pre>
+<h1 id="stamps_1">STAMPS</h1>
 <pre><code>描述
 </code></pre>
 <p><img alt="邮票作弊button" src="../images/A_stamp_button.png" /></p>
@@ -146,45 +161,46 @@
 </code></pre>
 <h1 id="byd">BYD</h1>
 <p><img alt="byd data" src="../images/A_byd.png" /></p>
-<p><code>Byd free_chest_ts:</code>：首次免费领取建筑道具的时间戳<br>
-<code>Byd chest_data:</code>：[<code>Common</code>:1, <code>Rare</code>:1, <code>Epic</code>:1, <code>Legendary</code>:1] BYD道具数量<br>
-<code>Byd items_data:</code>：BYD建筑数据<br></p>
+<p><code>Byd free_chest_ts</code>: 首次免费领取建筑道具的时间戳<br>
+<code>Byd chest_data</code>: [<code>Common</code>:1, <code>Rare</code>:1, <code>Epic</code>:1, <code>Legendary</code>:1] BYD道具数量<br>
+<code>Byd items_data</code>: BYD建筑数据<br>
+<img alt="byd level" src="../images/A_byd_level.png" /></p>
 <pre><code>    BYD建筑数据:
         [[建筑1],[建筑2],[建筑3],[建筑4],[.....],[建筑9]]共9个建筑
-        [建筑等级,建筑总经验,建筑宝箱领取时间]：一个建筑的数据
+        [建筑等级,建筑总经验,建筑宝箱领取时间]: 一个建筑的数据
 </code></pre>
-<p><code>Byd byd_start_ts:</code>:领取引导赠送<code>depot</code>道具的时间戳<br>
-<code>Byd chest_exp:</code>：<br>
-<code>Byd is_collected:</code>：BYD全建筑集齐收奖状态 <code>0</code>未收奖 or <code>1</code>已收奖<br>
-<code>BYD current_season</code>：BYD赛季 <br>
+<p><code>Byd byd_start_ts</code>:领取引导赠送<code>depot</code>道具的时间戳<br>
+<code>Byd chest_exp</code>: <br>
+<code>Byd is_collected</code>: BYD全建筑集齐收奖状态 <code>0</code>未收奖 or <code>1</code>已收奖<br>
+<code>BYD current_season</code>: BYD赛季 <br>
 <code>BYD gallery [[], []]</code>:历史赛季建筑完成度，每个<code>[]</code>内相当于一个赛季的<code>Byd items_data</code>数据<br>
-<code>BYD_rank_building</code>：摩天大楼经验值<br></p>
+<code>BYD_rank_building</code>: 摩天大楼经验值<br></p>
 <h1 id="atw">ATW</h1>
 <p><img alt="atw data" src="../images/A_atw.png" /></p>
-<p><code>guide</code>：新手引导<br>
-<code>season</code>：赛季<br>
-<code>start_ts</code>：领取引导赠送<code>bag</code>道具的时间戳<br>
-<code>season_collected</code>：<br>
-<code>store_point</code>：<br>
-<code>shop_list</code>：<br></p>
-<pre><code>shop_list：
+<p><code>guide</code>: 新手引导<br>
+<code>season</code>: 赛季<br>
+<code>start_ts</code>: 领取引导赠送<code>bag</code>道具的时间戳<br>
+<code>season_collected</code>: <br>
+<code>store_point</code>: <br>
+<code>shop_list</code>: <br></p>
+<pre><code>shop_list: 
         [[800,0],[1000,1],[1000,1]] :此数据为一个商店的3个道具list 
         `800` = 道具当前经验上限 ，`0` = `0`未收奖 or `1`已收奖
 </code></pre>
-<p><code>wild_bag_list</code>：<br>
-<code>shop_collected_list</code>：每个值对应每个商店的收奖状态 <code>0</code>未收奖 or <code>1</code>已收奖<br>
-<code>shops_gallery：[[], []]</code>:历史赛季ATW商店完成度，每个<code>[]</code>内相当于一个赛季的<code>shop_list</code>数据<br>
-<code>quality</code>：<br>
-<code>ATW Flag</code>：<br>
-<code>Round</code>：轮次<br>
-<code>bag_progress</code>：<br>
-<code>atw bag list</code>：[<code>Common</code>:1, <code>Rare</code>:1, <code>Deluxe</code>:1, <code>Epic</code>:1, <code>Premium</code>:1] ATW道具数量<br></p></div>
+<p><code>wild_bag_list</code>: <br>
+<code>shop_collected_list</code>: 每个值对应每个商店的收奖状态 <code>0</code>未收奖 or <code>1</code>已收奖<br>
+<code>shops_gallery: [[], []]</code>:历史赛季ATW商店完成度，每个<code>[]</code>内相当于一个赛季的<code>shop_list</code>数据<br>
+<code>quality</code>: <br>
+<code>ATW Flag</code>: <br>
+<code>Round</code>: 轮次<br>
+<code>bag_progress</code>: <br>
+<code>atw bag list</code>: [<code>Common</code>:1, <code>Rare</code>:1, <code>Deluxe</code>:1, <code>Epic</code>:1, <code>Premium</code>:1] ATW道具数量<br></p></div>
             </div>
         </div>
 
         <footer class="col-md-12">
             <hr>
-            <p>用<a href="https://www.mkdocs.org/">MkDocs</a>建立的文档。</p>
+            <p>CF 内部使用请勿外传</p>
         </footer>
         <script>
             var base_url = "..",
