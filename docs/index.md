@@ -7,4 +7,6 @@
 ## [系统活动](System.md)
 ## [活动配置](Activity.md)
 ## [新手](quest.md)
+## [登录流程](login_test.md)
+
 <!-- For full documentation visit [mkdocs.org](https://www.mkdocs.org). -->

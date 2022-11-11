@@ -1,21 +1,22 @@
-# B Activity
+# B activity
+    `在Admin网站修改任何数据，一定要确定好 “服务器端口” 选择的对不对！！！`
 ## 配置
 
 
 ## Bingo
 <!-- ![](images/B_bingo.png)   -->
-`Round:`: 轮次    
-`Index:`: 小关  
-`Pos:`: 位置  
-`Token:`: token数量  
-`Prize Multi:`:   
-`Progress:`:   
-`History:`:   
-`Board:`: 小关数据  
-`Bingo Prize:`: 奖励  
-`Final Prize:`:   
-`Disconnection:`: 断线数据  
-`Booster:`: [ 0, 0] ：booster1和2，两个时间戳  
+`Round`: 轮次    
+`Index`: 小关  
+`Pos`: 位置  
+`Token`: token数量  
+`Prize Multi`:   
+`Progress`:   
+`History`:   
+`Board`: 小关数据  
+`Bingo Prize`: 奖励  
+`Final Prize`:   
+`Disconnection`: 断线数据  
+`Booster`: [ 0, 0] : booster1和2，两个时间戳  
 `scores`:   
 `has_played`:   
 `Is_first_progress`:   
