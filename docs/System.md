@@ -417,17 +417,17 @@ rank prize: 待确认<br>
 `message_list_data`: <br>
 `_kingdom_index`: 第几个村庄<br>
 `_kingdom_status_data`: 当前村子状态<br>
-`_season`: 赛季<br>
+`_season`: 赛季1<br>
 `_kingdom_index_other`: 额外村庄进度(所有村子完成后开始累计这个进度,每完成一个<br>
 
 ## cash_kingdom_ball_machine
-normal_limit_ts 1661831601
-normal_progress {"normal_ball": [5, 8, 10, 15, 20, 30, 50], "jp_ball": [1000]}
-normal_result {}
-premium_limit_ts 1661846863
-premium_progress {}
-premium_result {}
-premium_need_chips 1999
+`normal_limit_ts`: 普通转盘下次刷新时间戳<br>
+`normal_progress` {"normal_ball": [5, 8, 10, 15, 20, 30, 50], "jp_ball": [1000]}
+`normal_result` {}
+`premium_limit_ts`: 普通转盘下次刷新时间戳<br>
+`premium_progress` {}
+`premium_result` {}
+`premium_need_chips` 1999
 
 ## cash_kingdom_login_bonus
 _base_credits_month 80000000
