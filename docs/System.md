@@ -451,4 +451,4 @@ _weekly_count 0
 `Spin Reward coins`:<br>
 `Spin Reward Date`:<br>
 `Spin Reward TS`:<br>
-`Spin Reward Lounge TS`:<br>
+`Spin Reward Lounge TS`:<br>](https://xuxiaolei0317.github.io/CF-wiki/)
