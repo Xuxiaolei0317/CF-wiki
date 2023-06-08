@@ -4,27 +4,27 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
         
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>CF Wiki</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>登录类型 - CF Wiki</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
 
-        <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap.min.js" defer></script>
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/zh_CN.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href=".">CF Wiki</a>
+                <a class="navbar-brand" href="..">CF Wiki</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
@@ -34,29 +34,29 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem active">
-                                <a href="." class="nav-link">主页</a>
+                            <li class="navitem">
+                                <a href=".." class="nav-link">主页</a>
                             </li>
                             <li class="navitem">
-                                <a href="quest/" class="nav-link">新手</a>
+                                <a href="../quest/" class="nav-link">新手</a>
                             </li>
                             <li class="navitem">
-                                <a href="System/" class="nav-link">系统</a>
+                                <a href="../System/" class="nav-link">系统</a>
                             </li>
                             <li class="navitem">
-                                <a href="A_Activity/" class="nav-link">A级活动</a>
+                                <a href="../A_Activity/" class="nav-link">A级活动</a>
                             </li>
                             <li class="navitem">
-                                <a href="B_Activity/" class="nav-link">B级活动</a>
+                                <a href="../B_Activity/" class="nav-link">B级活动</a>
                             </li>
                             <li class="navitem">
-                                <a href="C_Activity/" class="nav-link">C级活动</a>
+                                <a href="../C_Activity/" class="nav-link">C级活动</a>
                             </li>
                             <li class="navitem">
-                                <a href="Activity/" class="nav-link">活动配置</a>
+                                <a href="../Activity/" class="nav-link">活动配置</a>
                             </li>
                             <li class="navitem">
-                                <a href="inbox/" class="nav-link">Inbox</a>
+                                <a href="../inbox/" class="nav-link">Inbox</a>
                             </li>
                         </ul>
 
@@ -66,16 +66,6 @@
                                 <i class="fa fa-search"></i> 搜索
                             </a>
                         </li>
-                            <li class="nav-item">
-                                <a rel="prev" class="nav-link disabled">
-                                    <i class="fa fa-arrow-left"></i> 上一张
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a rel="next" href="quest/" class="nav-link">
-                                    下一张 <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li>
                     </ul>
                 </div>
             </div>
@@ -94,38 +84,37 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="2"><a href="#a" class="nav-link">A级活动</a>
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">登录类型</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1" class="nav-link">1. 直接登录</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="2"><a href="#b" class="nav-link">B级活动</a>
+            <li class="nav-item" data-level="2"><a href="#2" class="nav-link">2. 先游客登录</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="2"><a href="#c" class="nav-link">C级活动</a>
+            <li class="nav-item" data-level="2"><a href="#3" class="nav-link">3. 先选择平台</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">系统活动</a>
-              <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">活动配置</a>
+            <li class="nav-item" data-level="1"><a href="#_2" class="nav-link">登录流程</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1_1" class="nav-link">1. 显示进度条</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">新手</a>
+            <li class="nav-item" data-level="2"><a href="#2-socket" class="nav-link">2. 代码加载完毕，开始连接socket时</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">登录流程</a>
+            <li class="nav-item" data-level="2"><a href="#3-socket" class="nav-link">3. socket连接完毕时</a>
               <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -133,17 +122,81 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<!-- # CF wiki -->
-<!-- # CF wiki ![](images/cf.jpg) -->
-
-<h2 id="a"><a href="A_Activity/">A级活动</a></h2>
-<h2 id="b"><a href="B_Activity/">B级活动</a></h2>
-<h2 id="c"><a href="C_Activity/">C级活动</a></h2>
-<h2 id="_1"><a href="System/">系统活动</a></h2>
-<h2 id="_2"><a href="Activity/">活动配置</a></h2>
-<h2 id="_3"><a href="quest/">新手</a></h2>
-<h2 id="_4"><a href="login_test/">登录流程</a></h2>
-<!-- For full documentation visit [mkdocs.org](https://www.mkdocs.org). --></div>
+<h1 id="_1">登录类型</h1>
+<h2 id="1">1. 直接登录</h2>
+<ul>
+<li>一遍进度条，进入游戏，不显示选择平台</li>
+</ul>
+<h2 id="2">2. 先游客登录</h2>
+<ul>
+<li>先走一遍进度条登录游客账号，然后显示选择平台，玩家选择游客账号，直接进入游戏；玩家选择平台账号，登录平台，再走一遍进度条，进入游戏</li>
+</ul>
+<h2 id="3">3. 先选择平台</h2>
+<ul>
+<li>先走一遍进度条，显示选择平台，玩家选择平台或者游客账号之后，再走一遍进度条进入游戏</li>
+</ul>
+<h1 id="_2">登录流程</h1>
+<h2 id="1_1">1. 显示进度条</h2>
+<h2 id="2-socket">2. 代码加载完毕，开始连接socket时</h2>
+<ul>
+<li>
+<p>[1] 检查本地保存的数据，玩家上次是第三方平台账号登录</p>
+</li>
+<li>
+<p><a href="#1. 直接登录">直接登录第三方平台账号</a></p>
+</li>
+<li>
+<p>[2] 玩家是游客账号且非新设备</p>
+</li>
+<li>
+<p>(1) 根据LoginView的版本号判断是第一次登录，为了兼容旧版本</p>
+</li>
+<li>
+<p><a href="#1. 直接登录">直接登录，不选择平台</a></p>
+</li>
+<li>
+<p>(2) 第二次及以后登录</p>
+</li>
+<li>
+<p>距离上次登录超过100天</p>
+</li>
+</ul>
+<!-- -               [先选择平台，然后登录](#先选择平台) -->
+<ul>
+<li>
+<p><a href="#1. 直接登录">直接登录，不选择平台</a></p>
+</li>
+<li>
+<p>距离上次登录少于100天</p>
+</li>
+<li>
+<p><a href="#1. 直接登录">直接登录，不选择平台</a></p>
+</li>
+</ul>
+<h2 id="3-socket">3. socket连接完毕时</h2>
+<ul>
+<li>
+<p>玩家非第三方平台账号，且为新用户时，获取设备账号历史记录</p>
+</li>
+<li>
+<p>[1] 没有历史账号</p>
+</li>
+<li>
+<p><a href="#1. 直接登录">新设备，直接登录游客账号，不选择平台</a></p>
+</li>
+<li>
+<p>[2] 历史记录包含游客账号</p>
+</li>
+<li>
+<p><a href="2. #先游客登录">先登录游客账号，然后让玩家选择平台</a></p>
+</li>
+<li>
+<p>[3] 历史记录不包含游客账号</p>
+</li>
+<li>
+<p><a href="3. #先选择平台">先选择平台，再根据所选平台账号登录</a></p>
+</li>
+</ul></div>
             </div>
         </div>
 
@@ -152,11 +205,11 @@
             <p>CF 内部使用请勿外传</p>
         </footer>
         <script>
-            var base_url = ".",
+            var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="js/base.js" defer></script>
-        <script src="search/main.js" defer></script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -221,8 +274,3 @@
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.3.1
-Build Date UTC : 2023-06-08 06:51:50.664569+00:00
--->

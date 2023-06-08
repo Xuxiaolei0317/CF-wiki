@@ -209,22 +209,27 @@
               </ul>
             </li>
             
-            <li class="nav-item" data-level="2"><a href="#cash_kingdom_user" class="nav-link">cash_kingdom_user</a>
+            <li class="nav-item" data-level="2"><a href="#advertisement" class="nav-link">Advertisement</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-level="2"><a href="#cash_kingdom_ball_machine" class="nav-link">cash_kingdom_ball_machine</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            
-            <li class="nav-item" data-level="2"><a href="#cash_kingdom_login_bonus" class="nav-link">cash_kingdom_login_bonus</a>
+            <li class="nav-item" data-level="2"><a href="#cash_go" class="nav-link">Cash_Go</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
             <li class="nav-item" data-level="2"><a href="#purchase-booster" class="nav-link">Purchase: Booster</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#limited-offer" class="nav-link">Limited Offer 商店侧边栏促销</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#bonus-voucher" class="nav-link">Bonus Voucher</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -245,12 +250,9 @@
 <code>Credits</code>: 拥有的<code>coins</code>数量<br>
 <code>Lounge Points</code>: 高级房点数<br>
 <code>Lounge Ts</code>:高级房倒计时<br>
-<code>Newguide Flag</code>: 1
-<code>Newtreasure Flag</code>: 0
-<code>Welcomeback Flag</code>: 0
 <code>Free Lounge Points</code>: 待确认<br>
 <code>ranking_level</code>: 排行榜房间等级<br>
-<code>is_admin</code>: 为<code>3</code>时是可以手动调整r level的等级；为<code>0</code>时是模仿真实用户登录情况<br>
+<code>is_admin</code>: 和<code>user status</code>功能一致，但是好像不生效了<br>
 <code>b_season</code>: 当前B级赛季<br>
 <code>level_burst_bug_flag</code>: 待确认<br>
 <code>lounge_reward_points</code>: 待确认<br>
@@ -269,8 +271,8 @@
 <code>last_birthday</code>: 改成<code>[0,0,0]</code>可触发生日周年弹窗<br>
 <code>mp last season purchase</code>: 上赛季的MP解锁状态<br>
 <code>mp current season purchase</code>: 当前赛季的MP解锁状态<br>
-<code>user status</code>: 待确认<br>
-<code>first_quest_end_ts</code>: <a href="../quest/">新手期倒计时</a><br>
+<code>user status</code>: 为<code>3</code>时是可以手动调整r level的等级；为<code>0</code>时是模仿真实用户登录情况<br>
+<code>first_quest_end_ts</code>: [[Quest| 新手期倒计时]]<br>
 <code>user_icon_id</code>: 正在使用的头像ID<br>
 <code>nick_name</code>: 游戏内编辑的name<br>
 <code>inbox bonus ts</code>: 待确认<br>
@@ -281,7 +283,7 @@
 <code>vip_points</code>: VIP点数<br>
 <code>flag6</code>: 国内ip进不去游戏时，将此数据改成<code>10</code><br>
 <code>store_bonus_prompt_ts</code>: 待确认<br>
-<code>client_resources_flag</code>: 待确认<br>
+<code>client_resources_flag</code>: 清除游戏内某个客户端资源，数据格式为：[[2, '资源名称'], [2, '资源名称2']]<br>
 <code>first_quest_finish_prize</code>: 新手期奖励<br>
 <code>weekend_tournament_ranking_level</code>: 周末锦标赛，排行榜房间<br>
 <code>weekend_tournament_last_ranking_level</code>: 周末锦标赛，上次排行榜房间<br>
@@ -299,9 +301,9 @@
 <code>lounge_free_collected</code>: 高级房引导中的free pass卡领取状态<br>
 <code>lounge_transform_info</code>: 待确认<br>
 <code>mp_send_free_booster_flag</code>: 赠送免费的mission star booster弹窗<br>
-<code>novice_end_first_login</code>: <a href="../quest/">新手基金</a><br>
-<code>novice_reward</code>: <a href="../quest/">新手基金</a><br>
-<code>novice_end_time</code>: <a href="../quest/">新手基金</a><br>
+<code>novice_end_first_login</code>: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
+<code>novice_reward</code>: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
+<code>novice_end_time</code>: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
 <code>store_stamp_count</code> lucky chames的数量<br>
 <code>lounge_store_week_ts</code>: lounge兑换商店道具刷新倒计时<br>
 <code>daily_login_count</code>: 当天的第几次login，一般用于看login强弹<br>
@@ -309,15 +311,12 @@
 <code>stamp_easter_egg_ts</code>: 待确认<br>
 <code>no_adv_return_end</code>: 7天内免费看广告的结束时间戳<br>
 <code>total_purchase</code>: 用户的全部付费额<br>
-<code>another_first_quest_flag</code>: <a href="../quest/">新手ABtest</a><br>
-<code>no_adv_return_end</code>: 7天内免费看广告的结束时间戳<br>
-<code>total_purchase</code>: 用户的全部付费额<br>
-<code>another_first_quest_flag</code>: 新手quest的AB组debug，<code>1</code>为奇数组，<code>2</code>位偶数组<br>
+<code>another_first_quest_flag</code>: 新手ABtes，取消了<br>
 <code>new_ad_theme_fg_limit</code>: 主题内FG后，广告翻倍播报弹出次数上限<br>
 <code>new_ad_theme_fg_ts</code>: 主题内FG后，广告翻倍播报CD时间<br>
 <code>welcome_back_free_soc</code>: <br>
-<code>welcome_end_ts</code>: 回归的结束时间<br>
-<code>p_user_ad_type</code>: 广告用户的前端分类type<br>
+<code>welcome_end_ts</code>: <br>
+<code>p_user_ad_type</code>: 广告用户type<br>
 <code>welcome_type</code>: 回归用户的type，对应回归的分类逻辑<br>
 <code>welcome_first_day_end_ts</code>: <br>
 <code>welcome_no_popup</code>: 回归活动的禁止活动强弹的状态<br>
@@ -328,7 +327,8 @@
 <code>welcome_upgrade</code>: <br>
 <code>new_ad_byd_ts</code>: BYD看广告，广告间隔的CD时间<br>
 <code>new_ad_byd_count</code>: BYD看广告次数，上限<code>10</code>次<br>
-<code>new_ad_byd_reset</code>: BYD看广告的每日重置时间戳<br></p>
+<code>new_ad_byd_reset</code>: BYD看广告的每日重置时间戳<br>
+<code>new_ad_byd_reset</code>: <br></p>
 <h2 id="frenzy_vault">frenzy_vault</h2>
 <p><code>a_data</code>: [<code>BYD</code>, <code>STAMP</code>, <code>ATW</code>] 3个A级道具的puzzle碎片数量<br>
 <code>b_prop_list</code>: 对应B级的token数量</p>
@@ -419,7 +419,7 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <h2 id="mission-pass-debug">mission pass debug</h2>
 <pre><code>在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
 </code></pre>
-<p><img alt="解锁弹窗配置" src="../images/S_mission_pass_boost.png" /><br></p>
+<p>[[文件:S mission pass boost.png]]</p>
 <h2 id="smash-egg">Smash Egg</h2>
 <p><code>Gold Hammer Status</code>: 每天领取金锤子的数量<br>
 <code>Gold Hammer Extra</code>: 购买金锤子的数量<br>
@@ -471,15 +471,15 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <code>disconnection room mission</code>: 待确认<br>
 <code>home_phase</code>: 待确认<br>
 <code>boosters_data</code>: 待确认<br>
-<code>skip_card</code>: 待确认<br>
-<code>mission_stage_data</code>: 待确认<br>
-<code>flash tag</code>: 待确认<br>
-<code>stage prize</code>: 待确认<br>
-<code>房间奖励数据</code>: 待确认<br>
-<code>当前房间奖励</code>: 待确认<br>
-<code>房间奖励断线数据</code>: 待确认<br>
-<code>新主题任务</code>: 待确认<br>
-<code>新主题idx</code>: 待确认<br></p>
+skip_card: 待确认<br>
+mission_stage_data: 待确认<br>
+flash tag: 待确认<br>
+stage prize: 待确认<br>
+房间奖励数据: 待确认<br>
+当前房间奖励: 待确认<br>
+房间奖励断线数据: 待确认<br>
+新主题任务: 待确认<br>
+新主题idx: 待确认<br></p>
 <h2 id="mansion-quest-ranking">Mansion Quest Ranking</h2>
 <p>mq tid: 待确认<br>
 round index: 待确认<br>
@@ -506,7 +506,7 @@ rank prize: 待确认<br></p>
 <code>month count</code>: 月签到次数，小于30<br>
 <code>month type</code>: 待确认<br>
 <code>month base coins</code>: 待确认<br>
-<code>last login</code>: 账号上次一次login时间<br>
+<code>last login</code>: 待确认<br>
 <code>has checked in</code>: 每日签到记录，<code>1</code>已签到 <code>0</code> 未签到<br>
 <code>month status</code>: 待确认<br>
 <code>ab flag</code>: 待确认<br></p>
@@ -549,8 +549,8 @@ rank prize: 待确认<br></p>
 <code>SoC Progress</code>: SoC 的进度累计值<br>
 <code>Multiplier</code>: 待确认<br>
 <code>Golden Multiplier</code>: 待确认<br>
-<code>Turbo ts</code>: 待确认<br>
-<code>Instant ts</code>: 待确认<br>
+<code>Turbo ts</code>: 红色刮刮卡倒计时戳（毫秒）<br>
+<code>Instant ts</code>: 蓝色刮刮卡倒计时戳（毫秒）<br>
 <code>Soc Count</code>: 待确认<br>
 <code>Turbo Speedy ts</code>: 待确认<br>
 <code>Last Multipler ts</code>: 待确认<br>
@@ -601,23 +601,52 @@ rank prize: 待确认<br></p>
 <h2 id="persona">Persona 广告用户</h2>
 <h3 id="_2"><a href="https://alidocs.dingtalk.com/i/nodes/3mzaPNMZ6jkJqkaxkvgLWYLDwXq4Ky1r?nav=share&amp;navQuery=spaceId%3Do5WXMNb78Z176mwO">广告用户逻辑</a></h3>
 <ul>
-<li>LL 广告用户为真正0付费玩家广告用户<ul>
-<li><del>LL用户 ID % 181 % 2 == 0 没有插屏广告 == 1 有插屏广告</del></li>
-<li><del>AC AB Test 的 <a href="../Activity/">abtest_adv_return</a>里加上自己的ID</del></li>
-</ul>
-</li>
-<li>HH-OO 用户有固定逻辑才会开启广告</li>
-</ul>
-<p><code>purchase_type: 1</code>: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
+<li>LL 广告用户为真正0付费玩家广告用户</li>
+<li>HH-OO 用户有固定逻辑才会开启广告
+<code>p_user_ad_type</code>: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
+<code>purchase_type: 2</code>: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 <code>new_ad_3h_counter 12</code>: <br>
 <code>new_ad_soc_premium_ts 0</code>: soc广告倒计时<br>
 <code>new_ad_pachinko_premium_ts 0</code>: 博青哥广告倒计时<br>
 <code>new_ad_atw_ts 0</code>: atw广告倒计时<br>
 <code>new_ad_b_token_ts 0</code>: B级token 广告倒计时<br>
 <code>new_ad_wheel_multi_fq 1</code>: 影响的新手做完任务之后奖励金币的数量<br> 
-<code>new_ad_hm_multi_count 3</code>: 影响的是看广告的奖励<br></p>
-<h2 id="cash_kingdom_user">cash_kingdom_user</h2>
-<p><code>_kingdom_coins</code>: Cash Go 的金币<br>
+<code>new_ad_hm_multi_count 3</code>: 影响的是看广告的奖励<br></li>
+</ul>
+<h2 id="advertisement">Advertisement</h2>
+<p><code>total_purchase</code> 3121<br>
+<code>max_purchase</code> 150<br>
+<code>watch_adv_count</code> 广告转盘，最大10次<br>
+<code>all_count</code> 除广告转盘10，最大看广告次数240次<br>
+<code>all_count_ts</code> 最大看广告次数重置时间戳<br>
+<code>user_source</code> 广告用户type<br></p>
+<h2 id="cash_go">Cash_Go</h2>
+<h3 id="spin">SPIN 作弊标记</h3>
+<pre><code># remote prize, id
+# θ正常，无送奖状态
+# 1 - 保护1 
+# 5 - 抑制0.5
+# 6 - 抑制0.25
+# 20 - miss
+# 21 - goblin 偷袭
+# 22 - bomb 攻击
+# 23 - potion 能量
+# 24 - shield盾
+# 25 - purse*3 大钱袋
+# 26 - coin*3小钱袋
+# 27 - purse* 2
+# 28 - purse*1
+# 29 - coin*2
+# 30 - coin*1
+# 31 - purse*1 + coin*1
+# 32 - purse*2 + coin*1
+# 33 - purse*1 + coin*2
+# 34 - disco*1
+# 35 - disco*2
+# 36 - disco*3
+</code></pre>
+<h3 id="_3">主界面</h3>
+<p><code>_kingdom_coins</code>: Cash Go的金币<br>
 <code>_shield_num</code>: 盾牌数量<br>
 <code>_crown_num</code>: 皇冠数量<br>
 <code>_energy_points</code>: 基础能量(50封顶，会随着时间流逝恢复)<br>
@@ -625,7 +654,6 @@ rank prize: 待确认<br></p>
 <code>_extra_energy_points</code>: 额外能量(基础能量封顶后获得的能量，无法通过时间流逝恢复<br>
 <code>_activity_symbol_num</code>: 活动的symbol编号(目前没用)<br>
 <code>_activity_reset_ts</code>: 活动重制时间(目前没用)<br>
-<code>_free_pet_food_ts</code>: 免费宠物食物倒计时<br>
 <code>_pet_protect_ts</code>: 宠物保护的结束时间<br>
 <code>_active_pet</code>: 激活的宠物<br>
 <code>message_list_data</code>: <br>
@@ -633,24 +661,44 @@ rank prize: 待确认<br></p>
 <code>_kingdom_status_data</code>: 当前村子状态<br>
 <code>_season</code>: 赛季<br>
 <code>_kingdom_index_other</code>: 额外村庄进度(所有村子完成后开始累计这个进度,每完成一个<br></p>
-<h2 id="cash_kingdom_ball_machine">cash_kingdom_ball_machine</h2>
-<p>normal_limit_ts 1661831601
-normal_progress {"normal_ball": [5, 8, 10, 15, 20, 30, 50], "jp_ball": [1000]}
-normal_result {}
-premium_limit_ts 1661846863
-premium_progress {}
-premium_result {}
-premium_need_chips 1999</p>
-<h2 id="cash_kingdom_login_bonus">cash_kingdom_login_bonus</h2>
-<p>_base_credits_month 80000000
-_base_credits_week 80000000
-_check_in 1
-_last_ts 1662611105.717114
-_month_count 0
-_month_status [0, 0, 0, 0]
-_type_month 0
-_type_week 0
-_weekly_count 0</p>
+<h3 id="cash_kingdom_pet">cash_kingdom_pet</h3>
+<p><code>_good_food_count</code> 拥有肉的数量<br>
+<code>_exp_food_count</code> 拥有经验<br>
+<code>_free_pet_food_ts</code>: 免费宠物食物倒计时<br>
+<code>_pet_info_data</code> 宠物数据<br></p>
+<pre><code>{
+"protect": { &lt;-- 宠物解锁后会有该数据 --&gt;
+    "pet_exp": 73540,                   宠物经验值 
+    "pet_level": 55,                    宠物等级
+    "pet_id": 3,                        宠物id
+    "pet_name": "protect",              宠物名称
+    "pet_active_end_ts": 1676412208},   宠物生效时间戳倒计时
+"steal": {
+    "pet_exp": 11080, 
+    "pet_level": 7, 
+    "pet_id": 1, 
+    "pet_name": "steal", 
+    "pet_active_end_ts": 1677219660}
+}
+</code></pre>
+<h3 id="cash_kingdom_ball_machine">cash_kingdom_ball_machine</h3>
+<p><code>normal_limit_ts</code>: 普通转盘下次刷新时间戳<br>
+<code>normal_progress</code> {"normal_ball": [5, 8, 10, 15, 20, 30, 50], "jp_ball": [1000]}<br>
+<code>normal_result</code> {}<br>
+<code>premium_limit_ts</code>: 普通转盘下次刷新时间戳<br>
+<code>premium_progress</code> {}<br>
+<code>premium_result</code> {}<br>
+<code>premium_need_chips</code> 1999<br></p>
+<h3 id="cash_kingdom_login_bonus">cash_kingdom_login_bonus</h3>
+<p><code>_base_credits_month</code> 80000000<br>
+<code>_base_credits_week</code> 80000000<br>
+<code>_check_in</code> 1<br>
+<code>_last_ts</code> 1662611105.717114<br>
+<code>_month_count</code> 0<br>
+<code>_month_status</code> [0, 0, 0, 0]<br>
+<code>_type_month</code> 0<br>
+<code>_type_week</code> 0<br>
+<code>_weekly_count</code> 0<br></p>
 <h2 id="purchase-booster">Purchase: Booster</h2>
 <p><code>Level Burst</code>:LEVEL BONUS BURST 倒计时<br>
 <code>Cashback</code>:<br>
@@ -662,7 +710,29 @@ _weekly_count 0</p>
 <code>Spin Reward coins</code>:<br>
 <code>Spin Reward Date</code>:<br>
 <code>Spin Reward TS</code>:<br>
-<code>Spin Reward Lounge TS</code>:<br></p></div>
+<code>Spin Reward Lounge TS</code>:<br>
+<code>Triple XP</code>:3X booster 倒计时<br>
+<code>Storage Double XP</code>:开启3X booster时，2X booster时间暂停，储存在此（秒）<br>
+<code>Storgae Triple XP</code>:3X booster储存<br></p>
+<h2 id="limited-offer">Limited Offer 商店侧边栏促销</h2>
+<p><code>Season Pack Available Count</code> 1 <br>
+<code>Season Pack End Ts</code> 1680148799 <br>
+<code>Week Pack Available</code> Count List<br>
+<code>Week Pack End Ts</code><br>
+<code>Coin Pack Count</code> 1<br>
+<code>Coin Pack End Ts</code> 1680148800<br>
+<code>Chip Pack Count</code> 1<br>
+<code>Chip Pack End Ts</code> 1680148800<br>
+<code>Bundle Pack Count</code> 2<br>
+<code>Bundle Pack End Ts</code> 1680321600<br></p>
+<h2 id="bonus-voucher">Bonus Voucher</h2>
+<p><code>card level</code>礼品卡的等级一共1,2,3,4,5,6这些状态, 其中6是开启活动21038时候会触发的特殊状态<br>
+<code>card dollar</code> 礼品卡的价值, 根据礼品卡的等级有所不同<br>
+<code>reset ts</code> 是每天重制bonus_voucher的时间戳<br>
+<code>inbox limit</code> 当天占用了领取次数多少次<br>
+<code>card num</code> 这次会发的礼品卡的数量,发送后<code>card_level</code>, <code>card_dollar</code>, <code>card_num</code>都会清0<br>
+<code>delta_limit</code> 收奖次数,也是花费第二货币后 获得的收奖次数<br>
+<code>open_reset_ts</code> 关闭bonus_voucher的时间戳<br></p></div>
             </div>
         </div>
 
