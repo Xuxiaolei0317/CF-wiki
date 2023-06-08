@@ -87,6 +87,7 @@
 `new_ad_byd_ts`: BYD看广告，广告间隔的CD时间<br>
 `new_ad_byd_count`: BYD看广告次数，上限`10`次<br>
 `new_ad_byd_reset`: BYD看广告的每日重置时间戳<br>
+`new_ad_byd_reset`: <br>
 
 ## frenzy_vault
 `a_data`: [`BYD`, `STAMP`, `ATW`] 3个A级道具的puzzle碎片数量<br>
@@ -404,6 +405,30 @@ rank prize: 待确认<br>
 `user_source` 广告用户type<br>
 
 ## Cash_Go
+### SPIN 作弊标记
+    
+    # remote prize, id
+    # θ正常，无送奖状态
+    # 1 - 保护1 
+    # 5 - 抑制0.5
+    # 6 - 抑制0.25
+    # 20 - miss
+    # 21 - goblin 偷袭
+    # 22 - bomb 攻击
+    # 23 - potion 能量
+    # 24 - shield盾
+    # 25 - purse*3 大钱袋
+    # 26 - coin*3小钱袋
+    # 27 - purse* 2
+    # 28 - purse*1
+    # 29 - coin*2
+    # 30 - coin*1
+    # 31 - purse*1 + coin*1
+    # 32 - purse*2 + coin*1
+    # 33 - purse*1 + coin*2
+    # 34 - disco*1
+    # 35 - disco*2
+    # 36 - disco*3
 ### 主界面
 `_kingdom_coins`: Cash Go的金币<br>
 `_shield_num`: 盾牌数量<br>
