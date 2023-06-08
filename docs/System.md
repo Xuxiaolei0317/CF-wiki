@@ -485,21 +485,20 @@ rank prize: 待确认<br>
 `_type_week` 0<br>
 `_weekly_count` 0<br>
 ## Purchase: Booster
-`Level Burst`:LEVEL BONUS BURST 倒计时<br>
-`Cashback`:<br>
-`Double XP`:LEVEL UP XP*2 倒计时<br>
-`Cashback Balance`:<br>
-`Cashback Date`:<br>
-`Bundle Count`:<br>
-`Cashback Ratio List`:<br>
-`Spin Reward coins`:<br>
-`Spin Reward Date`:<br>
-`Spin Reward TS`:<br>
-`Spin Reward Lounge TS`:<br>
-`Triple XP`:3X booster 倒计时<br>
-`Storage Double XP`:开启3X booster时，2X booster时间暂停，储存在此（秒）<br>
-`Storgae Triple XP`:3X booster储存<br>
-
+`Level Burst`: LEVEL BONUS BURST 的倒计时, 主要作用是升级时候多给2.5倍的金币奖励, 每10级是25倍<br>
+`Cashback`: cash back的倒计时, 没赢金币的时候按bet的一定比例存下来, 第二天的时候发给玩家<br>
+`Double XP`:LEVEL UP XP*2 双倍经验的booster的倒计时<br>
+`Cashback Balance`: 是cash back当前存下来的金币数量<br>
+`Cashback Date`: 上次cash back发奖日期<br>
+`Bundle Count`: <br>
+`Cashback Ratio List`: cash back的按bet存下来的比率的列表<br>
+`Spin Reward coins`: spin_reward存下来的金币数量<br>
+`Spin Reward Date`: spin_reward上次的发奖日期<br>
+`Spin Reward TS`: spin_reward的结束时间<br>
+`Spin Reward Lounge TS`: 上次spin_reward和lounge_ts同步的时间, 主要逻辑是在获得lounge_ts的时候同时给一些spin_reward的时间<br>
+`Triple XP`: LEVEL UP XP 3X booster 倒计时<br>
+`Storage Double XP`:开启3X booster时，2X booster时间暂停，暂存在此（秒）<br>
+`Storgae Triple XP`:暂存 3X booster 的持续时间<br>
 ## Limited Offer 商店侧边栏促销
 `Season Pack Available Count` 1 <br>
 `Season Pack End Ts` 1680148799 <br>
