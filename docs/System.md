@@ -42,7 +42,7 @@
 `vip_points`: VIP点数<br>
 `flag6`: 国内ip进不去游戏时，将此数据改成`10`<br>
 `store_bonus_prompt_ts`: 待确认<br>
-`client_resources_flag`: 清除游戏内某个客户端资源，数据格式为：[[2, '资源名称'], [2, '资源名称2']]<br>
+`client_resources_flag`: 清除游戏内某个客户端资源，数据格式为：[[2, '资源名称1'], [2, '资源名称2']]<br>
 `first_quest_finish_prize`: 新手期奖励<br>
 `weekend_tournament_ranking_level`: 周末锦标赛，排行榜房间<br>
 `weekend_tournament_last_ranking_level`: 周末锦标赛，上次排行榜房间<br>
@@ -60,7 +60,7 @@
 `lounge_free_collected`: 高级房引导中的free pass卡领取状态<br>
 `lounge_transform_info`: 待确认<br>
 `mp_send_free_booster_flag`: 赠送免费的mission star booster弹窗<br>
-`novice_end_first_login`: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
+`novice_end_first_login`: {quest.md}<br>
 `novice_reward`: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
 `novice_end_time`: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
 `store_stamp_count` lucky chames的数量<br>
@@ -88,7 +88,35 @@
 `new_ad_byd_count`: BYD看广告次数，上限`10`次<br>
 `new_ad_byd_reset`: BYD看广告的每日重置时间戳<br>
 `new_ad_byd_reset`: <br>
-
+`send_coupon_reset_ts` 0<br>
+`welcome_upgrade_booster` 0<br>
+`welcome_upgrade_coins_ends` 0<br>
+`web_client_prize_collected` 0<br>
+`welcome` p4 end ts 0<br>
+`knight_race_status` {}<br>
+`knight_race_type`<br>
+`vip_point_clear_flag` 2022<br>
+`bind_phone` 93415154612<br>
+`client_online_update_flag` 1<br>
+`christmas_gift` []<br>
+`sign_data` {"store_guide": 1, "smash_egg": 4}<br>
+`_r_level_test` -1<br>
+`cg_spin_res_num` cash go的spin作弊<br>
+`frenzy_mission_final_prize` {}<br>
+`spin_up_close_reward_flag` 0<br>
+`language_id` 0<br>
+`unlock_tag` 3<br>
+`cg_limie_sale` {"42": {"limit_count": 1, "active_ts": 1686119285, "limit_count_all": 1, "active_limit": 1, "buy_date": "2023-06-07", "item_id": "42", "limit_end_ts": 1686133685}}<br>
+`cg_inbox_fb_gift_ts` 1686196800<br>
+`last_purchase_id` 3231<br>
+`mp_send_eggs_flag` 1<br>
+`cg_steal_uid` 0<br>
+`mp_buy_bundle_season` 59<br>
+`cg_total_purchase` cash go里的总付费<br>
+`cg_recent_purchase` <br>
+`novice_rlevel` 新手基金 r level等级<br>
+`new_ad_theme_gm_limit` 0<br>
+`new_ad_theme_gm_ts` 0<br>
 ## frenzy_vault
 `a_data`: [`BYD`, `STAMP`, `ATW`] 3个A级道具的puzzle碎片数量<br>
 `b_prop_list`: 对应B级的token数量
@@ -185,7 +213,7 @@
 ## mission pass debug
 
     在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
-[[文件:S mission pass boost.png]]
+![解锁弹窗配置](images/S_mission_pass_boost.png)<br>
     
 ## Smash Egg
 `Gold Hammer Status`: 每天领取金锤子的数量<br>
@@ -233,29 +261,29 @@
 ## Mansion Quest
 `name`: 待确认<br>
 `stars`: 星星数量<br>
-`room`: 待确认<br>
-`room mission`: 待确认<br>
+`room`: 房间数据<br>
+`room mission`: 流程数据<br>
 `finish current phase`: 待确认<br>
 `mission`: 待确认<br>
 `disconnection room mission`: 待确认<br>
 `home_phase`: 待确认<br>
-`boosters_data`: 待确认<br>
-skip_card: 待确认<br>
-mission_stage_data: 待确认<br>
-flash tag: 待确认<br>
-stage prize: 待确认<br>
-房间奖励数据: 待确认<br>
-当前房间奖励: 待确认<br>
-房间奖励断线数据: 待确认<br>
-新主题任务: 待确认<br>
-新主题idx: 待确认<br>
+`boosters_data`: booster倒计时<br>
+`skip_card`: skip卡数量<br>
+`mission_stage_data`: 待确认<br>
+`flash tag`: 待确认<br>
+`stage prize`: 待确认<br>
+`房间奖励数据`: 待确认<br>
+`当前房间奖励`: 待确认<br>
+`房间奖励断线数据`: 待确认<br>
+`新主题任务`: 待确认<br>
+`新主题idx`: 待确认<br>
 
 ## Mansion Quest Ranking
-mq tid: 待确认<br>
-round index: 待确认<br>
-round points: 待确认<br>
+mq tid: 当前主题id<br>
+round index: 关卡<br>
+round points: 星星数量<br>
 round target: 待确认<br>
-season: 待确认<br>
+season: 赛季<br>
 mansion lv: 待确认<br>
 mission: 待确认<br>
 round prize: 待确认<br>
@@ -264,11 +292,11 @@ rank prize: 待确认<br>
 ## level_up_party
 `index`: 第几个进度<br>
 `tasks`: 待确认<br>
-`reset_ts`: 待确认<br>
+`reset_ts`: 倒计时<br>
 `has_game`: 待确认<br>
-`bet`: 待确认<br>
+`bet`: 以什么bet触发的本次level_up_party<br>
 `first_flag`: 待确认<br>
-`today_ts`: 待确认<br>
+`today_ts`: 今天是否触发过<br>
 `common_game`: 待确认<br>
 
 ## Login Bonus
@@ -284,10 +312,10 @@ rank prize: 待确认<br>
 `ab flag`: 待确认<br>
 
 ## Weekend Tournament
-`store_booster_ts`: 周末锦标赛store booster加成倒计时<br>
-`store_booster_multi`: 待确认<br>
-`daily_bonus_booster_ts`: 待确认<br>
-`daily_bonus_booster_multi`: 待确认<br>
+`store_booster_ts`: 周末锦标赛赠送的商店加成倒计时<br>
+`store_booster_multi`: 商店加成的值<br>
+`daily_bonus_booster_ts`: free bonus 加成倒计时<br>
+`daily_bonus_booster_multi`: free bonus 加成的值<br>
 `medal_booster`: 待确认<br>
 `is_collected`: 待确认<br>
 `season`: 赛季<br>
@@ -322,8 +350,8 @@ rank prize: 待确认<br>
 `last_sp_piggy_end_ts`: inbox商店促销，倒计时间戳<br>
 
 ## Lobby Bonus
-`Megaball Progress`: Megaball 的进度累计值<br>
-`SoC Progress`: SoC 的进度累计值<br>
+`Megaball Progress`: Megaball 的进度累计值，到3可玩<br>
+`SoC Progress`: SoC 的进度累计值，到5可玩<br>
 `Multiplier`: 待确认<br>
 `Golden Multiplier`: 待确认<br>
 `Turbo ts`: 红色刮刮卡倒计时戳（毫秒）<br>
@@ -396,13 +424,15 @@ rank prize: 待确认<br>
 `new_ad_wheel_multi_fq 1`: 影响的新手做完任务之后奖励金币的数量<br> 
 `new_ad_hm_multi_count 3`: 影响的是看广告的奖励<br>
 
-## Advertisement
+### Advertisement
 `total_purchase` 3121<br>
 `max_purchase` 150<br>
 `watch_adv_count` 广告转盘，最大10次<br>
 `all_count` 除广告转盘10，最大看广告次数240次<br>
 `all_count_ts` 最大看广告次数重置时间戳<br>
 `user_source` 广告用户type<br>
+
+###
 
 ## Cash_Go
 ### SPIN 作弊标记
@@ -484,10 +514,11 @@ rank prize: 待确认<br>
 `_type_month` 0<br>
 `_type_week` 0<br>
 `_weekly_count` 0<br>
+
 ## Purchase: Booster
 `Level Burst`: LEVEL BONUS BURST 的倒计时, 主要作用是升级时候多给2.5倍的金币奖励, 每10级是25倍<br>
 `Cashback`: cash back的倒计时, 没赢金币的时候按bet的一定比例存下来, 第二天的时候发给玩家<br>
-`Double XP`:LEVEL UP XP*2 双倍经验的booster的倒计时<br>
+`Double XP`: LEVEL UP XP*2 双倍经验的booster的倒计时<br>
 `Cashback Balance`: 是cash back当前存下来的金币数量<br>
 `Cashback Date`: 上次cash back发奖日期<br>
 `Bundle Count`: <br>
@@ -497,8 +528,8 @@ rank prize: 待确认<br>
 `Spin Reward TS`: spin_reward的结束时间<br>
 `Spin Reward Lounge TS`: 上次spin_reward和lounge_ts同步的时间, 主要逻辑是在获得lounge_ts的时候同时给一些spin_reward的时间<br>
 `Triple XP`: LEVEL UP XP 3X booster 倒计时<br>
-`Storage Double XP`:开启3X booster时，2X booster时间暂停，暂存在此（秒）<br>
-`Storgae Triple XP`:暂存 3X booster 的持续时间<br>
+`Storage Double XP`: 开启3X booster时，2X booster时间暂停，暂存在此（秒）<br>
+`Storgae Triple XP`: 暂存 3X booster 的持续时间<br>
 ## Limited Offer 商店侧边栏促销
 `Season Pack Available Count` 1 <br>
 `Season Pack End Ts` 1680148799 <br>
