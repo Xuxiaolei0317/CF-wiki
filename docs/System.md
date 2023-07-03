@@ -433,33 +433,31 @@ rank prize: 待确认<br>
 `user_source` 广告用户type<br>
 
 ## Cash Club User
-`cash_club_id` BQIY6U<br>
+`cash_club_id` 工会ID<br>
 `join_req_limit` 2<br>
-`join_req_reset_ts` 1688443200000<br>
+`join_req_reset_ts` 加入公会冷却时间倒计时时间戳（毫秒）<br>
 `received_extra_coins` {}<br>
 `no_chat_limit_ts` 0<br>
-`create_club_limit_ts` 1687432724000<br>
-`stamp_req_ts` 1688458323092<br>
-`club_chest_point` 0<br>
-`club_chest_target_weekly` [0, 8000, 30000, 100000, 200000, 350000]<br>
-`club_chest_prize` {}<br>
-`fresh_club_chest_target_ts` 1688443200000<br>
-`all_club_chest_prize` <br>
-        
-        [{"stamp_list": [{"place": 79, "config": [5, [5, 1], [0, 0], [0, 0], -1], "label": "Cash Club Rewards"}], "coins": 170000000000, "slot_blast": 86400, "atw": [0, 0, 1, 0, 0], "byd": [0, 5, 0, 0], "chips": 100}, {"stamp_list": [{"place": 79, "config": [5, [0, 0], [0, 0], [1, 1], -1], "label": "Cash Club Rewards"}], "coins": 340000000000, "level_burst": 7200, "atw": [0, 0, 5, 0, 0], "byd": [0, 0, 1, 0], "chips": 300}, {"stamp_list": [{"place": 79, "config": [1, [0, 0], [0, 0], [1, 3], -1], "label": "Cash Club Rewards"}], "coins": 510000000000, "atw": [0, 0, 0, 1, 0], "booster_bundle": 3600, "byd": [0, 0, 2, 0], "chips": 500}, {"stamp_list": [{"place": 79, "stamp_type": 9, "config": [1, [0, 0], [0, 0], [0, 0], -1], "label": "Cash Club Rewards"}], "coins": 850000000000, "atw": [0, 0, 0, 2, 0], "booster_bundle": 7200, "byd": [0, 0, 3, 0], "chips": 1000}, {"stamp_list": [{"place": 79, "stamp_type": 9, "config": [1, [0, 0], [0, 0], [0, 0], -1], "label": "Cash Club Rewards"}], "coins": 1360000000000, "atw": [0, 0, 0, 0, 1], "booster_bundle": 10800, "byd": [0, 0, 0, 1], "chips": 1500}, {"stamp_list": [{"place": 79, "stamp_type": 9, "config": [1, [0, 0], [0, 0], [0, 0], -1], "label": "Cash Club Rewards"}], "coins": 2720000000000, "atw": [0, 0, 0, 0, 2], "booster_bundle": 21600, "byd": [0, 0, 0, 2], "chips": 3000}]
-`join_ts` 0<br>
+`create_club_limit_ts` 创建公会限制时间戳（毫秒）<br>
+`stamp_req_ts` 公会索要邮票倒计时时间戳（毫秒）<br>
+`club_chest_point` 公会宝箱进度点数<br>
+`club_chest_target_weekly` 公会宝箱档位节点<br>
+`club_chest_prize` 公会宝箱奖励数据<br>
+`fresh_club_chest_target_ts` 公会宝箱结算时间戳（毫秒）<br>
+`all_club_chest_prize` 公会宝箱奖励数据<br>
+`join_ts` 加入公会的倒计时<br>
 `nick_name` PLAYER9324<br>
 `head_img`<br>
 `avg_bet` 170000000000<br>
-`guide` [1, 1, 1, 1, 1, 1, 1]<br>
+`guide` 公会引导<br>
 `jp_likes` 0<br>
 `stamp_req_count`<br>
 `super_member_type`<br>
 `super_club_chest_prize`<br>
 `free_club_point_ts`<br>
-`club_active_point` 0<br>
-`last_club_active_point` 30489<br>
-`last_chest_info` {}
+`club_active_point` 公会宝箱收集进度<br>
+`last_club_active_point` 上次公会宝箱收集的进度<br>
+`last_chest_info` 公会宝箱领取记录<br>
 
 ## Cash_Go
 ### SPIN 作弊标记
