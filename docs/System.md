@@ -1,3 +1,4 @@
+[adv]:images/adv_debug.png
 ## 个人数据
     `在Admin网站修改任何数据，一定要确定好 “服务器端口” 选择的对不对！！！`
 `Last Login Date`: 账号最后一次login时间戳<br>
@@ -216,7 +217,7 @@
 
     在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
 ![解锁弹窗配置](images/S_mission_pass_boost.png)<br>
-    
+
 ## Smash Egg
 `Gold Hammer Status`: 每天领取金锤子的数量<br>
 `Gold Hammer Extra`: 购买金锤子的数量<br>
@@ -421,7 +422,7 @@ rank prize: 待确认<br>
 `all_count_ts` 最大看广告次数重置时间戳<br>
 `user_source` 广告用户type<br>
 
-![广告按钮debug](images/adv_debug.png)<br>
+![adv debug](image.png)
 这个按钮点击之后直接强制改成广告用户，只能测试服使用<br>
 
 - LL 广告用户为真正0付费玩家广告用户
