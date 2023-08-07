@@ -59,7 +59,7 @@
                                 <a href="../inbox/" class="nav-link">Inbox</a>
                             </li>
                             <li class="navitem">
-                                <a href="../Tools.html" class="nav-link">Tools</a>
+                                <a href="../Tools/" class="nav-link">Tools</a>
                             </li>
                         </ul>
 
@@ -212,12 +212,17 @@
               </ul>
             </li>
             
-            <li class="nav-item" data-level="2"><a href="#cash-club-user" class="nav-link">Cash Club User</a>
+            <li class="nav-item" data-level="2"><a href="#spin-up-boost" class="nav-link">Spin Up Boost</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-level="2"><a href="#cash_go" class="nav-link">Cash_Go</a>
+            <li class="nav-item" data-level="2"><a href="#four_leaf_clover-lc" class="nav-link">four_leaf_clover (LC)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="2"><a href="#cash-club-user" class="nav-link">Cash Club User</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -348,19 +353,21 @@
 <code>cg_spin_res_num</code> cash go的spin作弊<br>
 <code>frenzy_mission_final_prize</code> {}<br>
 <code>spin_up_close_reward_flag</code> 0<br>
-<code>language_id</code> 0<br>
+<code>language_id</code> 默认选择的语言：英语：0，繁中：1，日语：9，德语：4<br>
 <code>unlock_tag</code> 3<br>
 <code>cg_limie_sale</code> {"42": {"limit_count": 1, "active_ts": 1686119285, "limit_count_all": 1, "active_limit": 1, "buy_date": "2023-06-07", "item_id": "42", "limit_end_ts": 1686133685}}<br>
 <code>cg_inbox_fb_gift_ts</code> 1686196800<br>
 <code>last_purchase_id</code> 3231<br>
 <code>mp_send_eggs_flag</code> 1<br>
-<code>cg_steal_uid</code> 0<br>
-<code>mp_buy_bundle_season</code> 59<br>
+<code>cg_steal_uid</code> cash go攻击/偷钱目标的id<br>
+<code>mp_buy_bundle_season</code> MP最后一次购买bundle的赛季<br>
 <code>cg_total_purchase</code> cash go里的总付费<br>
 <code>cg_recent_purchase</code> <br>
 <code>novice_rlevel</code> 新手基金 r level等级<br>
 <code>new_ad_theme_gm_limit</code> 0<br>
-<code>new_ad_theme_gm_ts</code> 0<br></p>
+<code>new_ad_theme_gm_ts</code> 0<br>
+<code>fb_bind_pop_ts</code> FB绑定弹窗弹出的时间<br>
+<code>fb_bind_pop_count</code> FB绑定弹窗弹出次数<br></p>
 <h2 id="frenzy_vault">frenzy_vault</h2>
 <p><code>a_data</code>: [<code>BYD</code>, <code>STAMP</code>, <code>ATW</code>] 3个A级道具的puzzle碎片数量<br>
 <code>b_prop_list</code>: 对应B级的token数量</p>
@@ -631,7 +638,15 @@ rank prize: 待确认<br></p>
 <code>guide</code>: 引导步数<br>
 <code>daily_prize_count</code>: 每日奖励宝箱领取状态<br></p>
 <h2 id="persona">Persona 广告用户</h2>
-<h3 id="_2"><a href="https://alidocs.dingtalk.com/i/nodes/3mzaPNMZ6jkJqkaxkvgLWYLDwXq4Ky1r?nav=share&amp;navQuery=spaceId%3Do5WXMNb78Z176mwO">广告用户逻辑</a></h3>
+<h3 id="advertisement">Advertisement</h3>
+<p><code>total_purchase</code> 3121<br>
+<code>max_purchase</code> 150<br>
+<code>watch_adv_count</code> 广告转盘，最大10次<br>
+<code>all_count</code> 除广告转盘10，最大看广告次数240次<br>
+<code>all_count_ts</code> 最大看广告次数重置时间戳<br>
+<code>user_source</code> 广告用户type<br></p>
+<p><img alt="广告按钮debug" src="../images/adv_debug.png" /><br></p>
+<p>这个按钮点击之后直接强制改成广告用户，只能测试服使用<br></p>
 <ul>
 <li>LL 广告用户为真正0付费玩家广告用户</li>
 <li>HH-OO 用户有固定逻辑才会开启广告
@@ -645,13 +660,19 @@ rank prize: 待确认<br></p>
 <code>new_ad_wheel_multi_fq 1</code>: 影响的新手做完任务之后奖励金币的数量<br> 
 <code>new_ad_hm_multi_count 3</code>: 影响的是看广告的奖励<br></li>
 </ul>
-<h3 id="advertisement">Advertisement</h3>
-<p><code>total_purchase</code> 3121<br>
-<code>max_purchase</code> 150<br>
-<code>watch_adv_count</code> 广告转盘，最大10次<br>
-<code>all_count</code> 除广告转盘10，最大看广告次数240次<br>
-<code>all_count_ts</code> 最大看广告次数重置时间戳<br>
-<code>user_source</code> 广告用户type<br></p>
+<h2 id="spin-up-boost">Spin Up Boost</h2>
+<p><code>progress</code>super spinup的累计次数，上限7<br></p>
+<h2 id="four_leaf_clover-lc">four_leaf_clover (LC)</h2>
+<p><code>reset_ts</code> 重置倒计时<br>
+<code>clover_list</code> [1, 1, 1]当前LC数量，上限4个值对应4个LC，0=绿色，1=金色<br>
+<code>last_clover</code> 最后一次累计的LC数量<br>
+<code>reward_list</code> []，转盘扇叶，数值<br>
+<code>last_reward</code> []，最后一次的转盘扇叶，数值<br>
+<code>r_level</code> 1<br>
+<code>one_dallor</code> LC计算的对应1$金币值<br>
+<code>extra_clover</code> []<br>
+<code>disconnect</code> {}<br>
+<code>r_level_gold</code> 1<br></p>
 <h2 id="cash-club-user">Cash Club User</h2>
 <p><code>cash_club_id</code> 工会ID<br>
 <code>join_req_limit</code> 2<br>
@@ -678,8 +699,7 @@ rank prize: 待确认<br></p>
 <code>club_active_point</code> 公会宝箱收集进度<br>
 <code>last_club_active_point</code> 上次公会宝箱收集的进度<br>
 <code>last_chest_info</code> 公会宝箱领取记录<br></p>
-<h2 id="cash_go">Cash_Go</h2>
-<h3 id="spin">SPIN 作弊标记</h3>
+<h3 id="cash-go-spin">Cash Go SPIN 作弊标记</h3>
 <pre><code># remote prize, id
 # θ正常，无送奖状态
 # 1 - 保护1 
@@ -703,7 +723,7 @@ rank prize: 待确认<br></p>
 # 35 - disco*2
 # 36 - disco*3
 </code></pre>
-<h3 id="_3">主界面</h3>
+<h3 id="_2">主界面</h3>
 <p><code>_kingdom_coins</code>: Cash Go的金币<br>
 <code>_shield_num</code>: 盾牌数量<br>
 <code>_crown_num</code>: 皇冠数量<br>
@@ -715,10 +735,17 @@ rank prize: 待确认<br></p>
 <code>_pet_protect_ts</code>: 宠物保护的结束时间<br>
 <code>_active_pet</code>: 激活的宠物<br>
 <code>message_list_data</code>: <br>
-<code>_kingdom_index</code>: 第几个村庄<br>
-<code>_kingdom_status_data</code>: 当前村子状态<br>
+<code>_kingdom_index</code>: 小岛等级<br>
+<code>_kingdom_status_data</code>: 当前小岛状态<br>
 <code>_season</code>: 赛季<br>
-<code>_kingdom_index_other</code>: 额外村庄进度(所有村子完成后开始累计这个进度,每完成一个<br></p>
+<code>_kingdom_index_other</code>: 额外村庄进度(所有小岛完成后开始累计这个进度,每完成一个<br>
+<code>_new_user_guide_part_data</code> cash go的引导：{"p2": 10, "p3": 5, "p1": 4, "prize": 1, "p4": 2}<br>
+<code>_auto_flag</code> 1<br>
+<code>_new_user_spin_count</code> 新手spin次数，大于50进入可被攻击偷钱的随机列表<br>
+<code>_last_damage_ts</code> 1691120117<br>
+<code>_cg_ab</code> 5.14<br>
+<code>_new_user_flags</code> 11<br>
+<code>_total_purchase_chips</code> 第二货币总付费<br></p>
 <h3 id="cash_kingdom_pet">cash_kingdom_pet</h3>
 <p><code>_good_food_count</code> 拥有肉的数量<br>
 <code>_exp_food_count</code> 拥有经验<br>
