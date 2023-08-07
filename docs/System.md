@@ -104,19 +104,21 @@
 `cg_spin_res_num` cash go的spin作弊<br>
 `frenzy_mission_final_prize` {}<br>
 `spin_up_close_reward_flag` 0<br>
-`language_id` 0<br>
+`language_id` 默认选择的语言：英语：0，繁中：1，日语：9，德语：4<br>
 `unlock_tag` 3<br>
 `cg_limie_sale` {"42": {"limit_count": 1, "active_ts": 1686119285, "limit_count_all": 1, "active_limit": 1, "buy_date": "2023-06-07", "item_id": "42", "limit_end_ts": 1686133685}}<br>
 `cg_inbox_fb_gift_ts` 1686196800<br>
 `last_purchase_id` 3231<br>
 `mp_send_eggs_flag` 1<br>
-`cg_steal_uid` 0<br>
-`mp_buy_bundle_season` 59<br>
+`cg_steal_uid` cash go攻击/偷钱目标的id<br>
+`mp_buy_bundle_season` MP最后一次购买bundle的赛季<br>
 `cg_total_purchase` cash go里的总付费<br>
 `cg_recent_purchase` <br>
 `novice_rlevel` 新手基金 r level等级<br>
 `new_ad_theme_gm_limit` 0<br>
 `new_ad_theme_gm_ts` 0<br>
+`fb_bind_pop_ts` FB绑定弹窗弹出的时间<br>
+`fb_bind_pop_count` FB绑定弹窗弹出次数<br>
 ## frenzy_vault
 `a_data`: [`BYD`, `STAMP`, `ATW`] 3个A级道具的puzzle碎片数量<br>
 `b_prop_list`: 对应B级的token数量
@@ -411,7 +413,17 @@ rank prize: 待确认<br>
 `daily_prize_count`: 每日奖励宝箱领取状态<br>
 
 ## Persona 广告用户
-### [广告用户逻辑](https://alidocs.dingtalk.com/i/nodes/3mzaPNMZ6jkJqkaxkvgLWYLDwXq4Ky1r?nav=share&navQuery=spaceId%3Do5WXMNb78Z176mwO)
+### Advertisement
+`total_purchase` 3121<br>
+`max_purchase` 150<br>
+`watch_adv_count` 广告转盘，最大10次<br>
+`all_count` 除广告转盘10，最大看广告次数240次<br>
+`all_count_ts` 最大看广告次数重置时间戳<br>
+`user_source` 广告用户type<br>
+
+![广告按钮debug](images/adv_debug.png)<br>
+这个按钮点击之后直接强制改成广告用户，只能测试服使用<br>
+
 - LL 广告用户为真正0付费玩家广告用户
 - HH-OO 用户有固定逻辑才会开启广告
 `p_user_ad_type`: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
@@ -424,13 +436,20 @@ rank prize: 待确认<br>
 `new_ad_wheel_multi_fq 1`: 影响的新手做完任务之后奖励金币的数量<br> 
 `new_ad_hm_multi_count 3`: 影响的是看广告的奖励<br>
 
-### Advertisement
-`total_purchase` 3121<br>
-`max_purchase` 150<br>
-`watch_adv_count` 广告转盘，最大10次<br>
-`all_count` 除广告转盘10，最大看广告次数240次<br>
-`all_count_ts` 最大看广告次数重置时间戳<br>
-`user_source` 广告用户type<br>
+## Spin Up Boost
+`progress`super spinup的累计次数，上限7<br>
+
+## four_leaf_clover (LC)
+`reset_ts` 重置倒计时<br>
+`clover_list` [1, 1, 1]当前LC数量，上限4个值对应4个LC，0=绿色，1=金色<br>
+`last_clover` 最后一次累计的LC数量<br>
+`reward_list` []，转盘扇叶，数值<br>
+`last_reward` []，最后一次的转盘扇叶，数值<br>
+`r_level` 1<br>
+`one_dallor` LC计算的对应1$金币值<br>
+`extra_clover` []<br>
+`disconnect` {}<br>
+`r_level_gold` 1<br>
 
 ## Cash Club User
 `cash_club_id` 工会ID<br>
@@ -459,8 +478,7 @@ rank prize: 待确认<br>
 `last_club_active_point` 上次公会宝箱收集的进度<br>
 `last_chest_info` 公会宝箱领取记录<br>
 
-## Cash_Go
-### SPIN 作弊标记
+### Cash Go SPIN 作弊标记
     
     # remote prize, id
     # θ正常，无送奖状态
@@ -496,10 +514,18 @@ rank prize: 待确认<br>
 `_pet_protect_ts`: 宠物保护的结束时间<br>
 `_active_pet`: 激活的宠物<br>
 `message_list_data`: <br>
-`_kingdom_index`: 第几个村庄<br>
-`_kingdom_status_data`: 当前村子状态<br>
+`_kingdom_index`: 小岛等级<br>
+`_kingdom_status_data`: 当前小岛状态<br>
 `_season`: 赛季<br>
-`_kingdom_index_other`: 额外村庄进度(所有村子完成后开始累计这个进度,每完成一个<br>
+`_kingdom_index_other`: 额外村庄进度(所有小岛完成后开始累计这个进度,每完成一个<br>
+`_new_user_guide_part_data` cash go的引导：{"p2": 10, "p3": 5, "p1": 4, "prize": 1, "p4": 2}<br>
+`_auto_flag` 1<br>
+`_new_user_spin_count` 新手spin次数，大于50进入可被攻击偷钱的随机列表<br>
+`_last_damage_ts` 1691120117<br>
+`_cg_ab` 5.14<br>
+`_new_user_flags` 11<br>
+`_total_purchase_chips` 第二货币总付费<br>
+
 ### cash_kingdom_pet
 `_good_food_count` 拥有肉的数量<br>
 `_exp_food_count` 拥有经验<br>
@@ -575,3 +601,4 @@ rank prize: 待确认<br>
 `card num` 这次会发的礼品卡的数量,发送后`card_level`, `card_dollar`, `card_num`都会清0<br>
 `delta_limit` 收奖次数,也是花费第二货币后 获得的收奖次数<br>
 `open_reset_ts` 关闭bonus_voucher的时间戳<br>
+
