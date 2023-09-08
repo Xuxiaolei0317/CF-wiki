@@ -421,12 +421,10 @@ rank prize: 待确认<br>
 `all_count` 除广告转盘10，最大看广告次数240次<br>
 `all_count_ts` 最大看广告次数重置时间戳<br>
 `user_source` 广告用户type<br>
-
 ![adv debug](image.png)
 这个按钮点击之后直接强制改成广告用户，只能测试服使用<br>
-
-- LL 广告用户为真正0付费玩家广告用户
-- HH-OO 用户有固定逻辑才会开启广告
+- LL 广告用户为真正0付费玩家广告用户<br>
+- HH-OO 用户有固定逻辑才会开启广告<br>
 `p_user_ad_type`: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 `purchase_type: 2`: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 `new_ad_3h_counter 12`: <br>
@@ -566,7 +564,15 @@ rank prize: 待确认<br>
 `_type_month` 0<br>
 `_type_week` 0<br>
 `_weekly_count` 0<br>
-
+### cash go inviter
+`invite_index` 奖励的index，每个等级消耗的邀请数不一样<br>
+`invite_progress` 总邀请数，登录后消耗领奖<br>
+`invite_fb_progress` 0<br>
+`invite_fb_num` 0<br>
+`fb_flag` 0<br>
+`normal_invite_ls_info_data` []<br>
+`fb_invite_ls_info_data` []<br>
+`invited_from`<br>
 ## Purchase: Booster
 `Level Burst`: LEVEL BONUS BURST 的倒计时, 主要作用是升级时候多给2.5倍的金币奖励, 每10级是25倍<br>
 `Cashback`: cash back的倒计时, 没赢金币的时候按bet的一定比例存下来, 第二天的时候发给玩家<br>
