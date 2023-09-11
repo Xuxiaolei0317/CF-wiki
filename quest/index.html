@@ -103,10 +103,6 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#another-first-quest" class="nav-link">Another First Quest</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
             <li class="nav-item" data-level="2"><a href="#_1" class="nav-link">新手基金</a>
               <ul class="nav flex-column">
               </ul>
@@ -122,12 +118,13 @@
 </code></pre>
 <h1 id="quest">Quest</h1>
 <pre><code>level等级到达 4 级时，触发新手quest！
-新手ABtest: ID 的十位数，奇数为:A组对照组，偶数为:B组实验组
 </code></pre>
-<p><code>first_quest_end_ts</code>: 新手quest结束时间（修改为过去时间戳可跨过新手quest）<br>
-<code>another_first_quest_flag</code>: 新手ABtest,<code>0</code>是对照组,<code>1</code>是实验组<br></p>
+<!-- 新手ABtest: ID 的十位数，奇数为:A组对照组，偶数为:B组实验组 -->
+
+<p><code>first_quest_end_ts</code>: 新手quest结束时间（修改为过去时间戳可跨过新手quest）<br></p>
+<!-- `another_first_quest_flag`: 新手ABtest,`0`是对照组,`1`是实验组<br> -->
 <h2 id="first_quest">first_quest</h2>
-<pre><code>A组用户: 完成新手quest 或者倒计时结束跨过新手期
+<pre><code>完成新手quest 或者倒计时结束跨过新手期
 </code></pre>
 <p><code>_task_index</code>: 已完成第几个主题，从0开始,完成一关就 + 1<br>
 <code>_prize_index</code>: 已经收取第几个主题后的奖励，从0开始,领取一个奖励就 + 1<br>
@@ -150,31 +147,33 @@
 {"tid": 242}], # 未进入的主题显示状态
 </code></pre>
 <p><code>_prize_list</code>: 6个奖励的数据<br></p>
-<h2 id="another-first-quest">Another First Quest</h2>
-<pre><code>B组用户: 倒计时结束跨过新手期，且quest关卡无尽轮次
-</code></pre>
-<p><code>prize_index</code>: 已经收取第几个主题后的奖励，从0开始,领取一个奖励就 + 1<br>
-<code>prize_list</code>: 6个奖励的数据<br>
-<code>round</code>: quest通关轮次<br>
-<code>task_index</code>: 已完成第几个主题，从0开始,完成一关就 + 1<br>
-<code>task_list</code>: 6个主题的数据<br></p>
-<pre><code>共有6个主题，前3个主题2个任务，后3个主题3个任务
-[{"tid": 122, # 主题id
-  "tasks": [ # 主题对应的任务
-        {# 任务1
-            "tid": 122, # 主题id
-            "current": 30, # 任务当前进度，和目标值相同即为完成
-            "type": 1, # 任务属性
-            "target": 30}, # 任务目标值
-        {# 任务2
-            "tid": 122, 
-            "current": 1800000, 
-            "type": 6, 
-            "target": 1800000}], 
-    "bet": 60000}, # 当前主题默认的bet
+<!-- ## Another First Quest
 
-{"tid": 242}], # 未进入的主题显示状态
-</code></pre>
+    B组用户: 倒计时结束跨过新手期，且quest关卡无尽轮次
+
+`prize_index`: 已经收取第几个主题后的奖励，从0开始,领取一个奖励就 + 1<br>
+`prize_list`: 6个奖励的数据<br>
+`round`: quest通关轮次<br>
+`task_index`: 已完成第几个主题，从0开始,完成一关就 + 1<br>
+`task_list`: 6个主题的数据<br>
+
+    共有6个主题，前3个主题2个任务，后3个主题3个任务
+    [{"tid": 122, # 主题id
+      "tasks": [ # 主题对应的任务
+            {# 任务1
+                "tid": 122, # 主题id
+                "current": 30, # 任务当前进度，和目标值相同即为完成
+                "type": 1, # 任务属性
+                "target": 30}, # 任务目标值
+            {# 任务2
+                "tid": 122, 
+                "current": 1800000, 
+                "type": 6, 
+                "target": 1800000}], 
+        "bet": 60000}, # 当前主题默认的bet
+
+    {"tid": 242}], # 未进入的主题显示状态 -->
+
 <p>全部主题完成的数据: </p>
 <pre><code>[
     {"tid": 122, "tasks": [
