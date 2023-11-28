@@ -63,7 +63,7 @@
 `mp_send_free_booster_flag`: 赠送免费的mission star booster弹窗<br>
 `novice_end_first_login`: {quest.md}<br>
 `novice_reward`: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
-`novice_end_time`: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
+`novice_end_time`: [Quest|新手基金]<br>
 `store_stamp_count` lucky chames的数量<br>
 `lounge_store_week_ts`: lounge兑换商店道具刷新倒计时<br>
 `daily_login_count`: 当天的第几次login，一般用于看login强弹<br>
@@ -477,7 +477,8 @@ rank prize: 待确认<br>
 `last_club_active_point` 上次公会宝箱收集的进度<br>
 `last_chest_info` 公会宝箱领取记录<br>
 
-### Cash Go SPIN 作弊标记
+## Cash Go
+### SPIN 作弊标记
     
     # remote prize, id
     # θ正常，无送奖状态
@@ -523,7 +524,8 @@ rank prize: 待确认<br>
 `_last_damage_ts` 1691120117<br>
 `_cg_ab` 5.14<br>
 `_new_user_flags` 11<br>
-`_total_purchase_chips` 第二货币总付费<br>
+`_total_purchase_chips` 第二货币总付费，改成0后会有商店100%more加成<br>
+`_total_purchase_dollar` cash go总付费，改成0后触发ooc可以触发破冰促销 <br>
 
 ### cash_kingdom_pet
 `_good_food_count` 拥有肉的数量<br>
@@ -573,6 +575,15 @@ rank prize: 待确认<br>
 `normal_invite_ls_info_data` []<br>
 `fb_invite_ls_info_data` []<br>
 `invited_from`<br>
+### Cash Go First Promotion
+`_limit_ts` 破冰促销倒计时<br>
+`_store_item` 破冰促销数据<br>
+        
+        {"soc_speedy_benefit": 43200, "lounge_points_benefit": 300, "vip_point": 36, "price": 1.99, "limit_ts": 1700556320, "cg_coins_num": 10000000, "credits": 75937500, "chip_num": 200, "item_id": 3789, "cg_energy_num": 200, "origin_price": 79.99}
+
+`_daily_count` 破冰促销当日触发3次后不再触发<br>
+
+
 ## Purchase: Booster
 `Level Burst`: LEVEL BONUS BURST 的倒计时, 主要作用是升级时候多给2.5倍的金币奖励, 每10级是25倍<br>
 `Cashback`: cash back的倒计时, 没赢金币的时候按bet的一定比例存下来, 第二天的时候发给玩家<br>
