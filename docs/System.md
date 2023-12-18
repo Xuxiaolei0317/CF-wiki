@@ -457,11 +457,11 @@ rank prize: 待确认<br>
 `received_extra_coins` {}<br>
 `no_chat_limit_ts` 0<br>
 `create_club_limit_ts` 创建公会限制时间戳（毫秒）<br>
-`stamp_req_ts` 公会索要邮票倒计时时间戳（毫秒）<br>
+`stamp_req_ts` 公会索要邮票倒计时时间戳（毫秒：改成1可以刷新倒计时）<br>
 `club_chest_point` 公会宝箱进度点数<br>
 `club_chest_target_weekly` 公会宝箱档位节点<br>
 `club_chest_prize` 公会宝箱奖励数据<br>
-`fresh_club_chest_target_ts` 公会宝箱结算时间戳（毫秒）<br>
+`fresh_club_chest_target_ts` 公会宝箱结算时间戳（毫秒：改成1可以直接刷新公会宝箱（模拟周三的刷新环境））<br>
 `all_club_chest_prize` 公会宝箱奖励数据<br>
 `join_ts` 加入公会的倒计时<br>
 `nick_name` PLAYER9324<br>
@@ -476,7 +476,11 @@ rank prize: 待确认<br>
 `club_active_point` 公会宝箱收集进度<br>
 `last_club_active_point` 上次公会宝箱收集的进度<br>
 `last_chest_info` 公会宝箱领取记录<br>
-
+`cash_club_point_booster_ts` 0<br>
+`club chest history` []<br>
+`fix_coins_flag_35008` 1<br>
+`active_list` [[72, 1702529999]]<br>
+`club chest point history`<br>
 ## Cash Go
 ### SPIN 作弊标记
     
