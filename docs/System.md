@@ -241,6 +241,13 @@
 `Silver Shell Status`: 待确认<br>
 `Special Chips Purchased`: 待确认<br>
 `Reset Feature Ts`: 待确认<br> -->
+## Exclusive Gift
+`Prize Type` 1-9个类型，最终会给不同的奖励<br>
+`Next Ts` 冷却时间<br>
+`Current Count` 领取奖励次数<br>
+`Debug Ratio`<br>
+`debug1-3` 用来触发不同的级别的防流失（就是奖励不一样）1级别最高奖励最多<br>
+![防流失奖励](images/S_Gift.png)<br>
 
 ## Blazing Challenge
 `EXP`: 经验值<br>
@@ -282,15 +289,15 @@
 `新主题idx`: 待确认<br>
 
 ## Mansion Quest Ranking
-mq tid: 当前主题id<br>
-round index: 关卡<br>
-round points: 星星数量<br>
-round target: 待确认<br>
-season: 赛季<br>
-mansion lv: 待确认<br>
-mission: 待确认<br>
-round prize: 待确认<br>
-rank prize: 待确认<br>
+`mq tid`: 当前主题id<br>
+`round index`: 关卡<br>
+`round points`: 星星数量<br>
+`round target`: 待确认<br>
+`season`: 赛季<br>
+`mansion lv`: 待确认<br>
+`mission`: 待确认<br>
+`round prize`: 待确认<br>
+`rank prize`: 待确认<br>
 
 ## level_up_party
 `index`: 第几个进度<br>
