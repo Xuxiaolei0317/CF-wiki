@@ -419,18 +419,19 @@
 `guide`: 引导步数<br>
 `daily_prize_count`: 每日奖励宝箱领取状态<br>
 
-## Persona 广告用户
-### Advertisement
-`total_purchase` 3121<br>
-`max_purchase` 150<br>
+## Advertisement 广告用户
+- LL 广告用户为真正0付费玩家广告用户<br>
+- HH-OO 用户有固定逻辑才会开启广告<br>
+`total_purchase` 用户的总付费<br>
+`max_purchase` 用户的最大付费<br>
 `watch_adv_count` 广告转盘，最大10次<br>
 `all_count` 除广告转盘10，最大看广告次数240次<br>
 `all_count_ts` 最大看广告次数重置时间戳<br>
-`user_source` 广告用户type<br>
+`user_source` 广告用户type, 2 = 广告用户（前提条件是`total_purchase` = 0） <br>
 <!-- ![adv debug](image.png) -->
 这个按钮点击之后直接强制改成广告用户，只能测试服使用<br>
-- LL 广告用户为真正0付费玩家广告用户<br>
-- HH-OO 用户有固定逻辑才会开启广告<br>
+
+## Persona 广告用户
 `p_user_ad_type`: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 `purchase_type: 2`: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 `new_ad_3h_counter 12`: <br>
