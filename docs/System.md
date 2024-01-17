@@ -1,12 +1,12 @@
-# 个人数据
+## 个人数据
     `在Admin网站修改任何数据，一定要确定好 “服务器端口” 选择的对不对！！！`
 `Last Login Date`: 账号最后一次login时间戳<br>
 `First Login`: 账号创建时间<br>
 `Last Login`: 账号上次一次login时间<br>
 `last Logout`: 账号上次下线时间<br>
-`Level`: 等级<br>
+`Level`: 等级(不要改太大)<br>
 `VIP`: VIP等级<br>
-`Credits`: 拥有的`coins`数量<br>
+`Credits`: 拥有的`coins`数量(不要改太多)<br>
 `Lounge Points`: 高级房点数<br>
 `Lounge Ts`:高级房倒计时<br>
 `Free Lounge Points`: 待确认<br>
@@ -22,7 +22,7 @@
 `old_b_used`: 待确认<br>
 `next_today_begin`: 账号上线时间戳，改成过去时间，再上线可以重置账号跨天状态<br>
 `next_first_login`: 账号上线时间戳，改成过去时间，再上线可以重置账号跨天状态<br>
-`stamp_round`: 待确认<br>
+`stamp_round`: 邮票轮次<br>
 `bc_avg_bet_ls`: 待确认<br>
 `behaviour_data_bug_fix`: 待确认<br>
 `mistery_bank_breaker_flag`: 待确认<br>
@@ -31,7 +31,7 @@
 `mp last season purchase`: 上赛季的MP解锁状态<br>
 `mp current season purchase`: 当前赛季的MP解锁状态<br>
 `user status`: 为`3`时是可以手动调整r level的等级；为`0`时是模仿真实用户登录情况<br>
-`first_quest_end_ts`: [[Quest| 新手期倒计时]]<br>
+`first_quest_end_ts`: [Quest](quest.md/#first_quest)<br>
 `user_icon_id`: 正在使用的头像ID<br>
 `nick_name`: 游戏内编辑的name<br>
 `inbox bonus ts`: 待确认<br>
@@ -60,9 +60,9 @@
 `lounge_free_collected`: 高级房引导中的free pass卡领取状态<br>
 `lounge_transform_info`: 待确认<br>
 `mp_send_free_booster_flag`: 赠送免费的mission star booster弹窗<br>
-`novice_end_first_login`: {quest.md}<br>
-`novice_reward`: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
-`novice_end_time`: [Quest|新手基金]<br>
+`novice_end_first_login`: [新手基金](quest.md)<br>
+`novice_reward`: [新手基金](quest.md)<br>
+`novice_end_time`: [新手基金](quest.md)<br>
 `store_stamp_count` lucky chames的数量<br>
 `lounge_store_week_ts`: lounge兑换商店道具刷新倒计时<br>
 `daily_login_count`: 当天的第几次login，一般用于看login强弹<br>
@@ -119,6 +119,9 @@
 `new_ad_theme_gm_ts` 0<br>
 `fb_bind_pop_ts` FB绑定弹窗弹出的时间<br>
 `fb_bind_pop_count` FB绑定弹窗弹出次数<br>
+
+
+---
 ## frenzy_vault
 `a_data`: [`BYD`, `STAMP`, `ATW`] 3个A级道具的puzzle碎片数量<br>
 `b_prop_list`: 对应B级的token数量
@@ -132,6 +135,8 @@
 `chips`: 第二货币数量<br>
 `frenzy_spin`: 邮票里frenzy spin的次数<br>
 
+
+---
 ## Mission
 `Reset Ts`: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
 `Wheel Collected`: Mission Points领奖状态<br>
@@ -160,6 +165,8 @@
 `Glory Mission Finish Flag`: 待确认<br>
 `Glory Mission Unlock Flag`: 待确认<br>
 
+
+---
 ## Mission Pass
 
     需要重置mission pass时，可以直接将Season数据改为上个赛季进游戏
@@ -212,11 +219,14 @@
 ## MP Guide
 `Guide`: Mission pass 的新手引导步数，重置改0<br>
 `Qualification`: 解锁MP 1$ 资格<br>
-## mission pass debug
 
-    在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
+## mission pass debug
 ![解锁弹窗配置](images/S_mission_pass_boost.png)<br>
 
+    在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
+
+
+---
 ## Smash Egg
 `Gold Hammer Status`: 每天领取金锤子的数量<br>
 `Gold Hammer Extra`: 购买金锤子的数量<br>
@@ -226,20 +236,8 @@
 `Silver Hammer Extra`: 购买银锤子的数量<br>
 `Silver Hammer Disconnection`: 断线数据<br>
 `Silver Hammer Flag`: `1` = 已经砸过蛋了，`0` = 未砸蛋<br>
-<!-- `Hammer Reset Ts`: 待确认<br>
-`Old Player Flag`: 待确认<br>
-`Gold Shell Pos LIst`: 待确认<br>
-`Gold Shell Win List`: 待确认<br>
-`Gold Shell Round`: 待确认<br>
-`Gold Shell Pick`: 待确认<br>
-`Gold Shell Status`: 待确认<br>
-`Silver Shell Pos LIst`: 待确认<br>
-`Silver Shell Win List`: 待确认<br>
-`Silver Shell Round`: 待确认<br>
-`Silver Shell Pick`: 待确认<br>
-`Silver Shell Status`: 待确认<br>
-`Special Chips Purchased`: 待确认<br>
-`Reset Feature Ts`: 待确认<br> -->
+
+---
 ## Exclusive Gift
 `Prize Type` 1-9个类型，最终会给不同的奖励<br>
 `Next Ts` 冷却时间<br>
@@ -248,6 +246,7 @@
 `debug1-3` 用来触发不同的级别的防流失（就是奖励不一样）1级别最高奖励最多<br>
 ![防流失奖励](images/S_Gift.png)<br>
 
+---
 ## Blazing Challenge
 `EXP`: 经验值<br>
 `Level`: 等级<br>
@@ -266,7 +265,7 @@
 `Commodities`: 待确认<br>
 `History Rank`: 历史上榜记录<br>
 
-
+---
 ## Mansion Quest
 `name`: 待确认<br>
 `stars`: 星星数量<br>
@@ -298,6 +297,7 @@
 `round prize`: 待确认<br>
 `rank prize`: 待确认<br>
 
+---
 ## level_up_party
 `index`: 第几个进度<br>
 `tasks`: 待确认<br>
@@ -308,6 +308,7 @@
 `today_ts`: 今天是否触发过<br>
 `common_game`: 待确认<br>
 
+---
 ## Login Bonus
 `week count`: 周签到次数，小于6<br>
 `week type`: 待确认<br>
@@ -320,6 +321,7 @@
 `month status`: 待确认<br>
 `ab flag`: 待确认<br>
 
+---
 ## Weekend Tournament
 `store_booster_ts`: 周末锦标赛赠送的商店加成倒计时<br>
 `store_booster_multi`: 商店加成的值<br>
@@ -337,6 +339,7 @@
 `wt_season`: 待确认<br>
 `last_send_inbox_ts`: 待确认<br>
 
+---
 ## Coupon New
 `Store Coupon Id`: 手动清除list内coupon时，此数据改`-1`<br>
 `Store Coupon List`: inbox内的`Store coupon`<br>
@@ -348,16 +351,21 @@
 `Chips Bank Coupon Id`: 手动清除list内coupon时，此数据改`-1`<br>
 `Chips Bank Coupon List`: inbox内的`Emerald bank coupon`<br>
 
+---
 ## Discount coupon
 `Store Discount Coupon Id`: 手动清除list内coupon时，此数据改`-1`<br>
 `Store Discount Coupon List`: inbox内的`降价coupon`的list<br>
 
+
+---
 ## inbox sp product
 `last_sp_store_end_ts`: inbox内Money bank促销，倒计时间戳<br>
 `sp_piggy_product`: inbox内商店促销: `0`没有，`1`有<br>
 `sp_store_product`: inbox内Money bank促销: `0`没有，`1`有<br>
 `last_sp_piggy_end_ts`: inbox商店促销，倒计时间戳<br>
 
+
+---
 ## Lobby Bonus
 `Megaball Progress`: Megaball 的进度累计值，到3可玩<br>
 `SoC Progress`: SoC 的进度累计值，到5可玩<br>
@@ -370,6 +378,8 @@
 `Last Multipler ts`: 待确认<br>
 `Slot Blast ts`: 待确认<br>
 
+
+---
 ## Purchase: Piggy Bank (New)
 `Piggy Bank Balance`: 当前bank数量<br>
 `Piggy Price LV`: 价格等级<br>
@@ -381,10 +391,14 @@
 `Piggy Bank AB Test`: 0<br>
 `Piggy Bank Data Migration`:<br>
 
+
+---
 ## Money Bag
 `Money Bag Current Coins`: 当前money bank bag积累的钱<br>
 `Money Bag Top Coins`: money bank bag积累上限<br>
 
+
+---
 ## Emerald Bank
 `Emerald Bank`: 当前bank数量<br>
 `Config Level`: 配置等级<br>
@@ -393,6 +407,8 @@
 `Level Down`: 降档（0=不降，1=降一档，2=降两档）最大2<br>
 `Max Days`: 未登录天数（7天降价）<br>
 
+
+---
 ## Welcome Home
 `daily_prize`: <br>
 `daily_prize_end_ts`: 每日奖励倒计时<br>
@@ -419,6 +435,8 @@
 `guide`: 引导步数<br>
 `daily_prize_count`: 每日奖励宝箱领取状态<br>
 
+
+---
 ## Advertisement 广告用户
 - LL 广告用户为真正0付费玩家广告用户<br>
 - HH-OO 用户有固定逻辑才会开启广告<br>
@@ -428,9 +446,11 @@
 `all_count` 除广告转盘10，最大看广告次数240次<br>
 `all_count_ts` 最大看广告次数重置时间戳<br>
 `user_source` 广告用户type, 2 = 广告用户（前提条件是`total_purchase` = 0） <br>
-![adv debug](images/adv.png)
+![adv debug](images/adv.png)<br>
 这个按钮点击之后直接强制改成广告用户，只能测试服使用<br>
 
+
+---
 ## Persona 广告用户
 `p_user_ad_type`: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 `purchase_type: 2`: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
@@ -442,9 +462,13 @@
 `new_ad_wheel_multi_fq 1`: 影响的新手做完任务之后奖励金币的数量<br> 
 `new_ad_hm_multi_count 3`: 影响的是看广告的奖励<br>
 
+
+---
 ## Spin Up Boost
 `progress`super spinup的累计次数，上限7<br>
 
+
+---
 ## four_leaf_clover (LC)
 `reset_ts` 重置倒计时<br>
 `clover_list` [1, 1, 1]当前LC数量，上限4个值对应4个LC，0=绿色，1=金色<br>
@@ -457,6 +481,8 @@
 `disconnect` {}<br>
 `r_level_gold` 1<br>
 
+
+---
 ## Red Dot
 `reset_ts` 1705477477<br>
 `weekly_progress` [0, 0, 0, 0, 0, 0, 0]<br>
@@ -468,6 +494,8 @@
 `ooc_notification_collect` 0<br>
 `ooc_notification_last_ts` 1705300539<br>
 `open_send_msg` 1<br>
+
+---
 ## Cash Club User
 `cash_club_id` 工会ID<br>
 `join_req_limit` 2<br>
@@ -499,6 +527,8 @@
 `fix_coins_flag_35008` 1<br>
 `active_list` [[72, 1702529999]]<br>
 `club chest point history`<br>
+
+---
 ## Cash Go
 ### SPIN 作弊标记
     
@@ -524,6 +554,7 @@
     # 34 - disco*1
     # 35 - disco*2
     # 36 - disco*3
+
 ### 主界面
 `_kingdom_coins`: Cash Go的金币<br>
 `_shield_num`: 盾牌数量<br>
@@ -549,6 +580,7 @@
 `_total_purchase_chips` 第二货币总付费，改成0后会有商店100%more加成<br>
 `_total_purchase_dollar` cash go总付费，改成0后触发ooc可以触发破冰促销 <br>
 
+
 ### cash_kingdom_pet
 `_good_food_count` 拥有肉的数量<br>
 `_exp_food_count` 拥有经验<br>
@@ -569,6 +601,7 @@
         "pet_name": "steal", 
         "pet_active_end_ts": 1677219660}
     }
+
 ### cash_kingdom_ball_machine
 `normal_limit_ts`: 普通转盘下次刷新时间戳<br>
 `normal_progress` {"normal_ball": [5, 8, 10, 15, 20, 30, 50], "jp_ball": [1000]}<br>
@@ -588,6 +621,7 @@
 `_type_month` 0<br>
 `_type_week` 0<br>
 `_weekly_count` 0<br>
+
 ### cash go inviter
 `invite_index` 奖励的index，每个等级消耗的邀请数不一样<br>
 `invite_progress` 总邀请数，登录后消耗领奖<br>
@@ -597,6 +631,7 @@
 `normal_invite_ls_info_data` []<br>
 `fb_invite_ls_info_data` []<br>
 `invited_from`<br>
+
 ### Cash Go First Promotion
 `_limit_ts` 破冰促销倒计时<br>
 `_store_item` 破冰促销数据<br>
@@ -606,6 +641,7 @@
 `_daily_count` 破冰促销当日触发3次后不再触发<br>
 
 
+---
 ## Purchase: Booster
 `Level Burst`: LEVEL BONUS BURST 的倒计时, 主要作用是升级时候多给2.5倍的金币奖励, 每10级是25倍<br>
 `Cashback`: cash back的倒计时, 没赢金币的时候按bet的一定比例存下来, 第二天的时候发给玩家<br>
@@ -621,6 +657,9 @@
 `Triple XP`: LEVEL UP XP 3X booster 倒计时<br>
 `Storage Double XP`: 开启3X booster时，2X booster时间暂停，暂存在此（秒）<br>
 `Storgae Triple XP`: 暂存 3X booster 的持续时间<br>
+
+
+---
 ## Limited Offer 商店侧边栏促销
 `Season Pack Available Count` 1 <br>
 `Season Pack End Ts` 1680148799 <br>
@@ -633,6 +672,9 @@
 `Bundle Pack Count` 2<br>
 `Bundle Pack End Ts` 1680321600<br>
 
+
+---
+
 ## Bonus Voucher
 `card level`礼品卡的等级一共1,2,3,4,5,6这些状态, 其中6是开启活动21038时候会触发的特殊状态<br>
 `card dollar` 礼品卡的价值, 根据礼品卡的等级有所不同<br>
@@ -641,4 +683,7 @@
 `card num` 这次会发的礼品卡的数量,发送后`card_level`, `card_dollar`, `card_num`都会清0<br>
 `delta_limit` 收奖次数,也是花费第二货币后 获得的收奖次数<br>
 `open_reset_ts` 关闭bonus_voucher的时间戳<br>
+
+
+---
 

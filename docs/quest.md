@@ -1,5 +1,7 @@
     `在Admin网站修改任何数据，一定要确定好 “服务器端口” 选择的对不对！！！`
-# Quest
+
+---
+## Quest
 
     level等级到达 4 级时，触发新手quest！
 <!-- 新手ABtest: ID 的十位数，奇数为:A组对照组，偶数为:B组实验组 -->
@@ -7,6 +9,7 @@
     
 `first_quest_end_ts`: 新手quest结束时间（修改为过去时间戳可跨过新手quest）<br>
 <!-- `another_first_quest_flag`: 新手ABtest,`0`是对照组,`1`是实验组<br> -->
+---
 ## first_quest
 
     完成新手quest 或者倒计时结束跨过新手期
@@ -65,8 +68,9 @@
             {"tid": 331, "current": 2, "type": 3, "target": 2}, 
             {"tid": 331, "current": 87500000, "type": 6, "target": 87500000}], 
             "bet": 1000000}]
-
-## 新手基金
+            
+---
+## Novice 新手基金
 
     level等级到达 3 级时，触发新手基金活动！
 ![新手基金数据](images/Q_novice.png)  
