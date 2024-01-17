@@ -96,11 +96,9 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#welcome-home">Welcome Home</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#persona">Persona 广告用户</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#advertisement">Advertisement</a>
+    <li class="toctree-l2"><a class="reference internal" href="#advertisement">Advertisement 广告用户</a>
     </li>
-        </ul>
+    <li class="toctree-l2"><a class="reference internal" href="#persona">Persona 广告用户</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#spin-up-boost">Spin Up Boost</a>
     </li>
@@ -581,19 +579,21 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <code>prize_list</code>: 回归点数奖励<br>
 <code>guide</code>: 引导步数<br>
 <code>daily_prize_count</code>: 每日奖励宝箱领取状态<br></p>
-<h2 id="persona">Persona 广告用户</h2>
-<h3 id="advertisement">Advertisement</h3>
-<p><code>total_purchase</code> 3121<br>
-<code>max_purchase</code> 150<br>
+<h2 id="advertisement">Advertisement 广告用户</h2>
+<ul>
+<li>LL 广告用户为真正0付费玩家广告用户<br></li>
+<li>HH-OO 用户有固定逻辑才会开启广告<br>
+<code>total_purchase</code> 用户的总付费<br>
+<code>max_purchase</code> 用户的最大付费<br>
 <code>watch_adv_count</code> 广告转盘，最大10次<br>
 <code>all_count</code> 除广告转盘10，最大看广告次数240次<br>
 <code>all_count_ts</code> 最大看广告次数重置时间戳<br>
-<code>user_source</code> 广告用户type<br></p>
+<code>user_source</code> 广告用户type, 2 = 广告用户（前提条件是<code>total_purchase</code> = 0） <br></li>
+</ul>
 <!-- ![adv debug](image.png) -->
-<p>这个按钮点击之后直接强制改成广告用户，只能测试服使用<br>
-- LL 广告用户为真正0付费玩家广告用户<br>
-- HH-OO 用户有固定逻辑才会开启广告<br>
-<code>p_user_ad_type</code>: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
+<p>这个按钮点击之后直接强制改成广告用户，只能测试服使用<br></p>
+<h2 id="persona">Persona 广告用户</h2>
+<p><code>p_user_ad_type</code>: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 <code>purchase_type: 2</code>: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 <code>new_ad_3h_counter 12</code>: <br>
 <code>new_ad_soc_premium_ts 0</code>: soc广告倒计时<br>
