@@ -427,7 +427,7 @@
 `all_count` 除广告转盘10，最大看广告次数240次<br>
 `all_count_ts` 最大看广告次数重置时间戳<br>
 `user_source` 广告用户type<br>
-![adv debug](image.png)
+<!-- ![adv debug](image.png) -->
 这个按钮点击之后直接强制改成广告用户，只能测试服使用<br>
 - LL 广告用户为真正0付费玩家广告用户<br>
 - HH-OO 用户有固定逻辑才会开启广告<br>
@@ -456,6 +456,17 @@
 `disconnect` {}<br>
 `r_level_gold` 1<br>
 
+## Red Dot
+`reset_ts` 1705477477<br>
+`weekly_progress` [0, 0, 0, 0, 0, 0, 0]<br>
+`bonus_percentage` 100<br>
+`debug_mode`<br>
+`debug_today_datetime`<br>
+`collect_week_reward` 记录推送开关的领奖，改成0可以重置领奖<br>
+`notifi_reset_ts` 记录推送开关的下次领奖，改成0可以重置领奖<br>
+`ooc_notification_collect` 0<br>
+`ooc_notification_last_ts` 1705300539<br>
+`open_send_msg` 1<br>
 ## Cash Club User
 `cash_club_id` 工会ID<br>
 `join_req_limit` 2<br>
