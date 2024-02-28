@@ -490,10 +490,10 @@
 `debug_mode`<br>
 `debug_today_datetime`<br>
 `collect_week_reward` 记录推送开关的领奖，改成0可以重置领奖<br>
-`notifi_reset_ts` 记录推送开关的下次领奖，改成0可以重置领奖<br>
+`notifi_reset_ts` 记录推送开关的下次领奖，改成0可以重置领奖，周计时，这里每周会+1（309就是2024年的第9周）<br>
 `ooc_notification_collect` 0<br>
 `ooc_notification_last_ts` 1705300539<br>
-`open_send_msg` 1<br>
+`open_send_msg` 推送开启判断，未判断是 -1 已开启的话是0 未开启的时候是1<br>
 
 ---
 ## Cash Club User
