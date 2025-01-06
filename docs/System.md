@@ -121,10 +121,7 @@
 `fb_bind_pop_count` FB绑定弹窗弹出次数<br>
 ## frenzy_vault
 `a_data`: [`BYD`, `STAMP`, `ATW`] 3个A级道具的puzzle碎片数量<br>
-`b_prop_list`: 对应B级的token数量
-
-        [archer,bingo,blast,cooking,gof,journey,rocket,sail,tower,mow]
-        [330, 355, 1404, 5062, 0, 601, 1109, 400, 51, 303, 28, 321]
+`b_prop_list`: ~~对应B级的token数量~~ 现在不能用了
 `c_data`: []<br>
 `a_type`: []<br>
 `b_store_data` {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}<br>
@@ -427,7 +424,7 @@
 `all_count` 除广告转盘10，最大看广告次数240次<br>
 `all_count_ts` 最大看广告次数重置时间戳<br>
 `user_source` 广告用户type<br>
-![adv debug](image.png)
+![adv debug](images/adv.png)
 这个按钮点击之后直接强制改成广告用户，只能测试服使用<br>
 - LL 广告用户为真正0付费玩家广告用户<br>
 - HH-OO 用户有固定逻辑才会开启广告<br>
@@ -629,4 +626,24 @@
 `card num` 这次会发的礼品卡的数量,发送后`card_level`, `card_dollar`, `card_num`都会清0<br>
 `delta_limit` 收奖次数,也是花费第二货币后 获得的收奖次数<br>
 `open_reset_ts` 关闭bonus_voucher的时间戳<br>
+
+## Behaviour
+`last_30days_login_flag_data` 30天登录次数<br>
+`last_30days_spin_times_data` 30天日spin次数<br>
+
+## wish list
+`wish_ls_flag` 是1的话就是激活了<br>
+`enhanced_wins_spin_times` 100<br>
+`benefit_end_ts` 1736917199<br>
+`extra_benifit_flag` 1<br>
+`current_day_ts` 改为0就能在inbox领奖励<br>
+`choice_time` 1<br>
+`enhanced_wins_daily_ts` 主题spin结算倒计时<br>
+`enhanced_wins_special_tag_ls` []<br>
+`enhanced_wins_coins` 0<br>
+`wish_ls` [0, 1, 0]<br>
+`enhanced_wins_next_day_count` 0<br>
+`extra_hide_gift_coins` 6552000000<br>
+`today_theme_info` {"tid": 369, "free_count": 7, "timeout": 1734411599}<br>
+`init_login_bonus_flag` 1<br>
 
