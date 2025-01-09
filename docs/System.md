@@ -147,15 +147,15 @@
 
 ## Red Dot
 `reset_ts` 重置活动中心领奖<br>
-`weekly_progress` [0, 0, 0, 1, 0, 0, 0]<br>
-`bonus_percentage` 110<br>
+`weekly_progress` [0, 0, 0, 0, 0, 0, 0]<br>
+`bonus_percentage` 100<br>
 `debug_mode`<br>
 `debug_today_datetime`<br>
-`collect_week_reward` 1<br>
-`notifi_reset_ts` 402<br>
+`collect_week_reward` 记录推送开关的领奖，改成0可以重置领奖<br>
+`notifi_reset_ts` 记录推送开关的下次领奖，改成0可以重置领奖<br>
 `ooc_notification_collect` 0<br>
-`ooc_notification_last_ts` 1736139603<br>
-`open_send_msg` 0<br>
+`ooc_notification_last_ts` 1705300539<br>
+`open_send_msg` 1<br>
 
 ## Mission
 `Reset Ts`: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
