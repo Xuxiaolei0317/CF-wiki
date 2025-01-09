@@ -155,7 +155,7 @@
 `notifi_reset_ts` 记录推送开关的下次领奖，改成0可以重置领奖<br>
 `ooc_notification_collect` 0<br>
 `ooc_notification_last_ts` 1705300539<br>
-`open_send_msg` 1<br>
+`open_send_msg` 推送开启判断：未判断：-1，已开启：0 ，未开启：1<br>
 
 ## Mission
 `Reset Ts`: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
