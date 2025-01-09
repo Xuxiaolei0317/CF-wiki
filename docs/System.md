@@ -121,13 +121,41 @@
 `fb_bind_pop_count` FB绑定弹窗弹出次数<br>
 ## frenzy_vault
 `a_data`: [`BYD`, `STAMP`, `ATW`] 3个A级道具的puzzle碎片数量<br>
-`b_prop_list`: ~~对应B级的token数量~~ 现在不能用了
+`b_prop_list`: ~~对应B级的token数量~~ 现在用 b_token_list 字段
 `c_data`: []<br>
 `a_type`: []<br>
 `b_store_data` {"`b_store`": `lucky_loot数量`, "is_get_lucky_loot": 1}<br>
 <!-- `c_type`: []<br> -->
 `chips`: 第二货币数量<br>
 `frenzy_spin`: 邮票里frenzy spin的次数<br>
+
+## b_token_list
+    -- B级后面 直接改 token 数量
+`tower` 0<br>
+`journey` 20<br>
+`bingo` 0<br>
+`cooking` 0<br>
+`archer` 7<br>
+`rocket` 16<br>
+`mow` 0<br>
+`makeover` 20<br>
+`coin_pusher` 80<br>
+`merge` 276<br>
+`diamond_mystery` 15<br>
+`blast` 0<br>
+`plink` 13<br>
+
+## Red Dot
+`reset_ts` 重置活动中心领奖<br>
+`weekly_progress` [0, 0, 0, 1, 0, 0, 0]<br>
+`bonus_percentage` 110<br>
+`debug_mode`<br>
+`debug_today_datetime`<br>
+`collect_week_reward` 1<br>
+`notifi_reset_ts` 402<br>
+`ooc_notification_collect` 0<br>
+`ooc_notification_last_ts` 1736139603<br>
+`open_send_msg` 0<br>
 
 ## Mission
 `Reset Ts`: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
@@ -606,6 +634,7 @@
 `Triple XP`: LEVEL UP XP 3X booster 倒计时<br>
 `Storage Double XP`: 开启3X booster时，2X booster时间暂停，暂存在此（秒）<br>
 `Storgae Triple XP`: 暂存 3X booster 的持续时间<br>
+
 ## Limited Offer 商店侧边栏促销
 `Season Pack Available Count` 1 <br>
 `Season Pack End Ts` 1680148799 <br>
