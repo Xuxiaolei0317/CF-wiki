@@ -53,6 +53,10 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#frenzy_vault">frenzy_vault</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#b_token_list">b_token_list</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#red-dot">Red Dot</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#mission">Mission</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#mission-pass">Mission Pass</a>
@@ -309,13 +313,40 @@
 <code>fb_bind_pop_count</code> FB绑定弹窗弹出次数<br></p>
 <h2 id="frenzy_vault">frenzy_vault</h2>
 <p><code>a_data</code>: [<code>BYD</code>, <code>STAMP</code>, <code>ATW</code>] 3个A级道具的puzzle碎片数量<br>
-<code>b_prop_list</code>: ~~对应B级的token数量~~ 现在不能用了
+<code>b_prop_list</code>: ~~对应B级的token数量~~ 现在用 b_token_list 字段
 <code>c_data</code>: []<br>
 <code>a_type</code>: []<br>
 <code>b_store_data</code> {"<code>b_store</code>": <code>lucky_loot数量</code>, "is_get_lucky_loot": 1}<br></p>
 <!-- `c_type`: []<br> -->
 <p><code>chips</code>: 第二货币数量<br>
 <code>frenzy_spin</code>: 邮票里frenzy spin的次数<br></p>
+<h2 id="b_token_list">b_token_list</h2>
+<pre><code>-- B级后面 直接改 token 数量
+</code></pre>
+<p><code>tower</code> 0<br>
+<code>journey</code> 20<br>
+<code>bingo</code> 0<br>
+<code>cooking</code> 0<br>
+<code>archer</code> 7<br>
+<code>rocket</code> 16<br>
+<code>mow</code> 0<br>
+<code>makeover</code> 20<br>
+<code>coin_pusher</code> 80<br>
+<code>merge</code> 276<br>
+<code>diamond_mystery</code> 15<br>
+<code>blast</code> 0<br>
+<code>plink</code> 13<br></p>
+<h2 id="red-dot">Red Dot</h2>
+<p><code>reset_ts</code> 重置活动中心领奖<br>
+<code>weekly_progress</code> [0, 0, 0, 0, 0, 0, 0]<br>
+<code>bonus_percentage</code> 100<br>
+<code>debug_mode</code><br>
+<code>debug_today_datetime</code><br>
+<code>collect_week_reward</code> 记录推送开关的领奖，改成0可以重置领奖<br>
+<code>notifi_reset_ts</code> 记录推送开关的下次领奖，改成0可以重置领奖<br>
+<code>ooc_notification_collect</code> 0<br>
+<code>ooc_notification_last_ts</code> 1705300539<br>
+<code>open_send_msg</code> 推送开启判断：未判断：-1，已开启：0 ，未开启：1<br></p>
 <h2 id="mission">Mission</h2>
 <p><code>Reset Ts</code>: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
 <code>Wheel Collected</code>: Mission Points领奖状态<br>
