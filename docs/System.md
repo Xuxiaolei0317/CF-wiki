@@ -185,6 +185,10 @@
 `Glory Mission Finish Flag`: 待确认<br>
 `Glory Mission Unlock Flag`: 待确认<br>
 
+## Stamps bonus
+`Star ts`: infinity machine 重置倒计时<br>
+`stamp_frenzy_inbox_prize_ts`: inbox 重置倒计时<br>
+
 ## Mission Pass
 
     需要重置mission pass时，可以直接将Season数据改为上个赛季进游戏
