@@ -12,18 +12,18 @@ nav:
     - Tools: Tools.md
     
 
-# theme:
-#     name: mkdocs
-#     highlightjs: true
-#     hljs_languages:
-#         - zh_CN
-#     locale: zh_CN
-
 theme:
-    name: readthedocs
+    name: mkdocs
     highlightjs: true
     hljs_languages:
         - zh_CN
     locale: zh_CN
+
+# theme:
+#     name: readthedocs
+#     highlightjs: true
+#     hljs_languages:
+#         - zh_CN
+#     locale: zh_CN
 
 # site_url: https://xuxiaolei0317.github.io/CF-wiki/
