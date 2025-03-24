@@ -53,16 +53,16 @@
 `last_b_season`: 最后一次的B级赛季<br>
 `max_purchase`: 最高付费金额<br>
 `selected_favourite_theme`: 喜欢主题的list<br>
-`supplement_chips_status`: 改成`0`重置第二货币用尽促销<br>
+`supplement_chips_status`: 改成`0`重置第二货币促销<br>
 `first_get_b_token`: B级免费token的领取状态<br>
 `first_play_b_system`: B级九选一的选中游玩状态<br>
 `lounge_guide`: 高级房引导<br>
 `lounge_free_collected`: 高级房引导中的free pass卡领取状态<br>
 `lounge_transform_info`: 待确认<br>
 `mp_send_free_booster_flag`: 赠送免费的mission star booster弹窗<br>
-`novice_end_first_login`: {quest.md}<br>
-`novice_reward`: [[Quest#.E6.96.B0.E6.89.8B.E5.9F.BA.E9.87.91|新手基金]]<br>
-`novice_end_time`: [Quest|新手基金]<br>
+`novice_end_first_login`: [新手基金](quest.md)<br>
+`novice_reward`: [新手基金](quest.md)<br>
+`novice_end_time`: [新手基金](quest.md)<br>
 `store_stamp_count` lucky chames的数量<br>
 `lounge_store_week_ts`: lounge兑换商店道具刷新倒计时<br>
 `daily_login_count`: 当天的第几次login，一般用于看login强弹<br>
@@ -157,6 +157,42 @@
 `ooc_notification_last_ts` 1705300539<br>
 `open_send_msg` 推送开启判断：未判断：-1，已开启：0 ，未开启：1<br>
 
+## Rate us
+`Rate us count`记录用户点击“Rate us”按钮的次数<br>
+`Next rate us ts` 下一次弹出“Rate us”提示的时间戳<br>
+`Big win ts The fifth to last`记录最近几次大赢的时间戳<br>
+`Big win ts The forth to last`<br>
+`Big win ts The third to last`<br>
+`Big win ts The second Last`<br>
+`Huge win ts forth to last`<br>
+`Huge win ts third to Last`<br>
+`Massive count`记录用户获得“Massive”奖励的次数<br>
+`Switch(0 on, 1 off)`用于控制“Rate us”功能的开启或关闭。0 表示开启，1 表示关闭。<br>
+`Rate us today init ts` Rate us功能在每天的初始化时间，在特定时间间隔后再次弹出Rate us<br>
+`Apocalyptic count` 记录用户获得“Apocalyptic”奖励的次数。<br>
+`Big win ts Last`<br>
+`Huge win ts second to Last`<br>
+`Huge win ts Last`<br>
+`Extra count` 1<br>
+`Big win timestamp list` [1736837360, 1736837369]<br>
+`Huge win timestamp list` [1733280145]<br>
+`Massive win timestamp list` [1734936459, 1734936850, 1735889606]<br>
+`inbox limit` inbox 奖励次数，改0重置<br>
+
+Rate us count: 记录用户点击“Rate us”按钮的次数。
+Next rate us ts: 下一次弹出“Rate us”提示的时间戳，初始值为 1737454535，对应的时间是 2024-11-21 07:08:55 UTC。
+Big win ts The fifth to last 到 Big win ts Last: 记录最近几次大赢的时间戳，用于判断是否在特定时间间隔内连续大赢，从而触发“Rate us”提示。
+Huge win ts forth to last 到 Huge win ts Last: 记录最近几次巨赢的时间戳，用于判断是否在特定时间间隔内连续巨赢，从而触发“Rate us”提示。
+Massive count: 记录用户获得“Massive”奖励的次数。
+Switch(0 on, 1 off): 一个开关，用于控制“Rate us”功能的开启或关闭。0 表示开启，1 表示关闭。
+Rate us today init ts: “Rate us”功能在每天的初始化时间，用于在特定时间间隔后再次弹出“Rate us”提示。
+Apocalyptic count: 记录用户获得“Apocalyptic”奖励的次数。
+Extra count: 记录额外的计数，初始值为 1。
+Big win timestamp list: 记录最近几次大赢的时间戳列表，初始值为 [1736837360, 1736837369]，对应的时间分别是 2024-11-14 04:02:40 UTC 和 2024-11-14 04:02:49 UTC。
+Huge win timestamp list: 记录最近几次巨赢的时间戳列表，初始值为 [1733280145]，对应的时间是 2024-10-04 03:22:25 UTC。
+Massive win timestamp list: 记录最近几次“Massive”奖励的时间戳列表，初始值为 [1734936459, 1734936850, 1735889606]，对应的时间分别是 2024-10-22 03:07:39 UTC、2024-10-22 03:14:10 UTC 和 2024-11-02 03:06:46 UTC。
+inbox limit: 收件箱限制，初始值为 0
+。
 ## Mission
 `Reset Ts`: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
 `Wheel Collected`: Mission Points领奖状态<br>
@@ -276,6 +312,11 @@
 `Debug Ratio`<br>
 `debug1-3` 用来触发不同的级别的防流失（就是奖励不一样）1级别最高奖励最多<br>
 ![防流失奖励](images/S_Gift.png)<br>
+
+## model_id
+`user_icon_id`:正在使用的头像ID<br>
+`icon_list`:已拥有的头像ID list<br>
+`model_list`:3D形象 list<br>
 
 ## Blazing Challenge
 `EXP`: 经验值<br>
