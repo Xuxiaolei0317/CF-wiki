@@ -411,23 +411,14 @@
 <code>Need Collect</code> 1<br>
 <code>Migration Flag</code> 0<br>
 <code>Disconnection</code> 排行榜断线收奖数据，把下面数据复制到自己数据里可以直接收奖<br></p>
-<pre><code>{
-
-"ranking_level": 1, #当前排行榜等级，1
-
+<pre><code>{"ranking_level": 1, #当前排行榜等级，1
 "last_season": 337, #上次参与的赛季编号，337
-
 "name": "bingo", # 上次参与的B级
-
 "coins": 196567425000, #当前获得的金币数量，196567425000
-
 "place": 0, #当前在排行榜的房间等级
-
-"reward_type": 1, #奖励类型1
-
-"has_prize": 1 #是否有奖励，1 表示存在奖励
+"reward_type": 1, #奖励类型1 
+"has_prize": 1 #是否有奖励，1 表示存在奖励}
 </code></pre>
-<p>}</p>
 <h2 id="red-dot">Red Dot</h2>
 <p><code>reset_ts</code> 重置活动中心领奖<br>
 <code>weekly_progress</code> [0, 0, 0, 0, 0, 0, 0]<br>
@@ -440,40 +431,19 @@
 <code>ooc_notification_last_ts</code> 1705300539<br>
 <code>open_send_msg</code> 推送开启判断：未判断：-1，已开启：0 ，未开启：1<br></p>
 <h2 id="rate-us">Rate us</h2>
-<p><code>Rate us count</code>记录用户点击“Rate us”按钮的次数<br>
-<code>Next rate us ts</code> 下一次弹出“Rate us”提示的时间戳<br>
-<code>Big win ts The fifth to last</code>记录最近几次大赢的时间戳<br>
-<code>Big win ts The forth to last</code><br>
-<code>Big win ts The third to last</code><br>
-<code>Big win ts The second Last</code><br>
-<code>Huge win ts forth to last</code><br>
-<code>Huge win ts third to Last</code><br>
-<code>Massive count</code>记录用户获得“Massive”奖励的次数<br>
-<code>Switch(0 on, 1 off)</code>用于控制“Rate us”功能的开启或关闭。0 表示开启，1 表示关闭。<br>
-<code>Rate us today init ts</code> Rate us功能在每天的初始化时间，在特定时间间隔后再次弹出Rate us<br>
-<code>Apocalyptic count</code> 记录用户获得“Apocalyptic”奖励的次数。<br>
-<code>Big win ts Last</code><br>
-<code>Huge win ts second to Last</code><br>
-<code>Huge win ts Last</code><br>
-<code>Extra count</code> 1<br>
-<code>Big win timestamp list</code> [1736837360, 1736837369]<br>
-<code>Huge win timestamp list</code> [1733280145]<br>
-<code>Massive win timestamp list</code> [1734936459, 1734936850, 1735889606]<br>
-<code>inbox limit</code> inbox 奖励次数，改0重置<br></p>
-<p>Rate us count: 记录用户点击“Rate us”按钮的次数。
-Next rate us ts: 下一次弹出“Rate us”提示的时间戳，初始值为 1737454535，对应的时间是 2024-11-21 07:08:55 UTC。
-Big win ts The fifth to last 到 Big win ts Last: 记录最近几次大赢的时间戳，用于判断是否在特定时间间隔内连续大赢，从而触发“Rate us”提示。
-Huge win ts forth to last 到 Huge win ts Last: 记录最近几次巨赢的时间戳，用于判断是否在特定时间间隔内连续巨赢，从而触发“Rate us”提示。
-Massive count: 记录用户获得“Massive”奖励的次数。
-Switch(0 on, 1 off): 一个开关，用于控制“Rate us”功能的开启或关闭。0 表示开启，1 表示关闭。
-Rate us today init ts: “Rate us”功能在每天的初始化时间，用于在特定时间间隔后再次弹出“Rate us”提示。
-Apocalyptic count: 记录用户获得“Apocalyptic”奖励的次数。
-Extra count: 记录额外的计数，初始值为 1。
-Big win timestamp list: 记录最近几次大赢的时间戳列表，初始值为 [1736837360, 1736837369]，对应的时间分别是 2024-11-14 04:02:40 UTC 和 2024-11-14 04:02:49 UTC。
-Huge win timestamp list: 记录最近几次巨赢的时间戳列表，初始值为 [1733280145]，对应的时间是 2024-10-04 03:22:25 UTC。
-Massive win timestamp list: 记录最近几次“Massive”奖励的时间戳列表，初始值为 [1734936459, 1734936850, 1735889606]，对应的时间分别是 2024-10-22 03:07:39 UTC、2024-10-22 03:14:10 UTC 和 2024-11-02 03:06:46 UTC。
-inbox limit: 收件箱限制，初始值为 0
-。</p>
+<p><code>Rate us count</code>: 记录用户点击“Rate us”按钮的次数。<br>
+<code>Next rate us ts</code>: 下一次弹出“Rate us”提示的时间戳<br>
+<code>Big win ts The fifth to last 到 Big win ts Last</code>: 判断是否在特定时间间隔内连续大赢<br>
+<code>Huge win ts forth to last 到 Huge win ts Last</code>: 判断是否在特定时间间隔内连续巨赢<br>
+<code>Massive count</code>: 记录用户获得“Massive”奖励的次数。<br>
+<code>Switch(0 on, 1 off)</code>: 控制“Rate us”功能的开启或关闭。0 表示开启，1 表示关闭。<br>
+<code>Rate us today init ts</code>: “Rate us”功能在每天的初始化时间<br>
+<code>Apocalyptic count</code>: 记录用户获得“Apocalyptic”奖励的次数。<br>
+<code>Extra count</code>: 记录额外的计数，初始值为 1。<br>
+<code>Big win timestamp list</code>: 记录最近几次大赢的时间戳列表<br>
+<code>Huge win timestamp list</code>: 记录最近几次巨赢的时间戳列表<br>
+<code>Massive win timestamp list</code>: 记录最近几次“Massive”奖励的时间戳列表<br>
+<code>inbox limit</code>: inbox 奖励次数，改0重置<br></p>
 <h2 id="mission">Mission</h2>
 <p><code>Reset Ts</code>: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
 <code>Wheel Collected</code>: Mission Points领奖状态<br>
