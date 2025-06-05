@@ -130,7 +130,7 @@
 `frenzy_spin`: 邮票里frenzy spin的次数<br>
 
 ## b_token_list
-    -- B级后面 直接改 token 数量
+    -- B级名称后面 直接改 token 数量
 `tower` 0<br>
 `journey` 20<br>
 `bingo` 0<br>
@@ -144,6 +144,33 @@
 `diamond_mystery` 15<br>
 `blast` 0<br>
 `plink` 13<br>
+
+## B Ranking
+`Scores` 当前排行榜分数<br>
+`Season` 当前赛季<br>
+`Ranking` 当前排行榜名次<br>
+`Last Season` 上次进入排行榜的赛季<br>
+`Last Ranking Level` 上次进入排行榜的等级<br>
+`Need Collect` 1<br>
+`Migration Flag` 0<br>
+`Disconnection` 排行榜断线收奖数据，把下面数据复制到自己数据里可以直接收奖<br>
+
+    {
+    
+    "ranking_level": 1, #当前排行榜等级，1
+    
+    "last_season": 337, #上次参与的赛季编号，337
+    
+    "name": "bingo", # 上次参与的B级
+    
+    "coins": 196567425000, #当前获得的金币数量，196567425000
+    
+    "place": 0, #当前在排行榜的房间等级
+    
+    "reward_type": 1, #奖励类型1 
+    
+    "has_prize": 1 #是否有奖励，1 表示存在奖励
+}
 
 ## Red Dot
 `reset_ts` 重置活动中心领奖<br>
