@@ -103,6 +103,11 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            
+            <li class="nav-item" data-level="2"><a href="#bigwin" class="nav-link">bigwin转轮计算</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
         </ul>
     </div>
 </div></div>
@@ -320,7 +325,185 @@
             // 绑定计算事件
             calculateButton.addEventListener('click', coins_item);
         </script>
-</div></div>
+</div>
+
+<h2 id="bigwin">bigwin转轮计算</h2>
+<body>
+  <!-- 将所有 bigwin 计算整合到一个 div 中，同时包含样式代码 -->
+  <div class="section">
+    <style>
+      h2 {
+        margin-top: 40px;
+      }
+      .section {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 20px;
+        max-width: 600px;
+      }
+      input {
+        margin: 5px 10px 5px 0;
+        width: 120px;
+      }
+      button {
+        margin: 5px 0;
+      }
+      .result {
+        font-weight: bold;
+        color: blue;
+      }
+    </style>
+    <!-- get_big_win_price -->
+    <h2>get_big_win_price</h2>
+    <p>逻辑：return max_big_pool * 1.0 / 100 / one_dollar</p>
+    <label>max_big_pool: <input id="max_big_pool" type="number" step="any" /></label><br/>
+    <label>one_dollar: <input id="one_dollar_big" type="number" step="any" /></label><br/>
+    <button onclick="calculateBigWinPrice()">Calculate</button><br/>
+    <p>Result: <span id="resultBigWinPrice" class="result"></span></p>
+
+    <!-- get_min_big_win -->
+    <h2>get_min_big_win</h2>
+    <p>逻辑：return 2 / 2.9 * price * one_dollar</p>
+    <label>price: <input id="price_big" type="number" step="any" /></label><br/>
+    <label>one_dollar: <input id="one_dollar_min_big" type="number" step="any" /></label><br/>
+    <button onclick="calculateMinBigWin()">Calculate</button><br/>
+    <p>Result: <span id="resultMinBigWin" class="result"></span></p>
+
+    <!-- check_can_trigger_big_win -->
+    <h2>check_can_trigger_big_win</h2>
+    <p>逻辑：return (2.9 * win - big_win_pool) / one_dollar - price * 3 <= 10</p>
+    <label>win: <input id="win_big" type="number" step="any" /></label><br/>
+    <label>big_win_pool: <input id="big_win_pool" type="number" step="any" /></label><br/>
+    <label>price: <input id="price_trigger_big" type="number" step="any" /></label><br/>
+    <label>one_dollar: <input id="one_dollar_trigger_big" type="number" step="any" /></label><br/>
+    <button onclick="checkCanTriggerBigWin()">Check</button><br/>
+    <p>Can Trigger Big Win: <span id="resultCheckBigWin" class="result"></span></p>
+
+    <!-- get_massive_win_price -->
+    <h2>get_massive_win_price</h2>
+    <p>逻辑：return max_massive_pool * 1.0 / 100 / one_dollar</p>
+    <label>max_massive_pool: <input id="max_massive_pool" type="number" step="any" /></label><br/>
+    <label>one_dollar: <input id="one_dollar_massive" type="number" step="any" /></label><br/>
+    <button onclick="calculateMassiveWinPrice()">Calculate</button><br/>
+    <p>Result: <span id="resultMassiveWinPrice" class="result"></span></p>
+
+    <!-- get_min_massive_win -->
+    <h2>get_min_massive_win</h2>
+    <p>逻辑：return 2 / 5.6 * price * one_dollar</p>
+    <label>price: <input id="price_massive" type="number" step="any" /></label><br/>
+    <label>one_dollar: <input id="one_dollar_min_massive" type="number" step="any" /></label><br/>
+    <button onclick="calculateMinMassiveWin()">Calculate</button><br/>
+    <p>Result: <span id="resultMinMassiveWin" class="result"></span></p>
+
+    <!-- check_can_trigger_massive_win -->
+    <h2>check_can_trigger_massive_win</h2>
+    <p>逻辑：return (5.6 * win - massive_win_pool) / one_dollar - price * 5 <= 30</p>
+    <label>win: <input id="win_massive" type="number" step="any" /></label><br/>
+    <label>massive_win_pool: <input id="massive_win_pool" type="number" step="any" /></label><br/>
+    <label>price: <input id="price_trigger_massive" type="number" step="any" /></label><br/>
+    <label>one_dollar: <input id="one_dollar_trigger_massive" type="number" step="any" /></label><br/>
+    <button onclick="checkCanTriggerMassiveWin()">Check</button><br/>
+    <p>Can Trigger Massive Win: <span id="resultCheckMassiveWin" class="result"></span></p>
+  </div>
+
+  <script>
+    /*
+      对应 Python 代码的逻辑转换为 JavaScript 函数
+    */
+
+    // 1. get_big_win_price
+    function getBigWinPrice(max_big_pool, one_dollar) {
+      return (max_big_pool * 1.0 / 100) / one_dollar;
+    }
+
+    // 2. get_min_big_win
+    function getMinBigWin(price, one_dollar) {
+      return (2 / 2.9) * price * one_dollar;
+    }
+
+    // 3. check_can_trigger_big_win
+    function canTriggerBigWin(win, big_win_pool, price, one_dollar) {
+      return ((2.9 * win - big_win_pool) / one_dollar) - (price * 3) <= 10;
+    }
+
+    // 4. get_massive_win_price
+    function getMassiveWinPrice(max_massive_pool, one_dollar) {
+      return (max_massive_pool * 1.0 / 100) / one_dollar;
+    }
+
+    // 5. get_min_massive_win
+    function getMinMassiveWin(price, one_dollar) {
+      return (2 / 5.6) * price * one_dollar;
+    }
+
+    // 6. check_can_trigger_massive_win
+    function canTriggerMassiveWin(win, massive_win_pool, price, one_dollar) {
+      return ((5.6 * win - massive_win_pool) / one_dollar) - (price * 5) <= 30;
+    }
+
+    // 以下是点击按钮时的计算逻辑
+
+    // get_big_win_price button
+    function calculateBigWinPrice() {
+      const max_big_pool = parseFloat(document.getElementById('max_big_pool').value) || 0;
+      const one_dollar = parseFloat(document.getElementById('one_dollar_big').value) || 0;
+      // 如果 one_dollar = 0，会导致除零，需要简单处理
+      let result = 0;
+      if (one_dollar !== 0) {
+        result = getBigWinPrice(max_big_pool, one_dollar);
+      }
+      document.getElementById('resultBigWinPrice').textContent = result.toString();
+    }
+
+    // get_min_big_win button
+    function calculateMinBigWin() {
+      const price = parseFloat(document.getElementById('price_big').value) || 0;
+      const one_dollar = parseFloat(document.getElementById('one_dollar_min_big').value) || 0;
+      document.getElementById('resultMinBigWin').textContent =
+        getMinBigWin(price, one_dollar).toString();
+    }
+
+    // check_can_trigger_big_win button
+    function checkCanTriggerBigWin() {
+      const win = parseFloat(document.getElementById('win_big').value) || 0;
+      const big_win_pool = parseFloat(document.getElementById('big_win_pool').value) || 0;
+      const price = parseFloat(document.getElementById('price_trigger_big').value) || 0;
+      const one_dollar = parseFloat(document.getElementById('one_dollar_trigger_big').value) || 0;
+      const result = canTriggerBigWin(win, big_win_pool, price, one_dollar);
+      document.getElementById('resultCheckBigWin').textContent = result ? "True" : "False";
+    }
+
+    // get_massive_win_price button
+    function calculateMassiveWinPrice() {
+      const max_massive_pool = parseFloat(document.getElementById('max_massive_pool').value) || 0;
+      const one_dollar = parseFloat(document.getElementById('one_dollar_massive').value) || 0;
+      let result = 0;
+      if (one_dollar !== 0) {
+        result = getMassiveWinPrice(max_massive_pool, one_dollar);
+      }
+      document.getElementById('resultMassiveWinPrice').textContent = result.toString();
+    }
+
+    // get_min_massive_win button
+    function calculateMinMassiveWin() {
+      const price = parseFloat(document.getElementById('price_massive').value) || 0;
+      const one_dollar = parseFloat(document.getElementById('one_dollar_min_massive').value) || 0;
+      document.getElementById('resultMinMassiveWin').textContent =
+        getMinMassiveWin(price, one_dollar).toString();
+    }
+
+    // check_can_trigger_massive_win button
+    function checkCanTriggerMassiveWin() {
+      const win = parseFloat(document.getElementById('win_massive').value) || 0;
+      const massive_win_pool = parseFloat(document.getElementById('massive_win_pool').value) || 0;
+      const price = parseFloat(document.getElementById('price_trigger_massive').value) || 0;
+      const one_dollar = parseFloat(document.getElementById('one_dollar_trigger_massive').value) || 0;
+      const result = canTriggerMassiveWin(win, massive_win_pool, price, one_dollar);
+      document.getElementById('resultCheckMassiveWin').textContent = result ? "True" : "False";
+    }
+
+  </script>
+</body></div>
             </div>
         </div>
 
