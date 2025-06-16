@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AB 测试计算</title>
+    <style>
+        body {
+            font-family: '微软雅黑', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            color: #1a202c;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+
+        button {
+            background-color: #4299e1;
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        button:hover {
+            background-color: #3182ce;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+
+        /* 新增返回按钮样式 */
+        #back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: auto;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 新增返回按钮 -->
+    <button id="back-button">返回上一级</button>
+    <div class="container">
+        <h2>AB 测试计算</h2>
+        <label for="id_input">输入要计算的 ID：多个 ID 使用空格隔开</label>
+        <input type="text" id="id_input">
+        <label for="mod_input_1">模一：</label>
+        <input type="number" id="mod_input_1">
+        <label for="mod_input_2">模二：</label>
+        <input type="number" id="mod_input_2" value="2">
+        <button id="calculate_button">计算</button>
+        <label for="output_text">数据展示：</label>
+        <textarea id="output_text" readonly></textarea>
+    </div>
+    <script>
+        // 获取 DOM 元素
+        const idInput = document.getElementById('id_input');
+        const modInput1 = document.getElementById('mod_input_1');
+        const modInput2 = document.getElementById('mod_input_2');
+        const outputText = document.getElementById('output_text');
+        const calculateButton = document.getElementById('calculate_button');
+
+        // 计算 ID 所属的 AB 分组
+        function ABtest() {
+            const idList = idInput.value.split(' ').map(Number);
+            const divideNumber1 = parseInt(modInput1.value) || 1;
+            const divideNumber2 = parseInt(modInput2.value) || 2;
+            let outputStr = '';
+
+            idList.forEach(function(id) {
+                outputStr += `${id} ÷ ${divideNumber1} ÷ ${divideNumber2} = ${id % divideNumber1 % divideNumber2}\n`;
+            });
+
+            outputText.value = outputStr;
+        }
+
+        // 绑定计算事件
+        calculateButton.addEventListener('click', ABtest);
+
+        // 绑定回车键事件
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && document.activeElement !== outputText) {
+                ABtest();
+            }
+        });
+
+        // 为返回按钮添加点击事件
+        document.getElementById('back-button').addEventListener('click', function() {
+            history.back();
+        });
+    </script>
+</body>
+</html>

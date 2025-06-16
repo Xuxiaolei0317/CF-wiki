@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bigwin 转轮计算</title>
+    <style>
+        body {
+            font-family: '微软雅黑', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #1a202c;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+
+        button {
+            background-color: #4299e1;
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        button:hover {
+            background-color: #3182ce;
+        }
+
+        .result {
+            font-weight: bold;
+            color: #2b6cb0;
+        }
+
+        p {
+            margin: 0.5rem 0;
+        }
+
+        /* 新增返回按钮样式 */
+        #back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: auto;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 新增返回按钮 -->
+    <button id="back-button">返回上一级</button>
+    <div class="section">
+        <!-- get_big_win_price -->
+        <h2>get_big_win_price</h2>
+        <p>逻辑：return max_big_pool * 1.0 / 100 / one_dollar</p>
+        <label>max_big_pool: <input id="max_big_pool" type="number" step="any" /></label>
+        <label>one_dollar: <input id="one_dollar_big" type="number" step="any" /></label>
+        <button onclick="calculateBigWinPrice()">Calculate</button>
+        <p>Result: <span id="resultBigWinPrice" class="result"></span></p>
+
+        <!-- get_min_big_win -->
+        <h2>get_min_big_win</h2>
+        <p>逻辑：return 2 / 2.9 * price * one_dollar</p>
+        <label>price: <input id="price_big" type="number" step="any" /></label>
+        <label>one_dollar: <input id="one_dollar_min_big" type="number" step="any" /></label>
+        <button onclick="calculateMinBigWin()">Calculate</button>
+        <p>Result: <span id="resultMinBigWin" class="result"></span></p>
+
+        <!-- check_can_trigger_big_win -->
+        <h2>check_can_trigger_big_win</h2>
+        <p>逻辑：return (2.9 * win - big_win_pool) / one_dollar - price * 3 <= 10</p>
+        <label>win: <input id="win_big" type="number" step="any" /></label>
+        <label>big_win_pool: <input id="big_win_pool" type="number" step="any" /></label>
+        <label>price: <input id="price_trigger_big" type="number" step="any" /></label>
+        <label>one_dollar: <input id="one_dollar_trigger_big" type="number" step="any" /></label>
+        <button onclick="checkCanTriggerBigWin()">Check</button>
+        <p>Can Trigger Big Win: <span id="resultCheckBigWin" class="result"></span></p>
+
+        <!-- get_massive_win_price -->
+        <h2>get_massive_win_price</h2>
+        <p>逻辑：return max_massive_pool * 1.0 / 100 / one_dollar</p>
+        <label>max_massive_pool: <input id="max_massive_pool" type="number" step="any" /></label>
+        <label>one_dollar: <input id="one_dollar_massive" type="number" step="any" /></label>
+        <button onclick="calculateMassiveWinPrice()">Calculate</button>
+        <p>Result: <span id="resultMassiveWinPrice" class="result"></span></p>
+
+        <!-- get_min_massive_win -->
+        <h2>get_min_massive_win</h2>
+        <p>逻辑：return 2 / 5.6 * price * one_dollar</p>
+        <label>price: <input id="price_massive" type="number" step="any" /></label>
+        <label>one_dollar: <input id="one_dollar_min_massive" type="number" step="any" /></label>
+        <button onclick="calculateMinMassiveWin()">Calculate</button>
+        <p>Result: <span id="resultMinMassiveWin" class="result"></span></p>
+
+        <!-- check_can_trigger_massive_win -->
+        <h2>check_can_trigger_massive_win</h2>
+        <p>逻辑：return (5.6 * win - massive_win_pool) / one_dollar - price * 5 <= 30</p>
+        <label>win: <input id="win_massive" type="number" step="any" /></label>
+        <label>massive_win_pool: <input id="massive_win_pool" type="number" step="any" /></label>
+        <label>price: <input id="price_trigger_massive" type="number" step="any" /></label>
+        <label>one_dollar: <input id="one_dollar_trigger_massive" type="number" step="any" /></label>
+        <button onclick="checkCanTriggerMassiveWin()">Check</button>
+        <p>Can Trigger Massive Win: <span id="resultCheckMassiveWin" class="result"></span></p>
+    </div>
+
+    <script>
+        // 1. get_big_win_price
+        function getBigWinPrice(max_big_pool, one_dollar) {
+            return (max_big_pool * 1.0 / 100) / one_dollar;
+        }
+
+        // 2. get_min_big_win
+        function getMinBigWin(price, one_dollar) {
+            return (2 / 2.9) * price * one_dollar;
+        }
+
+        // 3. check_can_trigger_big_win
+        function canTriggerBigWin(win, big_win_pool, price, one_dollar) {
+            return ((2.9 * win - big_win_pool) / one_dollar) - (price * 3) <= 10;
+        }
+
+        // 4. get_massive_win_price
+        function getMassiveWinPrice(max_massive_pool, one_dollar) {
+            return (max_massive_pool * 1.0 / 100) / one_dollar;
+        }
+
+        // 5. get_min_massive_win
+        function getMinMassiveWin(price, one_dollar) {
+            return (2 / 5.6) * price * one_dollar;
+        }
+
+        // 6. check_can_trigger_massive_win
+        function canTriggerMassiveWin(win, massive_win_pool, price, one_dollar) {
+            return ((5.6 * win - massive_win_pool) / one_dollar) - (price * 5) <= 30;
+        }
+
+        // 以下是点击按钮时的计算逻辑
+
+        // get_big_win_price button
+        function calculateBigWinPrice() {
+            const max_big_pool = parseFloat(document.getElementById('max_big_pool').value) || 0;
+            const one_dollar = parseFloat(document.getElementById('one_dollar_big').value) || 0;
+            // 如果 one_dollar = 0，会导致除零，需要简单处理
+            let result = 0;
+            if (one_dollar !== 0) {
+                result = getBigWinPrice(max_big_pool, one_dollar);
+            }
+            document.getElementById('resultBigWinPrice').textContent = result.toString();
+        }
+
+        // get_min_big_win button
+        function calculateMinBigWin() {
+            const price = parseFloat(document.getElementById('price_big').value) || 0;
+            const one_dollar = parseFloat(document.getElementById('one_dollar_min_big').value) || 0;
+            document.getElementById('resultMinBigWin').textContent =
+                getMinBigWin(price, one_dollar).toString();
+        }
+
+        // check_can_trigger_big_win button
+        function checkCanTriggerBigWin() {
+            const win = parseFloat(document.getElementById('win_big').value) || 0;
+            const big_win_pool = parseFloat(document.getElementById('big_win_pool').value) || 0;
+            const price = parseFloat(document.getElementById('price_trigger_big').value) || 0;
+            const one_dollar = parseFloat(document.getElementById('one_dollar_trigger_big').value) || 0;
+            const result = canTriggerBigWin(win, big_win_pool, price, one_dollar);
+            document.getElementById('resultCheckBigWin').textContent = result ? "True" : "False";
+        }
+
+        // get_massive_win_price button
+        function calculateMassiveWinPrice() {
+            const max_massive_pool = parseFloat(document.getElementById('max_massive_pool').value) || 0;
+            const one_dollar = parseFloat(document.getElementById('one_dollar_massive').value) || 0;
+            let result = 0;
+            if (one_dollar !== 0) {
+                result = getMassiveWinPrice(max_massive_pool, one_dollar);
+            }
+            document.getElementById('resultMassiveWinPrice').textContent = result.toString();
+        }
+
+        // get_min_massive_win button
+        function calculateMinMassiveWin() {
+            const price = parseFloat(document.getElementById('price_massive').value) || 0;
+            const one_dollar = parseFloat(document.getElementById('one_dollar_min_massive').value) || 0;
+            document.getElementById('resultMinMassiveWin').textContent =
+                getMinMassiveWin(price, one_dollar).toString();
+        }
+
+        // check_can_trigger_massive_win button
+        function checkCanTriggerMassiveWin() {
+            const win = parseFloat(document.getElementById('win_massive').value) || 0;
+            const massive_win_pool = parseFloat(document.getElementById('massive_win_pool').value) || 0;
+            const price = parseFloat(document.getElementById('price_trigger_massive').value) || 0;
+            const one_dollar = parseFloat(document.getElementById('one_dollar_trigger_massive').value) || 0;
+            const result = canTriggerMassiveWin(win, massive_win_pool, price, one_dollar);
+            document.getElementById('resultCheckMassiveWin').textContent = result ? "True" : "False";
+        }
+
+        // 为返回按钮添加点击事件
+        document.getElementById('back-button').addEventListener('click', function() {
+            history.back();
+        });
+    </script>
+</body>
+</html>
