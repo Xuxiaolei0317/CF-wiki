@@ -90,9 +90,20 @@
         button:hover {
             background-color: #3182ce;
         }
+
+        /* 新增返回按钮样式 */
+        #back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: auto;
+            padding: 0.5rem 1rem;
+        }
     </style>
 </head>
 <body>
+    <!-- 新增返回按钮 -->
+    <button id="back-button">返回上一级</button>
     <div class="container">
         <h2>金币计算</h2>
         <label for="coins_input">输入商店 100$ 的金币值:</label>
@@ -170,6 +181,11 @@
 
         // 绑定计算事件
         calculateButton.addEventListener('click', coins_item);
+
+        // 为返回按钮添加点击事件
+        document.getElementById('back-button').addEventListener('click', function() {
+            history.back();
+        });
     </script>
 </body>
 </html>

@@ -116,6 +116,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#novice-player" class="nav-link">Novice Player(新手任务)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#mission" class="nav-link">Mission</a>
               <ul class="nav flex-column">
               </ul>
@@ -444,6 +448,32 @@
 <code>Huge win timestamp list</code>: 记录最近几次巨赢的时间戳列表<br>
 <code>Massive win timestamp list</code>: 记录最近几次“Massive”奖励的时间戳列表<br>
 <code>inbox limit</code>: inbox 奖励次数，改0重置<br></p>
+<h2 id="novice-player">Novice Player(新手任务)</h2>
+<p><code>spin_prize_idx</code>: 当前选中的索引（未显示具体值）
+<code>unlock_task_idx</code>: 当前解锁第几天任务的索引（值为 1-7）</p>
+<p><code>today_ts</code>: 当前时间戳（1750132799）
+<code>task_info</code>: 任务信息数组，包含 7 个阶段的任务数据</p>
+<pre><code>[
+    # 第 1 阶段任务数据
+    [
+        [9, 100, 0, 5, {"coins": 100000}, 40],  
+        # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得100000金币）, 任务id]
+        [0, 1, 0, 5, {"coins": 200000}, 41],  
+        # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得200000金币）, 任务id]
+        [0, 3, 0, 5, {"coins": 500000}, 42],  
+        # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得500000金币）, 任务id]
+        [0, 3, 0, 10, {"chips": 50}, 43],  
+        # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得50个筹码）, 任务id]
+        [3, 30, 0, 10, {"coins": 500000}, 44]  
+        # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得500000金币）, 任务id]
+    ],
+]
+</code></pre>
+<p><code>stage_points</code>: 新手任务的推图进度值
+<code>stage_collected</code>: 新手任务的推图节点领取状态
+<code>is_end</code>: 是否结束（0 表示未结束）
+<code>unlock_theme_304</code>: 解锁主题 304
+<code>sign_reward_list</code>: 签到奖励列表（未显示具体内容）</p>
 <h2 id="mission">Mission</h2>
 <p><code>Reset Ts</code>: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
 <code>Wheel Collected</code>: Mission Points领奖状态<br>
