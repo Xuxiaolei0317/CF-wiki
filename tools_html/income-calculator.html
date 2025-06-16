@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>活动收益计算器</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6', // 主色调：蓝色
+            secondary: '#10B981', // 辅助色：绿色
+            accent: '#F59E0B', // 强调色：橙色
+            dark: '#1F2937', // 深色背景
+            light: '#F3F4F6', // 浅色背景
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .card-shadow {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+      }
+      .input-focus {
+        @apply focus:ring-2 focus:ring-primary/50 focus:border-primary;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen font-sans">
+  <!-- 顶部导航 -->
+  <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <i class="fa fa-calculator text-primary text-2xl"></i>
+        <h1 class="text-xl font-bold text-dark">活动收益计算器</h1>
+      </div>
+      <button class="md:hidden text-gray-600 hover:text-primary transition-colors">
+        <i class="fa fa-bars text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 主要内容 -->
+  <main class="container mx-auto px-4 py-8">
+    <!-- 介绍卡片 -->
+    <section class="mb-8 bg-white rounded-xl p-6 card-shadow">
+      <h2 class="text-2xl font-bold text-dark mb-4 flex items-center">
+        <i class="fa fa-lightbulb-o text-accent mr-2"></i>活动规则说明
+      </h2>
+      <div class="space-y-4 text-gray-700">
+        <p class="flex items-start">
+          <i class="fa fa-calendar-check-o text-primary mt-1 mr-3"></i>
+          <span>活动第六日玩家可获取全部存款 × 最终利率 的收益</span>
+        </p>
+        <p class="flex items-start">
+          <i class="fa fa-percent text-primary mt-1 mr-3"></i>
+          <span>玩家初始利息为0，每次存钱行为会同时进行利率累计</span>
+        </p>
+        <p class="flex items-start">
+          <i class="fa fa-refresh text-primary mt-1 mr-3"></i>
+          <span>每次存钱时触发利率计算更新：<br>
+            <code class="bg-gray-100 px-2 py-1 rounded text-sm">ratio_{new} = ratio_{old} + max{ 0.001, ratio_add * punish_k } + ratio_daily_add</code><br>
+            <span class="ml-6 text-sm">仅每日首次存钱时追加 <code>ratio daily_add</code></span>
+          </span>
+        </p>
+        <p class="flex items-start">
+          <i class="fa fa-arrow-up text-primary mt-1 mr-3"></i>
+          <span>累计存钱次数可以推进推图并获得额外利率权益（需要再次存钱更新）</span>
+        </p>
+        <p class="flex items-start">
+          <i class="fa fa-gamepad text-primary mt-1 mr-3"></i>
+          <span><strong>基础规则补充</strong>:
+            <ul class="list-disc ml-6 mt-2 space-y-1">
+              <li>玩家每通过spin累积满100点可获得一次存钱机会（需满足最低bet限制）</li>
+              <li>玩家可自选存钱比例，将对应比例的eb存入系统并获得利息</li>
+              <li>存钱后积累的点数清空，需重新累计</li>
+              <li>仅前5天可存钱，第6天可取出全部存款+利息</li>
+              <li>存入金币在指定取钱日期前不可取出</li>
+              <li>累计点数足够时，每日存钱次数不限</li>
+            </ul>
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <!-- 计算区域 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- 左侧：输入表单 -->
+      <section class="lg:col-span-1 bg-white rounded-xl p-6 card-shadow">
+        <h2 class="text-xl font-bold text-dark mb-4 flex items-center">
+          <i class="fa fa-sliders text-primary mr-2"></i>输入参数
+        </h2>
+        
+        <form id="calculatorForm" class="space-y-5">
+          <!-- 基础参数 -->
+          <div class="bg-gray-50 rounded-lg p-4 mb-4">
+            <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+              <i class="fa fa-user text-primary mr-2"></i>玩家基础信息
+            </h3>
+            
+            <!-- 当前金币 -->
+            <div>
+              <label for="currentCoins" class="block text-sm font-medium text-gray-700 mb-1">
+                当前金币余额
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                  <i class="fa fa-money"></i>
+                </span>
+                <input 
+                  type="number" 
+                  id="currentCoins" 
+                  class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg input-focus"
+                  placeholder="输入当前金币余额"
+                  min="0"
+                  step="100"
+                  value="10000"
+                  required
+                >
+              </div>
+            </div>
+            
+            <!-- 最低bet限制 -->
+            <div>
+              <label for="minBet" class="block text-sm font-medium text-gray-700 mb-1">
+                最低Bet限制
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                  <i class="fa fa-trophy"></i>
+                </span>
+                <input 
+                  type="number" 
+                  id="minBet" 
+                  class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg input-focus"
+                  placeholder="输入最低Bet限制"
+                  min="0"
+                  step="10"
+                  value="100"
+                  required
+                >
+              </div>
+            </div>
+            
+            <!-- 每次spin获得的点数 -->
+            <div>
+              <label for="pointsPerSpin" class="block text-sm font-medium text-gray-700 mb-1">
+                每次Spin获得的点数
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                  <i class="fa fa-star"></i>
+                </span>
+                <input 
+                  type="number" 
+                  id="pointsPerSpin" 
+                  class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg input-focus"
+                  placeholder="输入每次Spin获得的点数"
+                  min="0"
+                  step="1"
+                  value="10"
+                  required
+                >
+              </div>
+            </div>
+            
+            <!-- 每日spin次数 -->
+            <div>
+              <label for="spinsPerDay" class="block text-sm font-medium text-gray-700 mb-1">
+                每日Spin次数
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                  <i class="fa fa-refresh"></i>
+                </span>
+                <input 
+                  type="number" 
+                  id="spinsPerDay" 
+                  class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg input-focus"
+                  placeholder="输入每日Spin次数"
+                  min="0"
+                  step="1"
+                  value="50"
+                  required
+                >
+              </div>
+            </div>
+          </div>
+          
+          <!-- 存钱策略 -->
+          <div class="bg-gray-50 rounded-lg p-4 mb-4">
+            <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+              <i class="fa fa-pie-chart text-primary mr-2"></i>存钱策略
+            </h3>
+            
+            <!-- 存钱比例 -->
+            <div>
+              <label for="depositRatio" class="block text-sm font-medium text-gray-700 mb-1">
+                存钱比例
+              </label>
+              <div class="flex items-center">
+                <input 
+                  type="range" 
+                  id="depositRatio" 
+                  class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
+                  min="10"
+                  max="100"
+                  step="10"
+                  value="50"
+                >
+                <span id="depositRatioValue" class="ml-2 min-w-[40px] text-center font-medium">50%</span>
+              </div>
+            </div>
+            
+            <!-- 存钱阈值 -->
+            <div>
+              <label for="depositThreshold" class="block text-sm font-medium text-gray-700 mb-1">
+                存钱阈值
+              </label>
+              <div class="flex items-center">
+                <input 
+                  type="range" 
+                  id="depositThreshold" 
+                  class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
+                  min="1"
+                  max="10"
+                  step="1"
+                  value="1"
+                >
+                <span id="depositThresholdValue" class="ml-2 min-w-[40px] text-center font-medium">1</span>
+                <span class="ml-1 text-sm text-gray-500">次存钱机会</span>
+              </div>
+            </div>
+            
+            <!-- 活动天数 -->
+            <div>
+              <label for="dayCount" class="block text-sm font-medium text-gray-700 mb-1">
+                模拟天数
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                  <i class="fa fa-calendar"></i>
+                </span>
+                <select 
+                  id="dayCount" 
+                  class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg input-focus"
+                  required
+                >
+                  <option value="1">第1天</option>
+                  <option value="2">第2天</option>
+                  <option value="3">第3天</option>
+                  <option value="4">第4天</option>
+                  <option value="5">第5天</option>
+                  <option value="6" selected>第6天（结算）</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 惩罚系数 -->
+          <div>
+            <label for="punishK" class="block text-sm font-medium text-gray-700 mb-1">
+              惩罚系数
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                <i class="fa fa-exclamation-triangle"></i>
+              </span>
+              <input 
+                type="number" 
+                id="punishK" 
+                class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg input-focus"
+                placeholder="输入惩罚系数"
+                min="0"
+                max="1"
+                step="0.01"
+                value="1"
+                required
+              >
+            </div>
+          </div>
+          
+          <!-- 计算按钮 -->
+          <button 
+            type="submit" 
+            class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg flex items-center justify-center"
+          >
+            <i class="fa fa-calculator mr-2"></i>计算收益
+          </button>
+        </form>
+      </section>
+      
+      <!-- 右侧：结果显示 -->
+      <section class="lg:col-span-2 bg-white rounded-xl p-6 card-shadow">
+        <h2 class="text-xl font-bold text-dark mb-4 flex items-center">
+          <i class="fa fa-line-chart text-primary mr-2"></i>计算结果
+        </h2>
+        
+        <!-- 结果概览卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-primary">
+            <p class="text-sm text-gray-500 mb-1">最终利率</p>
+            <p id="finalRatio" class="text-2xl font-bold text-primary">0.00%</p>
+          </div>
+          <div class="bg-green-50 rounded-lg p-4 border-l-4 border-secondary">
+            <p class="text-sm text-gray-500 mb-1">预期收益</p>
+            <p id="expectedIncome" class="text-2xl font-bold text-secondary">0</p>
+          </div>
+          <div class="bg-orange-50 rounded-lg p-4 border-l-4 border-accent">
+            <p class="text-sm text-gray-500 mb-1">总资产</p>
+            <p id="totalAssets" class="text-2xl font-bold text-accent">0</p>
+          </div>
+          <div class="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
+            <p class="text-sm text-gray-500 mb-1">总存钱次数</p>
+            <p id="totalDepositCount" class="text-2xl font-bold text-purple-600">0</p>
+          </div>
+        </div>
+        
+        <!-- 详细计算过程 -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+          <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+            <i class="fa fa-list-alt text-primary mr-2"></i>每日操作详情
+          </h3>
+          <div id="calculationSteps" class="text-sm text-gray-700 space-y-2 min-h-[120px]">
+            <p class="text-gray-500 italic">输入参数后点击"计算收益"按钮查看详细计算过程...</p>
+          </div>
+        </div>
+        
+        <!-- 收益分析 -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+          <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+            <i class="fa fa-bar-chart text-primary mr-2"></i>收益分析
+          </h3>
+          <div id="incomeAnalysis" class="text-sm text-gray-700 space-y-2 min-h-[120px]">
+            <p class="text-gray-500 italic">计算完成后显示收益分析...</p>
+          </div>
+        </div>
+        
+        <!-- 利率增长趋势图表 -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+            <i class="fa fa-area-chart text-primary mr-2"></i>利率增长趋势
+          </h3>
+          <div id="trendChart" class="h-64 bg-white rounded-lg shadow-sm border border-gray-200">
+            <p class="text-gray-500 italic text-center py-12">计算后显示利率增长趋势...</p>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+    <!-- 数值配置参考 -->
+    <section class="mt-8 bg-white rounded-xl p-6 card-shadow">
+      <h2 class="text-xl font-bold text-dark mb-4 flex items-center">
+        <i class="fa fa-table text-primary mr-2"></i>数值配置参考
+      </h2>
+      
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                天数
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                每日额外利率加成 (ratio daily_add)
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                示例：存款次数对应的利率加成 (ratio add)
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                第1天
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                0.005 (0.5%)
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                1次: 0.002 (0.2%) | 5次: 0.008 (0.8%) | 10次: 0.015 (1.5%)
+              </td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                第2天
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                0.008 (0.8%)
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                1次: 0.002 (0.2%) | 5次: 0.008 (0.8%) | 10次: 0.015 (1.5%)
+              </td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                第3天
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                0.012 (1.2%)
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                1次: 0.002 (0.2%) | 5次: 0.008 (0.8%) | 10次: 0.015 (1.5%)
+              </td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                第4天
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                0.015 (1.5%)
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                1次: 0.002 (0.2%) | 5次: 0.008 (0.8%) | 10次: 0.015 (1.5%)
+              </td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                第5天
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                0.020 (2.0%)
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                1次: 0.002 (0.2%) | 5次: 0.008 (0.8%) | 10次: 0.015 (1.5%)
+              </td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                第6天
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                0.025 (2.5%)
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                1次: 0.002 (0.2%) | 5次: 0.008 (0.8%) | 10次: 0.015 (1.5%)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <p class="mt-4 text-sm text-gray-500">
+        <i class="fa fa-info-circle text-primary mr-1"></i>
+        注：实际游戏中的数值配置可能与此表不同，请以游戏内为准。
+      </p>
+    </section>
+  </main>
+
+  
+
+  <!-- JavaScript -->
+  <script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 获取表单和结果元素
+      const form = document.getElementById('calculatorForm');
+      const finalRatioElement = document.getElementById('finalRatio');
+      const expectedIncomeElement = document.getElementById('expectedIncome');
+      const totalAssetsElement = document.getElementById('totalAssets');
+      const totalDepositCountElement = document.getElementById('totalDepositCount');
+      const calculationStepsElement = document.getElementById('calculationSteps');
+      const incomeAnalysisElement = document.getElementById('incomeAnalysis');
+      const trendChartElement = document.getElementById('trendChart');
+      
+      // 范围滑块显示当前值
+      const depositRatioSlider = document.getElementById('depositRatio');
+      const depositRatioValue = document.getElementById('depositRatioValue');
+      const depositThresholdSlider = document.getElementById('depositThreshold');
+      const depositThresholdValue = document.getElementById('depositThresholdValue');
+      
+      depositRatioSlider.addEventListener('input', function() {
+        depositRatioValue.textContent = this.value + '%';
+      });
+      
+      depositThresholdSlider.addEventListener('input', function() {
+        depositThresholdValue.textContent = this.value;
+      });
+      
+      // 模拟每日额外利率加成数据
+      const dailyRatioAdd = {
+        1: 0.005,
+        2: 0.008,
+        3: 0.012,
+        4: 0.015,
+        5: 0.020,
+        6: 0.025
+      };
+      
+      // 模拟存款次数对应的利率加成数据
+      function getRatioAddByCount(count) {
+        if (count <= 0) return 0;
+        if (count <= 5) return 0.002;
+        if (count <= 10) return 0.008;
+        if (count <= 20) return 0.015;
+        if (count <= 50) return 0.025;
+        return 0.035;
+      }
+      
+      // 计算每日spin获得的点数
+      function calculatePointsPerDay(spinsPerDay, pointsPerSpin) {
+        return spinsPerDay * pointsPerSpin;
+      }
+      
+      // 计算每日获得的存钱机会
+      function calculateDepositChances(pointsPerDay, pointsThreshold = 100) {
+        return Math.floor(pointsPerDay / pointsThreshold);
+      }
+      
+      // 计算每次存钱的金额
+      function calculateDepositAmount(currentCoins, depositRatio) {
+        return Math.round(currentCoins * (depositRatio / 100));
+      }
+      
+      // 计算利率
+      function calculateRatio(depositCount, dayCount, isFirstDaily, punishK) {
+        let ratio = 0;
+        let steps = [];
+        
+        // 模拟每日存款过程
+        for (let day = 1; day <= dayCount; day++) {
+          // 当日首次存款的额外加成
+          const dailyAdd = isFirstDaily && day === dayCount ? dailyRatioAdd[day] : 0;
+          
+          // 根据总存款次数获取基础加成
+          const baseAdd = getRatioAddByCount(depositCount);
+          
+          // 计算本次存款的实际加成
+          const actualAdd = Math.max(0.001, baseAdd * punishK);
+          
+          // 累计利率
+          ratio += actualAdd + dailyAdd;
+          
+          // 记录计算步骤
+          steps.push({
+            day,
+            depositCount,
+            dailyAdd,
+            baseAdd,
+            punishK,
+            actualAdd,
+            ratio
+          });
+        }
+        
+        return { ratio, steps };
+      }
+      
+      // 计算收益
+      function calculateIncome(depositAmount, ratio) {
+        return depositAmount * ratio;
+      }
+      
+      // 模拟活动过程
+      function simulateActivity(currentCoins, minBet, pointsPerSpin, spinsPerDay, depositRatio, depositThreshold, dayCount, punishK) {
+        let totalDeposit = 0;
+        let totalDepositCount = 0;
+        let finalRatio = 0;
+        let currentPoints = 0;
+        let dailyDepositCount = 0;
+        let dailySteps = [];
+        
+        // 模拟每一天
+        for (let day = 1; day <= dayCount; day++) {
+          const isFirstDay = day === 1;
+          const isLastDay = day === dayCount;
+          const isDepositDay = day <= 5; // 前5天可以存钱
+          
+          // 重置每日存款计数
+          dailyDepositCount = 0;
+          
+          // 计算今日spin获得的点数
+          const pointsToday = calculatePointsPerDay(spinsPerDay, pointsPerSpin);
+          currentPoints += pointsToday;
+          
+          // 计算今日获得的存钱机会
+          const depositChancesToday = calculateDepositChances(currentPoints);
+          
+          // 记录每日基础数据
+          const dayStep = {
+            day,
+            isFirstDay,
+            isLastDay,
+            isDepositDay,
+            coinsAtStart: currentCoins,
+            pointsAtStart: currentPoints - pointsToday,
+            pointsEarned: pointsToday,
+            pointsAfter: currentPoints,
+            depositChances: depositChancesToday,
+            deposits: []
+          };
+          
+          // 模拟存款操作
+          if (isDepositDay && depositChancesToday >= depositThreshold) {
+            // 计算可以进行的存款次数
+            const depositsPossible = Math.floor(depositChancesToday / depositThreshold);
+            
+            for (let i = 0; i < depositsPossible; i++) {
+              // 计算本次存款金额
+              const depositAmount = calculateDepositAmount(currentCoins, depositRatio);
+              
+              // 更新金币和点数
+              currentCoins -= depositAmount;
+              totalDeposit += depositAmount;
+              totalDepositCount++;
+              dailyDepositCount++;
+              currentPoints -= depositThreshold * 100; // 消耗点数
+              
+              // 计算利率更新
+              const isFirstDailyDeposit = dailyDepositCount === 1;
+              const { ratio } = calculateRatio(totalDepositCount, day, isFirstDailyDeposit, punishK);
+              finalRatio = ratio;
+              
+              // 记录存款操作
+              dayStep.deposits.push({
+                depositAmount,
+                isFirstDaily: isFirstDailyDeposit,
+                ratioAfter: ratio
+              });
+            }
+          }
+          
+          // 第6天结算
+          if (isLastDay) {
+            const income = calculateIncome(totalDeposit, finalRatio);
+            const totalAssets = currentCoins + totalDeposit + income;
+            
+            dayStep.income = income;
+            dayStep.totalAssets = totalAssets;
+          }
+          
+          // 保存每日步骤
+          dailySteps.push(dayStep);
+        }
+        
+        return {
+          totalDeposit,
+          totalDepositCount,
+          finalRatio,
+          dailySteps
+        };
+      }
+      
+      // 生成趋势图
+      function generateTrendChart(dailySteps) {
+        const chartData = [];
+        let currentRatio = 0;
+        
+        dailySteps.forEach(step => {
+          // 找出当天最高的利率（最后一次存款后的利率）
+          let dayRatio = currentRatio;
+          if (step.deposits.length > 0) {
+            dayRatio = step.deposits[step.deposits.length - 1].ratioAfter;
+          }
+          
+          chartData.push({ day: step.day, ratio: dayRatio });
+          currentRatio = dayRatio;
+        });
+        
+        // 生成简单的SVG图表
+        const chartHeight = 200;
+        const chartWidth = 500;
+        const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+        const innerWidth = chartWidth - margin.left - margin.right;
+        const innerHeight = chartHeight - margin.top - margin.bottom;
+        
+        // 找出最大利率值
+        const maxRatio = Math.max(...chartData.map(d => d.ratio));
+        const ratioScale = innerHeight / (maxRatio || 0.01);
+        
+        // 创建SVG
+        let svg = `
+          <svg width="${chartWidth}" height="${chartHeight}">
+            <!-- 背景 -->
+            <rect width="${chartWidth}" height="${chartHeight}" fill="#f9fafb" rx="4" ry="4" />
+            
+            <!-- 坐标轴 -->
+            <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${margin.top + innerHeight}" stroke="#e5e7eb" />
+            <line x1="${margin.left}" y1="${margin.top + innerHeight}" x2="${margin.left + innerWidth}" y2="${margin.top + innerHeight}" stroke="#e5e7eb" />
+            
+            <!-- 网格线 -->
+            ${[0.25, 0.5, 0.75].map(factor => `
+              <line x1="${margin.left}" y1="${margin.top + innerHeight - factor * innerHeight}" 
+                    x2="${margin.left + innerWidth}" y2="${margin.top + innerHeight - factor * innerHeight}" 
+                    stroke="#f3f4f6" stroke-dasharray="2,2" />
+              <text x="${margin.left - 5}" y="${margin.top + innerHeight - factor * innerHeight + 5}" 
+                    text-anchor="end" font-size="10" fill="#6b7280">${(maxRatio * factor * 100).toFixed(1)}%</text>
+            `).join('')}
+            
+            <!-- 数据点和线 -->
+            ${chartData.map((d, i) => {
+              const x = margin.left + (i / (chartData.length - 1 || 1)) * innerWidth;
+              const y = margin.top + innerHeight - d.ratio * ratioScale;
+              
+              // 前一个点的坐标（用于连线）
+              const prevX = i > 0 ? margin.left + ((i-1) / (chartData.length - 1 || 1)) * innerWidth : x;
+              const prevY = i > 0 ? margin.top + innerHeight - chartData[i-1].ratio * ratioScale : y;
+              
+              return `
+                <!-- 连接线 -->
+                <line x1="${prevX}" y1="${prevY}" x2="${x}" y2="${y}" stroke="#3B82F6" stroke-width="2" />
+                <!-- 数据点 -->
+                <circle cx="${x}" cy="${y}" r="4" fill="#3B82F6" stroke="#ffffff" stroke-width="2" />
+                <!-- 数据标签 -->
+                <text x="${x}" y="${y - 8}" text-anchor="middle" font-size="10" fill="#1F2937">${(d.ratio * 100).toFixed(2)}%</text>
+                <!-- 天数标签 -->
+                <text x="${x}" y="${margin.top + innerHeight + 15}" text-anchor="middle" font-size="10" fill="#6b7280">第${d.day}天</text>
+              `;
+            }).join('')}
+            
+            <!-- 标题 -->
+            <text x="${chartWidth/2}" y="${margin.top - 5}" text-anchor="middle" font-size="12" font-weight="bold" fill="#1F2937">利率增长趋势</text>
+          </svg>
+        `;
+        
+        trendChartElement.innerHTML = svg;
+      }
+      
+      // 生成收益分析
+      function generateIncomeAnalysis(totalDeposit, income, totalAssets, initialCoins, totalDepositCount) {
+        const profit = income;
+        const profitPercentage = (profit / initialCoins) * 100;
+        
+        return `
+          <p><span class="font-medium">总投入</span>: ${totalDeposit.toLocaleString()} 金币</p>
+          <p><span class="font-medium">总收益</span>: ${profit.toLocaleString()} 金币 (${profitPercentage.toFixed(2)}%)</p>
+          <p><span class="font-medium">投入产出比</span>: 1 : ${(totalAssets / initialCoins).toFixed(2)}</p>
+          <p><span class="font-medium">平均每次存款收益</span>: ${(profit / totalDepositCount).toFixed(2)} 金币</p>
+        `;
+      }
+      
+      // 处理表单提交
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 获取输入值
+        const currentCoins = parseFloat(document.getElementById('currentCoins').value) || 0;
+        const minBet = parseFloat(document.getElementById('minBet').value) || 0;
+        const pointsPerSpin = parseInt(document.getElementById('pointsPerSpin').value) || 0;
+        const spinsPerDay = parseInt(document.getElementById('spinsPerDay').value) || 0;
+        const depositRatio = parseInt(document.getElementById('depositRatio').value) || 50;
+        const depositThreshold = parseInt(document.getElementById('depositThreshold').value) || 1;
+        const dayCount = parseInt(document.getElementById('dayCount').value) || 6;
+        const punishK = parseFloat(document.getElementById('punishK').value) || 1;
+        
+        // 模拟活动过程
+        const { totalDeposit, totalDepositCount, finalRatio, dailySteps } = simulateActivity(
+          currentCoins, minBet, pointsPerSpin, spinsPerDay, depositRatio, depositThreshold, dayCount, punishK
+        );
+        
+        // 计算收益
+        const income = calculateIncome(totalDeposit, finalRatio);
+        const totalAssets = currentCoins - totalDeposit + totalDeposit + income; // 加上存款和收益
+        
+        // 更新结果显示
+        finalRatioElement.textContent = (finalRatio * 100).toFixed(2) + '%';
+        expectedIncomeElement.textContent = income.toLocaleString();
+        totalAssetsElement.textContent = totalAssets.toLocaleString();
+        totalDepositCountElement.textContent = totalDepositCount;
+        
+        // 更新每日操作详情
+        calculationStepsElement.innerHTML = dailySteps.map((step, index) => {
+          // 格式化存款操作
+          const depositSteps = step.deposits.map((deposit, i) => `
+            <div class="mt-2 pl-4 border-l-2 border-blue-200">
+              <p><span class="font-medium">存款 ${i+1}</span>: ${deposit.depositAmount.toLocaleString()} 金币</p>
+              <p>${deposit.isFirstDaily ? '<span class="text-sm text-blue-600 font-medium">每日首次存款</span>' : ''}</p>
+              <p><span class="font-medium">利率更新</span>: ${(deposit.ratioAfter * 100).toFixed(2)}%</p>
+            </div>
+          `).join('');
+          
+          // 第6天结算信息
+          const settlementInfo = step.isLastDay ? `
+            <div class="mt-2 pl-4 border-l-2 border-green-200">
+              <p><span class="font-medium">结算收益</span>: ${step.income.toLocaleString()} 金币</p>
+              <p><span class="font-medium">总资产</span>: ${step.totalAssets.toLocaleString()} 金币</p>
+            </div>
+          ` : '';
+          
+          return `
+            <div class="flex flex-col ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} p-3 rounded-lg">
+              <div class="flex justify-between items-center mb-2">
+                <h4 class="font-medium text-lg">第${step.day}天</h4>
+                <span class="px-2 py-1 text-xs rounded-full ${step.isDepositDay ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}">
+                  ${step.isDepositDay ? '可存款' : '结算日'}
+                </span>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                <div>
+                  <p class="text-xs text-gray-500">金币余额</p>
+                  <p class="font-medium">${step.coinsAtStart.toLocaleString()} → ${(step.coinsAtStart - (step.deposits.reduce((sum, d) => sum + d.depositAmount, 0))).toLocaleString()} 金币</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">点数</p>
+                  <p class="font-medium">${step.pointsAtStart} + ${step.pointsEarned} = ${step.pointsAfter} 点</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">存钱机会</p>
+                  <p class="font-medium">${step.depositChances} 次</p>
+                </div>
+              </div>
+              
+              ${depositSteps}
+              ${settlementInfo}
+            </div>
+          `;
+        }).join('');
+        
+        // 更新收益分析
+        incomeAnalysisElement.innerHTML = generateIncomeAnalysis(
+          totalDeposit, income, totalAssets, currentCoins, totalDepositCount
+        );
+        
+        // 添加结果显示动画
+        finalRatioElement.classList.add('animate-pulse');
+        expectedIncomeElement.classList.add('animate-pulse');
+        totalAssetsElement.classList.add('animate-pulse');
+        totalDepositCountElement.classList.add('animate-pulse');
+        
+        setTimeout(() => {
+          finalRatioElement.classList.remove('animate-pulse');
+          expectedIncomeElement.classList.remove('animate-pulse');
+          totalAssetsElement.classList.remove('animate-pulse');
+          totalDepositCountElement.classList.remove('animate-pulse');
+        }, 1000);
+        
+        // 生成趋势图
+        generateTrendChart(dailySteps);
+      });
+      
+      // 添加表单输入的实时反馈
+      const inputs = form.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.addEventListener('input', function() {
+          if (this.value.trim() === '') {
+            this.classList.add('border-red-300');
+          } else {
+            this.classList.remove('border-red-300');
+          }
+        });
+      });
+      
+      // 添加平滑滚动效果
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

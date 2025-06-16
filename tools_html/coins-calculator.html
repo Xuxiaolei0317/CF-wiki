@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金币计算</title>
+    <style>
+        body {
+            font-family: '微软雅黑', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            color: #1a202c;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 75px;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+            readonly: true;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+
+        button {
+            background-color: #4299e1;
+            color: white;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #3182ce;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>金币计算</h2>
+        <label for="coins_input">输入商店 100$ 的金币值:</label>
+        <input type="text" id="coins_input" value="8400000">
+        <label for="coins_cash_input">计算多少 $:</label>
+        <input type="text" id="coins_cash_input" value="1">
+        <label for="config_text">结果显示:</label>
+        <textarea id="config_text" readonly></textarea>
+        <button id="calculate_button">计算</button>
+    </div>
+    <script>
+        // 获取 DOM 元素
+        const coinsInput = document.getElementById('coins_input');
+        const coinsCashInput = document.getElementById('coins_cash_input');
+        const configText = document.getElementById('config_text');
+        const calculateButton = document.getElementById('calculate_button');
+
+        // 集成打印到文本框里
+        function cg_ps(name, str) {
+            name.value = str;
+        }
+
+        // 转换单位
+        function float_en(num, num_digits = 1) {
+            const units = ['', 'K', 'M', 'B', 'T'];
+            function flo_str(num) {
+                const s = num.toString();
+                if (s.endsWith('0')) {
+                    return s.slice(0, -2);
+                }
+                return s;
+            }
+            function strofsize(num, level) {
+                if (level >= units.length - 1) {
+                    return [num, level];
+                } else if (Math.abs(num) >= 1000) {
+                    num /= 1000;
+                    level += 1;
+                    return strofsize(num, level);
+                } else {
+                    return [num, level];
+                }
+            }
+            const [result, level] = strofsize(num, 0);
+            return `${flo_str(Math.round(result * Math.pow(10, num_digits)) / Math.pow(10, num_digits))}${units[level]}`;
+        }
+
+        // 计算金币值
+        function Coins(buy_100, cash = 1) {
+            return Math.floor(buy_100 / 100 * cash);
+        }
+
+        // 计算函数
+        function coins_item() {
+            try {
+                const num = parseInt(coinsInput.value);
+                const cash = parseFloat(coinsCashInput.value);
+                const result = Coins(num, cash);
+                const text = `商店100$价值：${num.toLocaleString()}\n${cash}$ 价值：${result.toLocaleString()} = ${float_en(result)}`;
+                cg_ps(configText, text);
+            } catch (error) {
+                if (coinsCashInput.value === '' && coinsInput.value === '') {
+                    cg_ps(configText, "ValueError 输入金币值");
+                } else if (coinsCashInput.value === '') {
+                    const num = parseInt(coinsInput.value);
+                    const cash = 1;
+                    const result = Coins(num, cash);
+                    const text = `商店100$价值：${num.toLocaleString()}\n${cash}$ 价值：${result.toLocaleString()} = ${float_en(result)}`;
+                    cg_ps(configText, text);
+                } else {
+                    cg_ps(configText, "ValueError 输入金币值");
+                }
+            }
+        }
+
+        // 绑定计算事件
+        calculateButton.addEventListener('click', coins_item);
+    </script>
+</body>
+</html>
