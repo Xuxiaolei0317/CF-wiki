@@ -119,6 +119,7 @@
 `new_ad_theme_gm_ts` 0<br>
 `fb_bind_pop_ts` FB绑定弹窗弹出的时间<br>
 `fb_bind_pop_count` FB绑定弹窗弹出次数<br>
+
 ## frenzy_vault
 `a_data`: [`BYD`, `STAMP`, `ATW`] 3个A级道具的puzzle碎片数量<br>
 `b_prop_list`: ~~对应B级的token数量~~ 现在用 b_token_list 字段
@@ -190,6 +191,35 @@
 `Massive win timestamp list`: 记录最近几次“Massive”奖励的时间戳列表<br>
 `inbox limit`: inbox 奖励次数，改0重置<br>
 
+## Novice Player(新手任务)
+`spin_prize_idx`: 当前选中的索引（未显示具体值）<br>
+`unlock_task_idx`: 当前解锁第几天任务的索引（值为 1-7）<br>
+`today_ts`: 当前时间戳（1750132799）<br>
+`task_info`: 任务信息数组，包含 7 个阶段的任务数据<br>
+
+    [
+        # 第 1 阶段任务数据
+        [
+            [9, 100, 0, 5, {"coins": 100000}, 40],  
+            # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得100000金币）, 任务id]
+            [0, 1, 0, 5, {"coins": 200000}, 41],  
+            # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得200000金币）, 任务id]
+            [0, 3, 0, 5, {"coins": 500000}, 42],  
+            # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得500000金币）, 任务id]
+            [0, 3, 0, 10, {"chips": 50}, 43],  
+            # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得50个筹码）, 任务id]
+            [3, 30, 0, 10, {"coins": 500000}, 44]  
+            # 任务配置，含义推测：[任务类型, 目标值, 未知参数1, 任务次数, 奖励内容（获得500000金币）, 任务id]
+        ],
+    ]
+`stage_points`: 新手任务的推图进度值<br>
+`stage_collected`: 新手任务的推图节点领取状态<br>
+`is_end`: 是否结束（0 表示未结束）<br>
+`unlock_theme_304`: 解锁主题 304<br>
+`sign_reward_list`: 签到奖励列表（未显示具体内容）<br>
+
+
+
 ## Mission
 `Reset Ts`: mission倒计时间戳，改成过去时间可以重置daily mission的完成状态<br>
 `Wheel Collected`: Mission Points领奖状态<br>
@@ -217,6 +247,7 @@
 `box_collected`: 待确认<br>
 `Glory Mission Finish Flag`: 待确认<br>
 `Glory Mission Unlock Flag`: 待确认<br>
+
 
 ## Stamps bonus
 `Star ts`: infinity machine 重置倒计时<br>
@@ -259,7 +290,6 @@
 `Chest exp`: mission pass宝箱经验<br>
 
 ## Mission Pass Plus
-
 `season`: 赛季<br>
 `level`: 等级<br>
 `exp`: 经验值<br>
@@ -274,6 +304,7 @@
 ## MP Guide
 `Guide`: Mission pass 的新手引导步数，重置改0<br>
 `Qualification`: 解锁MP 1$ 资格<br>
+
 ## mission pass debug
 
     在后台修改对应字段配置，可以切换不同状态的解锁弹窗，共有5种状态！
