@@ -170,7 +170,8 @@
                 const presetItem = document.createElement('div');
                 presetItem.className = 'flex items-center p-2 rounded-md preset-hover';
                 presetItem.innerHTML = `
-                    <input type="checkbox" id="preset-${index}" class="mr-3 h-4 w-4 accent-primary" ${preset.checked ? 'checked' : ''}>
+                    <span class="mr-2 w-6 text-center">${index + 1}.</span>
+                    <input type="checkbox" id="preset-${index}" class="mr-2 h-4 w-4 accent-primary" ${preset.checked ? 'checked' : ''}>
                     <label for="preset-${index}" class="flex-grow cursor-pointer">${preset.text}</label>
                     <button class="edit-btn text-neutral hover:text-primary mr-2" data-index="${index}">
                         <i class="fa fa-pencil"></i>
