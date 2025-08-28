@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨天测试内容验证工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        neutral: '#64748B',
+                        light: '#F1F5F9',
+                        dark: '#1E293B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .preset-hover {
+                @apply transition-all duration-200 hover:bg-light dark:hover:bg-dark/50;
+            }
+            .btn-effect {
+                @apply transition-all duration-200 transform hover:scale-105 active:scale-95;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-[0.9rem] max-w-none">
+        <header class="mb-6 text-center">
+            <h3 class="text-[clamp(1.17rem,2vw,1.5rem)] font-bold text-primary mb-2">测试checklist</h3>
+            <p class="text-neutral">勾选左侧预设list，右侧将实时显示选中内容</p>
+        </header>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- 右侧预设配置区域 -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
+                <div class="bg-primary text-white p-2">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fa fa-cogs mr-2"></i>预设list
+                    </h2>
+                </div>
+                <div class="p-3 max-h-[75vh] overflow-y-auto" id="presets-container">
+                    <div id="presets-list" class="space-y-2">
+                        <!-- 动态生成的预设项将在这里显示 -->
+                    </div>
+                </div>
+                <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-between">
+                    <button id="add-preset" class="bg-secondary text-white px-4 py-2 rounded-md btn-effect flex items-center">
+                        <i class="fa fa-plus mr-2"></i>新增预设
+                    </button>
+                    <button id="clear-all" class="bg-neutral text-white px-4 py-2 rounded-md btn-effect flex items-center">
+                        <i class="fa fa-trash mr-2"></i>清空选中
+                    </button>
+                </div>
+            </div>
+
+            <!-- 左侧输出区域 -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg flex-1">
+                <div class="bg-primary text-white p-2">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fa fa-list-alt mr-2"></i>输出内容
+                    </h2>
+                </div>
+                <div class="p-3 max-h-[80vh] overflow-y-auto" id="output-container">
+                    <!-- 添加复制按钮 -->
+                    <div class="mb-4 flex justify-end">
+                        <button id="copy-all-btn" class="bg-secondary text-white px-4 py-2 rounded-md btn-effect flex items-center text-sm">
+                            <i class="fa fa-copy mr-2"></i>复制所有内容
+                        </button>
+                    </div>
+                    <ul id="output-list" class="space-y-2">
+                        <!-- 动态生成的输出内容将在这里显示 -->
+                    </ul>
+                    <div id="empty-state" class="text-neutral text-center py-10 hidden">
+                        <i class="fa fa-info-circle text-4xl mb-2"></i>
+                        <p>没有选中的预设list项</p>
+                    </div>
+                    <!-- 复制成功提示 -->
+                    <div id="copy-toast" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg transform translate-y-[-100px] opacity-0 transition-all duration-300 flex items-center">
+                        <i class="fa fa-check-circle mr-2"></i>
+                        <span>复制成功！</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑预设的模态框 -->
+    <div id="edit-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 w-full max-w-md">
+            <h3 class="text-xl font-semibold mb-4">编辑</h3>
+            <div class="mb-4">
+                <label for="preset-text" class="block mb-2 text-sm font-medium">预设内容</label>
+                <textarea id="preset-text" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700" rows="3"></textarea>
+            </div>
+            <input type="hidden" id="edit-index" value="-1">
+            <div class="flex justify-end space-x-2">
+                <button id="cancel-edit" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md btn-effect">取消</button>
+                <button id="save-edit" class="px-4 py-2 bg-primary text-white rounded-md btn-effect">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 从localStorage加载预设数据或使用默认数据
+        const savedPresets = localStorage.getItem('presets');
+        let presets = savedPresets ? JSON.parse(savedPresets) : [
+            { text: 'A级换季', checked: false },
+            { text: '4次登陆强弹，活动配置核对；', checked: false },
+            { text: 'FB登录，登出；', checked: false },
+            { text: 'loginbonus领取，回归愿望清单领取奖励；', checked: false },
+            { text: '活动中心活动查看+遍历跳转+购买；', checked: false },
+            { text: '广告位活动显示，滑动，跳转，购买；', checked: false },
+            { text: '商店入场特效+金币购买+hotdeal购买+deal购买；', checked: false },
+            { text: '横竖版MB购买；', checked: false },
+            { text: '大厅任务集合查看+跳转；', checked: false },
+            { text: '主题侧边栏滑动查看+活动跳转；', checked: false },
+            { text: '新主题内spin，领取42016活动奖励；', checked: false },
+            { text: '邮票开包+frenzy spin+灯神游玩+灯神开包；', checked: false },
+            { text: 'BYD+开包+C活动查看，跳转，购买，领奖；', checked: false },
+            { text: 'ATW开包，收奖，set收奖；', checked: false },
+            { text: '奖励中心蓝刮刮卡+红刮刮卡+inbox所有奖励领取+领取/赠送好友邮票，金币，礼盒；', checked: false },
+            { text: 'MP购买，奖励领取；', checked: false },
+            { text: 'daily mission主题内spin/消耗第二货币完成所有任务，领奖；', checked: false },
+            { text: 'BC刷新，完成任务，任务跳转，领取奖励；', checked: false },
+            { text: 'journey游玩+Bpass收奖+boss玩法+购买booster3使用；', checked: false },
+            { text: 'cash go 登陆领奖，领取好友赠送spin；', checked: false },
+            { text: '10倍spin+建造切场景+偷钱+攻击+喂养+C活动付费；', checked: false },
+            { text: 'mansion建造；', checked: false },
+            { text: '公会发消息+查看成员信息+完成公会任务领奖；', checked: false },
+            { text: '成就系统领奖；奖励中心跳转；', checked: false }
+        ];
+
+        // 保存预设数据到localStorage
+        function savePresetsToLocalStorage() {
+            localStorage.setItem('presets', JSON.stringify(presets));
+        }
+
+        // DOM 元素
+        const presetsList = document.getElementById('presets-list');
+        const outputList = document.getElementById('output-list');
+        const emptyState = document.getElementById('empty-state');
+        const addPresetBtn = document.getElementById('add-preset');
+        const clearAllBtn = document.getElementById('clear-all');
+        const editModal = document.getElementById('edit-modal');
+        const presetTextInput = document.getElementById('preset-text');
+        const editIndexInput = document.getElementById('edit-index');
+        const saveEditBtn = document.getElementById('save-edit');
+        const cancelEditBtn = document.getElementById('cancel-edit');
+
+        // 渲染预设列表
+        function renderPresets() {
+            presetsList.innerHTML = '';
+            
+            presets.forEach((preset, index) => {
+                const presetItem = document.createElement('div');
+                presetItem.className = 'flex items-center p-2 rounded-md preset-hover';
+                presetItem.innerHTML = `
+                    <input type="checkbox" id="preset-${index}" class="mr-3 h-4 w-4 accent-primary" ${preset.checked ? 'checked' : ''}>
+                    <label for="preset-${index}" class="flex-grow cursor-pointer">${preset.text}</label>
+                    <button class="edit-btn text-neutral hover:text-primary mr-2" data-index="${index}">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button class="delete-btn text-neutral hover:text-red-500" data-index="${index}">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                `;
+                presetsList.appendChild(presetItem);
+                
+                // 添加事件监听器
+                const checkbox = presetItem.querySelector('input[type="checkbox"]');
+                checkbox.addEventListener('change', () => {
+                    preset.checked = checkbox.checked;
+                    updateOutput();
+                });
+                
+                const editBtn = presetItem.querySelector('.edit-btn');
+                editBtn.addEventListener('click', () => openEditModal(index));
+                
+                const deleteBtn = presetItem.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', () => deletePreset(index));
+            });
+        }
+
+        // 更新输出内容
+        function updateOutput() {
+            const checkedPresets = presets.filter(preset => preset.checked);
+            
+            outputList.innerHTML = '';
+            
+            if (checkedPresets.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            checkedPresets.forEach((preset, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'flex items-start p-2 border-b border-gray-100 dark:border-gray-700 last:border-0';
+                listItem.innerHTML = `
+                    <span class="inline-block bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">${index + 1}</span>
+                    <span>${preset.text}</span>
+                `;
+                outputList.appendChild(listItem);
+            });
+        }
+
+        // 打开编辑模态框
+        function openEditModal(index) {
+            const preset = presets[index];
+            presetTextInput.value = preset.text;
+            editIndexInput.value = index;
+            editModal.classList.remove('hidden');
+            presetTextInput.focus();
+        }
+
+        // 关闭编辑模态框
+        function closeEditModal() {
+            editModal.classList.add('hidden');
+            presetTextInput.value = '';
+            editIndexInput.value = '-1';
+        }
+
+        // 保存编辑的预设
+        function saveEdit() {
+            const index = parseInt(editIndexInput.value);
+            if (index >= 0 && index < presets.length) {
+                const newText = presetTextInput.value.trim();
+                if (newText) {
+                    presets[index].text = newText;
+                    renderPresets();
+                    updateOutput();
+                    savePresetsToLocalStorage(); // 保存到localStorage
+                }
+            }
+            closeEditModal();
+        }
+
+        // 删除预设
+        function deletePreset(index) {
+            if (confirm('确定要删除这个预设吗？')) {
+                presets.splice(index, 1);
+                renderPresets();
+                updateOutput();
+                savePresetsToLocalStorage(); // 保存到localStorage
+            }
+        }
+
+        // 添加新预设
+        function addPreset() {
+            presets.push({ text: '新预设内容', checked: false });
+            renderPresets();
+            // 自动打开编辑框
+            openEditModal(presets.length - 1);
+            savePresetsToLocalStorage(); // 保存到localStorage
+        }
+
+        // 清空所有选中状态
+        function clearAllChecked() {
+            if (confirm('确定要取消所有选中状态吗？')) {
+                presets.forEach(preset => {
+                    preset.checked = false;
+                });
+                renderPresets();
+                updateOutput();
+                savePresetsToLocalStorage(); // 保存到localStorage
+            }
+        }
+
+        // 添加事件监听器
+        addPresetBtn.addEventListener('click', addPreset);
+        clearAllBtn.addEventListener('click', clearAllChecked);
+        saveEditBtn.addEventListener('click', saveEdit);
+        cancelEditBtn.addEventListener('click', closeEditModal);
+        
+        // 复制所有输出内容功能
+        document.getElementById('copy-all-btn').addEventListener('click', function() {
+            const outputItems = document.querySelectorAll('#output-list li');
+            if (outputItems.length === 0) {
+                alert('没有可复制的内容');
+                return;
+            }
+            
+            // 提取所有选中项文本
+            let content = '验证内容：\n'; // 添加预设语句，不带有序号
+            outputItems.forEach((item, index) => {
+                const text = item.querySelector('span:last-child').textContent;
+                content += `${index + 1}. ${text}\n`;
+            });
+            
+            // 复制到剪贴板
+            navigator.clipboard.writeText(content.trim()).then(() => {
+                // 显示复制成功提示
+                const toast = document.getElementById('copy-toast');
+                toast.classList.remove('translate-y-[-100px]', 'opacity-0');
+                
+                // 3秒后隐藏提示
+                setTimeout(() => {
+                    toast.classList.add('translate-y-[-100px]', 'opacity-0');
+                }, 3000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        });
+        
+        // 点击模态框外部关闭
+        editModal.addEventListener('click', (e) => {
+            if (e.target === editModal) {
+                closeEditModal();
+            }
+        });
+
+        // 初始化
+        renderPresets();
+        updateOutput();
+    </script>
+</body>
+</html>
