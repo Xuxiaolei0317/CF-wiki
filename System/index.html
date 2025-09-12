@@ -252,6 +252,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#stamp-pack-storehouse" class="nav-link">Stamp Pack Storehouse</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -962,7 +966,30 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <code>enhanced_wins_next_day_count</code> 0<br>
 <code>extra_hide_gift_coins</code> 6552000000<br>
 <code>today_theme_info</code> {"tid": 369, "free_count": 7, "timeout": 1734411599}<br>
-<code>init_login_bonus_flag</code> 1<br></p></div>
+<code>init_login_bonus_flag</code> 1<br></p>
+<h2 id="stamp-pack-storehouse">Stamp Pack Storehouse</h2>
+<p><code>stamp pack dict</code>：邮票卡包数量 <br></p>
+<pre><code>{"m1":                              # m1 = mansion卡包
+    {"#":10,                        # 卡包总数
+    "2":{"#":5}},                   # “1” = period，邮票周开放，测试服不用管这个，随机0-11就行
+"f10":{"#":3,"2":{"#":3}},          # f10 = frenzy卡包
+"cc1":{"#":15,"2":{"#":15}},        # cc1 = 公会卡包
+"c1":{"#":15,"2":{"#":15}},         # c1 = 普通卡包  
+"g1":{"#":15,"2":{"#":15}}}         # g1 = 灯神卡包
+</code></pre>
+<p><code>guide</code> 0<br>
+<code>season</code> 赛季号<br>
+<code>wild_stamp：</code>bonus卡包list，[[倒计时，赛季，类型],[第二个bonus卡]]<br></p>
+<pre><code>[
+    [1757746747,     # wild stamp 倒计时
+    26,             # 赛季
+    2,              # 类型：1普通 2钻石 3frenzy
+    ],
+    [1757746747,
+    26,
+    3,],
+]
+</code></pre></div>
             </div>
         </div>
 
