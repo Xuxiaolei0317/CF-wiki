@@ -403,6 +403,7 @@
 
 
         // 渲染预设列表
+        // 1. 首先修改渲染预设列表函数中的复选框事件监听器，添加时间戳记录
         function renderPresets() {
             presetsList.innerHTML = '';
             
@@ -443,9 +444,17 @@
                 presetsList.appendChild(presetItem);
                 
                 // 添加事件监听器（保持不变）
+                // 修改复选框事件监听器，添加时间戳记录
                 const checkbox = presetItem.querySelector('input[type="checkbox"]');
                 checkbox.addEventListener('change', () => {
                     preset.checked = checkbox.checked;
+                    // 记录勾选时间戳
+                    if (preset.checked) {
+                        preset.checkTime = Date.now();
+                    } else {
+                        // 取消勾选时移除时间戳
+                        delete preset.checkTime;
+                    }
                     updateOutput();
                 });
                 
@@ -558,19 +567,19 @@
             renderPresets();
         });
 
-        // 更新输出内容
+        // 修改updateOutput函数，按勾选时间排序
         function updateOutput() {
             const checkedPresets = presets.filter(preset => preset.checked);
-
+        
             outputList.innerHTML = '';
-
+        
             if (checkedPresets.length === 0) {
                 emptyState.classList.remove('hidden');
                 return;
             }
-
+        
             emptyState.classList.add('hidden');
-
+        
             // 按登录次数分组
             const groupedByLogin = {};
             checkedPresets.forEach(preset => {
@@ -580,13 +589,23 @@
                 }
                 groupedByLogin[loginNumber].push(preset);
             });
-
+        
             // 获取所有登录次数并排序
             const loginNumbers = Object.keys(groupedByLogin).map(Number).sort((a, b) => a - b);
-
+        
             // 为每个登录次数创建分组显示
             loginNumbers.forEach(loginNumber => {
                 const loginGroup = groupedByLogin[loginNumber];
+                
+                // 按勾选时间排序
+                loginGroup.sort((a, b) => {
+                    // 如果有checkTime属性，则按时间戳排序
+                    if (a.checkTime && b.checkTime) {
+                        return a.checkTime - b.checkTime;
+                    }
+                    // 否则保持原有顺序
+                    return 0;
+                });
                 
                 // 创建登录次数标题
                 const groupHeader = document.createElement('div');
