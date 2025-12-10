@@ -100,7 +100,7 @@
             2. 额外加成（仅指定次数）：第3次+0.05 | 第10次+0.05 | 第30次+0.1 | 其他次数无<br>
             3. 惩罚系数：punish_score≥70<75→0.5 | ≥75<80→0.3 | ≥80<90→0.2 | ≥90→0.1 | 低于70→1<br>
             4. 今日首次存钱：仅第1次计算时+0.04，后续次数无<br>
-            注：最终显示的加成和ratio值均为百分比（×100后）；列表从「当前存钱次数」开始生成到201次
+            注：最终显示的加成和ratio值均为百分比（×100后）；列表从「当前存钱次数的前一次」开始生成到201次
         </div>
 
         <!-- 输入区域 -->
@@ -110,7 +110,7 @@
         </div>
         <div class="input-group">
             <label for="currentTimes">当前存钱次数：</label>
-            <input type="number" id="currentTimes" min="1" max="201" step="1" required placeholder="例如：15（从该次数开始生成）">
+            <input type="number" id="currentTimes" min="2" max="201" step="1" required placeholder="例如：15（从14次开始生成）">
         </div>
         <div class="input-group">
             <label for="punishScore">punish_score值：</label>
@@ -126,7 +126,7 @@
 
         <!-- 按钮区域（仅保留生成列表按钮） -->
         <div class="btn-group">
-            <button onclick="generateFullList()">生成当前次数到201次列表</button>
+            <button onclick="generateFullList()">生成当前次数前一次到201次列表</button>
         </div>
 
         <!-- 结果提示区域 -->
@@ -138,11 +138,11 @@
                 <thead>
                     <tr>
                         <th>存钱次数</th>
-                        <th>当前ratio（%）</th>
                         <th>基础加成（ratio_add*punish_k）</th>
                         <th>每日首次加成</th>
                         <th>节点加成</th>
-                        <th>本次总加成（%）</th>
+                        <th>下次总加成（%）</th>
+                        <th>加成后的ratio（%）</th>
                     </tr>
                 </thead>
                 <tbody id="listBody"></tbody>
@@ -187,7 +187,7 @@
             return extra;
         }
 
-        // 生成「当前次数到201次」的列表
+        // 生成「当前次数前一次到201次」的列表
         function generateFullList() {
             // 获取输入值
             let initialRatio = parseFloat(document.getElementById('currentRatio').value);
@@ -204,8 +204,8 @@
                 document.getElementById('singleResultArea').textContent = "请填写所有必填数字（当前ratio、当前次数、punish_score）！";
                 return;
             }
-            if (currentTimes < 1 || currentTimes > 201) {
-                document.getElementById('singleResultArea').textContent = "当前存钱次数需在1-201之间！";
+            if (currentTimes < 2 || currentTimes > 201) {
+                document.getElementById('singleResultArea').textContent = "当前存钱次数需在2-201之间！";
                 return;
             }
 
@@ -214,25 +214,35 @@
             const listBody = document.getElementById('listBody');
             listBody.innerHTML = ""; // 清空原有内容
 
-            let currentRatio = initialRatio;
             const punishK = getPunishK(punishScore);
+            
+            // 计算当前次数对应的加成（用于从输入值中减去）
+            const currentRatioAdd = ratioAddList[currentTimes - 1];
+            const currentBaseAdd = Math.max(0.001, currentRatioAdd * punishK);
+            const currentDailyFirstAdd = (currentTimes === 1 && isFirstToday) ? 0.04 : 0;
+            const currentExtraReward = getExtraReward(currentTimes);
+            const currentTotalAdd = currentBaseAdd + currentDailyFirstAdd + currentExtraReward;
+            
+            // 从输入值中减去当前次数的加成，得到前一次的ratio值
+            let currentRatio = initialRatio - currentTotalAdd;
+            currentRatio = Math.max(0, currentRatio); // 确保不会出现负数
 
-            // 从当前次数循环到201次
-            for (let times = currentTimes; times <= 201; times++) {
+            // 从当前次数的前一次循环到201次
+            for (let times = currentTimes - 1; times <= 201; times++) {
                 // 计算单次数值
                 const ratioAdd = ratioAddList[times - 1];
                 const baseAdd = Math.max(0.001, ratioAdd * punishK);
-                const dailyFirstAdd = (times === currentTimes && isFirstToday) ? 0.04 : 0;
+                const dailyFirstAdd = (times === 1 && isFirstToday) ? 0.04 : 0;
                 const extraReward = getExtraReward(times);
                 const totalAdd = baseAdd + dailyFirstAdd + extraReward;
                 currentRatio += totalAdd;
 
                 // 转百分比
-                const totalAddPercent = (totalAdd * 100).toFixed(3);
-                const currentRatioPercent = (currentRatio * 100).toFixed(3);
-                const baseAddPercent = (baseAdd * 100).toFixed(3);
-                const dailyFirstAddPercent = (dailyFirstAdd * 100).toFixed(3);
-                const extraRewardPercent = (extraReward * 100).toFixed(3);
+                const totalAddPercent = (totalAdd * 100).toFixed(1);
+                const currentRatioPercent = (currentRatio * 100).toFixed(1);
+                const baseAddPercent = (baseAdd * 100).toFixed(1);
+                const dailyFirstAddPercent = (dailyFirstAdd * 100).toFixed(1);
+                const extraRewardPercent = (extraReward * 100).toFixed(1);
 
                 // 创建表格行
                 const tr = document.createElement('tr');
@@ -244,18 +254,18 @@
                 // 填充单元格
                 tr.innerHTML = `
                     <td>${times}</td>
-                    <td>${currentRatioPercent - totalAddPercent}%</td>
                     <td>${baseAddPercent}%</td>
                     <td>${dailyFirstAddPercent}%</td>
                     <td>${extraRewardPercent}%</td>
                     <td>${totalAddPercent}%</td>
+                    <td>${currentRatioPercent}%</td>
                 `;
 
                 listBody.appendChild(tr);
             }
 
             // 提示完成
-            document.getElementById('singleResultArea').textContent = `已生成第${currentTimes}次到201次的完整加成列表！（数值已转百分比显示）`;
+            document.getElementById('singleResultArea').textContent = `已生成第${currentTimes-1}次到201次的完整加成列表！（数值已转百分比显示）`;
         }
     </script>
 </body>
