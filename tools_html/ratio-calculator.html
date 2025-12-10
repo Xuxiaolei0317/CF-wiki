@@ -96,7 +96,7 @@
         <!-- 规则提示 -->
         <div class="rule-tip">
             核心规则：<br>
-            1. 基础加成规则：1-20次每次+0.02 | 21-40次每次+0.01 | 41-90次每次+0.005 | 91-200次每次+0.002 | 201次+0.001<br>
+            1. 基础加成规则：1-20次每次+0.02 | 21-40次每次+0.01 | 41-90次每次+0.005 | 91-190次每次+0.002 | 191-201次每次+0.001<br>
             2. 额外加成（仅指定次数）：第3次+0.05 | 第10次+0.05 | 第30次+0.1 | 其他次数无<br>
             3. 惩罚系数：punish_score≥70<75→0.5 | ≥75<80→0.3 | ≥80<90→0.2 | ≥90→0.1 | 低于70→1<br>
             4. 今日首次存钱：仅第1次计算时+0.04，后续次数无<br>
@@ -138,11 +138,11 @@
                 <thead>
                     <tr>
                         <th>存钱次数</th>
+                        <th>当前ratio（%）</th>
                         <th>基础加成（ratio_add*punish_k）</th>
                         <th>每日首次加成</th>
                         <th>节点加成</th>
-                        <th>下次总加成（%）</th>
-                        <th>加成后的ratio（%）</th>
+                        <th>本次总加成（%）</th>
                     </tr>
                 </thead>
                 <tbody id="listBody"></tbody>
@@ -160,10 +160,10 @@
             for (let i=0; i<20; i++) list.push(0.01);
             // 41-90次：0.005（50个）
             for (let i=0; i<50; i++) list.push(0.005);
-            // 91-200次：0.002（110个）
-            for (let i=0; i<110; i++) list.push(0.002);
-            // 201次：0.001（1个）
-            list.push(0.001);
+            // 91-190次：0.002（100个）
+            for (let i=0; i<100; i++) list.push(0.002);
+            // 191-201次：0.001（11个）
+            for (let i=0; i<11; i++) list.push(0.001);
             return list;
         }
         const ratioAddList = getRatioAddList();
@@ -228,11 +228,11 @@
                 currentRatio += totalAdd;
 
                 // 转百分比
-                const totalAddPercent = (totalAdd * 100).toFixed(1);
-                const currentRatioPercent = (currentRatio * 100).toFixed(1);
-                const baseAddPercent = (baseAdd * 100).toFixed(1);
-                const dailyFirstAddPercent = (dailyFirstAdd * 100).toFixed(1);
-                const extraRewardPercent = (extraReward * 100).toFixed(1);
+                const totalAddPercent = (totalAdd * 100).toFixed(3);
+                const currentRatioPercent = (currentRatio * 100).toFixed(3);
+                const baseAddPercent = (baseAdd * 100).toFixed(3);
+                const dailyFirstAddPercent = (dailyFirstAdd * 100).toFixed(3);
+                const extraRewardPercent = (extraReward * 100).toFixed(3);
 
                 // 创建表格行
                 const tr = document.createElement('tr');
@@ -244,11 +244,11 @@
                 // 填充单元格
                 tr.innerHTML = `
                     <td>${times}</td>
+                    <td>${currentRatioPercent - totalAddPercent}%</td>
                     <td>${baseAddPercent}%</td>
                     <td>${dailyFirstAddPercent}%</td>
                     <td>${extraRewardPercent}%</td>
                     <td>${totalAddPercent}%</td>
-                    <td>${currentRatioPercent}%</td>
                 `;
 
                 listBody.appendChild(tr);
