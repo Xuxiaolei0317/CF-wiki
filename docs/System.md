@@ -749,3 +749,42 @@
 `today_theme_info` {"tid": 369, "free_count": 7, "timeout": 1734411599}<br>
 `init_login_bonus_flag` 1<br>
 
+
+## Stamp Pack Storehouse
+`stamp pack dict`：邮票卡包数量 <br>
+    
+    {"m1":                              # m1 = mansion卡包
+        {"#":10,                        # 卡包总数
+        "2":{"#":5}},                   # “1” = period，邮票周开放，测试服不用管这个，随机0-11就行
+    "f10":{"#":3,"2":{"#":3}},          # f10 = frenzy卡包
+    "cc1":{"#":15,"2":{"#":15}},        # cc1 = 公会卡包
+    "c1":{"#":15,"2":{"#":15}},         # c1 = 普通卡包  
+    "g1":{"#":15,"2":{"#":15}}}         # g1 = 灯神卡包
+`guide` 0<br>
+`season` 赛季号<br>
+`wild_stamp：`bonus卡包list，[[倒计时，赛季，类型],[第二个bonus卡]]<br>
+
+    [
+        [1757746747,     # wild stamp 倒计时
+        26,             # 赛季
+        2,              # 类型：1普通 2钻石 3frenzy
+        ],
+        [1757746747,
+        26,
+        3,],
+    ]
+
+## Big Win Wheel
+big_win_pool 
+massive_win_pool
+limit_ts_list [1760547514, 1760619566]
+base_win 0
+max_big_win_pool
+max_massive_win_pool
+debug_spin 0
+purchase_flag 0
+collect_flag 0
+spin_flag 0
+close_flag 1
+last_one_dollar 43200000000
+abtest_flag

@@ -48,17 +48,22 @@
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <!-- 右侧预设配置区域 -->
+            <!-- 左侧预设配置区域 -->
             <div
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
                 <div class="bg-primary text-white p-2">
                     <h2 class="text-xl font-semibold flex items-center justify-between">
                         <span><i class="fa fa-cogs mr-2"></i>预设list</span>
-                        <select id="category-filter" class="bg-white/20 text-white text-sm rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-white/50">
-                            <option value="all">全部</option>
-                            <option value="系统" selected>系统</option>
-                            <option value="主题">主题</option>
-                        </select>
+                        <!-- 替换下拉菜单为选项卡 -->
+                        <div class="flex space-x-2 overflow-x-auto">
+                            <button id="filter-all" class="filter-tab px-3 py-1 rounded-md text-sm whitespace-nowrap">全部</button>
+                            <button id="filter-system" class="filter-tab px-3 py-1 rounded-md text-sm whitespace-nowrap bg-white/20">系统</button>
+                            <button id="filter-theme" class="filter-tab px-3 py-1 rounded-md text-sm whitespace-nowrap">主题</button>
+                            <button id="filter-login-1" class="filter-tab px-3 py-1 rounded-md text-sm whitespace-nowrap">登录1</button>
+                            <button id="filter-login-2" class="filter-tab px-3 py-1 rounded-md text-sm whitespace-nowrap">登录2</button>
+                            <button id="filter-login-3" class="filter-tab px-3 py-1 rounded-md text-sm whitespace-nowrap">登录3</button>
+                            <button id="filter-login-4" class="filter-tab px-3 py-1 rounded-md text-sm whitespace-nowrap">登录4</button>
+                        </div>
                     </h2>
                 </div>
                 <div class="p-3 max-h-[75vh] overflow-y-auto" id="presets-container">
@@ -78,7 +83,7 @@
                 </div>
             </div>
 
-            <!-- 左侧输出区域 -->
+            <!-- 右侧输出区域 -->
             <div
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg flex-1">
                 <div class="bg-primary text-white p-2">
@@ -124,10 +129,19 @@
             </div>
             <div class="mb-4">
                 <label for="preset-category" class="block mb-2 text-sm font-medium">标签</label>
-                <select id="preset-category"
-                    class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700">
+                <select id="preset-category" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700">
                     <option value="系统">系统</option>
                     <option value="主题">主题</option>
+                </select>
+            </div>
+            <!-- 添加登录次数选择器 -->
+            <div class="mb-4">
+                <label for="preset-login" class="block mb-2 text-sm font-medium">登录次数</label>
+                <select id="preset-login" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary dark:bg-gray-700">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
                 </select>
             </div>
             <input type="hidden" id="edit-index" value="-1">
@@ -143,58 +157,208 @@
         // 从localStorage加载预设数据或使用默认数据
         const savedPresets = localStorage.getItem('presets');
         let presets = savedPresets ? JSON.parse(savedPresets) : [
-            {text:'A级换季', checked: false, category: '系统' },
-            {text:'4次登陆强弹，活动配置核对；', checked: false, category: '系统' },
-            {text:'FB登录，登出；', checked: false, category: '系统' },
-            {text:'loginbonus领取，回归愿望清单领取奖励；', checked: false, category: '系统' },
-            {text:'活动中心活动查看+遍历跳转+购买；', checked: false, category: '系统' },
-            {text:'广告位活动显示，滑动，跳转，购买；', checked: false, category: '系统' },
-            {text:'商店入场特效+金币购买+hotdeal购买+deal购买；', checked: false, category: '系统' },
-            {text:'横竖版MB购买；', checked: false, category: '系统' },
-            {text:'大厅任务集合查看+跳转；', checked: false, category: '系统' },
-            {text:'主题侧边栏滑动查看+活动跳转；', checked: false, category: '系统' },
-            {text:'新主题内spin，领取42016活动奖励；', checked: false, category: '系统' },
-            {text:'邮票开包+frenzy spin+灯神游玩+灯神开包；', checked: false, category: '系统' },
-            {text:'BYD+开包+C活动查看，跳转，购买，领奖；', checked: false, category: '系统' },
-            {text:'ATW开包，收奖，set收奖；', checked: false, category: '系统' },
-            {text:'奖励中心蓝刮刮卡+红刮刮卡+inbox所有奖励领取+领取/赠送好友邮票，金币，礼盒；', checked: false, category: '系统' },
-            {text:'MP购买，奖励领取；', checked: false, category: '系统' },
-            {text:'daily mission主题内spin/消耗第二货币完成所有任务，领奖；', checked: false, category: '系统' },
-            {text:'BC刷新，完成任务，任务跳转，领取奖励；', checked: false, category: '系统' },
-            {text:'journey游玩+Bpass收奖+boss玩法+购买booster3使用；', checked: false, category: '系统' },
-            {text:'cash go 登陆领奖，领取好友赠送spin；', checked: false, category: '系统' },
-            {text:'10倍spin+建造切场景+偷钱+攻击+喂养+C活动付费；', checked: false, category: '系统' },
-            {text:'mansion建造；', checked: false, category: '系统' },
-            {text:'公会发消息+查看成员信息+完成公会任务领奖；', checked: false, category: '系统' },
-            {text:'成就系统领奖；奖励中心跳转；', checked: false, category: '系统' },
-            {text:'主题所有玩法显示和奖励正常', checked: false, category: '主题' },
-            {text:'base预售活动不同状态的多语显示和购买', checked: false, category: '主题' },
-            {text:'base预售倒计时显示', checked: false, category: '主题' },
-            {text:'base预售视频播放正常', checked: false, category: '主题' },
-            {text:'mb活动多语显示和购买', checked: false, category: '主题' },
-            {text:'mb视频播放正常', checked: false, category: '主题' },
-            {text:'三合一倒计时时间', checked: false, category: '主题' },
-            {text:'三合一活动多语显示和完成情况', checked: false, category: '主题' },
-            {text:'三合一奖励兑换', checked: false, category: '主题' },
-            {text:'newgame新机台多语显示', checked: false, category: '主题' },
-            {text:'newgame视频播放正常', checked: false, category: '主题' },
-            {text:'mega77倒计时显示', checked: false, category: '主题' },
-            {text:'mega77未完成状态多语显示', checked: false, category: '主题' },
-            {text:'mega77完成状态多语显示', checked: false, category: '主题' },
-            {text:'mega77完成的弹窗奖励显示', checked: false, category: '主题' },
-            {text:'badge多语显示和完成情况', checked: false, category: '主题' },
-            {text:'游戏和主题loading多语显示', checked: false, category: '主题' },
-            {text:'comming多语显示', checked: false, category: '主题' },
-            {text:'新主题BC显示和完成情况', checked: false, category: '主题' },
-            {text:'新主题GM多语显示和购买', checked: false, category: '主题' },
-            {text:'新主题玩法高低级房第二货币额外消耗', checked: false, category: '主题' },
-            {text:'game rule描述，pay值和JP倍数显示正确，多语链接跳转正常', checked: false, category: '主题' },
-            {text:'主题活动界面各按钮跳转', checked: false, category: '主题' },
-            {text:'新主题GM购买后GM功能正常', checked: false, category: '主题' },
-            {text:'主题皮肤显示', checked: false, category: '主题' },
-            {text:'主题大厅分类', checked: false, category: '主题' },
-            {text:'高低级房选bet界面显示', checked: false, category: '主题' },
-            {text:'主题大小icon多语显示', checked: false, category: '主题' },
+            // 登录次数1的系统预设
+            {text:'login bonus领奖+活动强弹+活动中心活动配置检查、遍历跳转、购买', checked: false, category: '系统', login: 1},
+            {text:'社区群跳转', checked: false, category: '系统', login: 1},
+            {text:'大厅广告位活动检查+跳转+购买、大厅主题集合及排序检查', checked: false, category: '系统', login: 1},
+            {text:'新主题spin、新主题内侧边栏活动检查+跳转', checked: false, category: '系统', login: 1},
+            {text:'inbox领奖', checked: false, category: '系统', login: 1},
+            {text:'劳工节排行榜结算+奖励发放', checked: false, category: '系统', login: 1},
+            {text:'15分钟赛', checked: false, category: '系统', login: 1},
+            {text:'商店入场特效+金币购买+spin up购买+hotdeal购买+deal购买', checked: false, category: '系统', login: 1},
+            {text:'横竖版MB购买', checked: false, category: '系统', login: 1},
+            {text:'bonus games游玩', checked: false, category: '系统', login: 1},
+            {text:'邮票玩法开邮票包+灯神小游戏+frenzy spin+浏览邮票+排行榜', checked: false, category: '系统', login: 1},
+            {text:'byd开仓库+领取每日奖励+唤起C礼包活动、跳转、购买', checked: false, category: '系统', login: 1},
+            {text:'atw开购物袋+浏览shop+浏览排行榜', checked: false, category: '系统', login: 1},
+            {text:'mansion建造+浏览', checked: false, category: '系统', login: 1},
+            {text:'公会消息浏览+公会任务领奖+发送消息', checked: false, category: '系统', login: 1},
+            {text:'inbox检查', checked: false, category: '系统', login: 1},
+            {text:'大厅任务集合查看+跳转', checked: false, category: '系统', login: 1},
+            {text:'新主题内spin，领取41016活动奖励', checked: false, category: '系统', login: 1},
+            {text:'奖励中心蓝刮刮卡+红刮刮卡', checked: false, category: '系统', login: 1},
+            {text:'商店入场特效+金币购买+hotdeal购买+deal购买', checked: false, category: '系统', login: 1},
+            {text:'横竖版MB购买', checked: false, category: '系统', login: 1},
+            {text:'MP等级购买+奖励领取', checked: false, category: '系统', login: 1},
+            {text:'奖励中心蓝刮刮卡+红刮刮卡+领取/赠送好友邮票，金币，礼盒', checked: false, category: '系统', login: 1},
+            {text:'cash go 登陆领奖+spin+好友+宠物喂养', checked: false, category: '系统', login: 1},
+            {text:'daily mission主题内spin+消耗第二货币完成任务领奖', checked: false, category: '系统', login: 1},
+            {text:'个人中心更换头像形象+成就系统领奖+更换大厅皮肤', checked: false, category: '系统', login: 1},
+            {text:'邮票开包+frenzy spin+灯神游玩+灯神开包', checked: false, category: '系统', login: 1},
+            {text:'BYD+开包+C活动查看，跳转，购买，领奖', checked: false, category: '系统', login: 1},
+            {text:'ATW开包，收奖，set收奖', checked: false, category: '系统', login: 1},
+            {text:'BC刷新，完成任务，任务跳转，领取奖励', checked: false, category: '系统', login: 1},
+            {text:'soc小游戏', checked: false, category: '系统', login: 1},
+            {text:'使用绿宝石完成任务领奖', checked: false, category: '系统', login: 1},
+            {text:'劳工节所有玩法+开卡包+小游戏', checked: false, category: '系统', login: 1},
+            {text:'劳工节各个促销跳转+购买', checked: false, category: '系统', login: 1},
+            {text:'merge游玩+Bpass收奖+关卡收奖+劳工节pass领奖', checked: false, category: '系统', login: 1},
+            {text:'rocket游玩+Bpass收奖+关卡收奖+购买token礼包booster礼包', checked: false, category: '系统', login: 1},
+            {text:'journey游玩+Bpass收奖+boss玩法+购买booster1使用', checked: false, category: '系统', login: 1},
+            {text:'cash go 登陆领奖，领取好友赠送spin', checked: false, category: '系统', login: 1},
+            {text:'10倍spin+建造切场景+偷钱+攻击+喂养+C活动付费', checked: false, category: '系统', login: 1},
+            {text:'mansion建造', checked: false, category: '系统', login: 1},
+            {text:'公会发消息+查看成员信息+完成公会任务领奖', checked: false, category: '系统', login: 1},
+            
+            // 登录次数2的系统预设（复制自登录1）
+            {text:'login bonus领奖+活动强弹+活动中心活动配置检查、遍历跳转、购买', checked: false, category: '系统', login: 2},
+            {text:'社区群跳转', checked: false, category: '系统', login: 2},
+            {text:'大厅广告位活动检查+跳转+购买、大厅主题集合及排序检查', checked: false, category: '系统', login: 2},
+            {text:'新主题spin、新主题内侧边栏活动检查+跳转', checked: false, category: '系统', login: 2},
+            {text:'inbox领奖', checked: false, category: '系统', login: 2},
+            {text:'劳工节排行榜结算+奖励发放', checked: false, category: '系统', login: 2},
+            {text:'15分钟赛', checked: false, category: '系统', login: 2},
+            {text:'商店入场特效+金币购买+spin up购买+hotdeal购买+deal购买', checked: false, category: '系统', login: 2},
+            {text:'横竖版MB购买', checked: false, category: '系统', login: 2},
+            {text:'bonus games游玩', checked: false, category: '系统', login: 2},
+            {text:'邮票玩法开邮票包+灯神小游戏+frenzy spin+浏览邮票+排行榜', checked: false, category: '系统', login: 2},
+            {text:'byd开仓库+领取每日奖励+唤起C礼包活动、跳转、购买', checked: false, category: '系统', login: 2},
+            {text:'atw开购物袋+浏览shop+浏览排行榜', checked: false, category: '系统', login: 2},
+            {text:'mansion建造+浏览', checked: false, category: '系统', login: 2},
+            {text:'公会消息浏览+公会任务领奖+发送消息', checked: false, category: '系统', login: 2},
+            {text:'inbox检查', checked: false, category: '系统', login: 2},
+            {text:'大厅任务集合查看+跳转', checked: false, category: '系统', login: 2},
+            {text:'新主题内spin，领取41016活动奖励', checked: false, category: '系统', login: 2},
+            {text:'奖励中心蓝刮刮卡+红刮刮卡', checked: false, category: '系统', login: 2},
+            {text:'商店入场特效+金币购买+hotdeal购买+deal购买', checked: false, category: '系统', login: 2},
+            {text:'横竖版MB购买', checked: false, category: '系统', login: 2},
+            {text:'MP等级购买+奖励领取', checked: false, category: '系统', login: 2},
+            {text:'奖励中心蓝刮刮卡+红刮刮卡+领取/赠送好友邮票，金币，礼盒', checked: false, category: '系统', login: 2},
+            {text:'cash go 登陆领奖+spin+好友+宠物喂养', checked: false, category: '系统', login: 2},
+            {text:'daily mission主题内spin+消耗第二货币完成任务领奖', checked: false, category: '系统', login: 2},
+            {text:'个人中心更换头像形象+成就系统领奖+更换大厅皮肤', checked: false, category: '系统', login: 2},
+            {text:'邮票开包+frenzy spin+灯神游玩+灯神开包', checked: false, category: '系统', login: 2},
+            {text:'BYD+开包+C活动查看，跳转，购买，领奖', checked: false, category: '系统', login: 2},
+            {text:'ATW开包，收奖，set收奖', checked: false, category: '系统', login: 2},
+            {text:'BC刷新，完成任务，任务跳转，领取奖励', checked: false, category: '系统', login: 2},
+            {text:'soc小游戏', checked: false, category: '系统', login: 2},
+            {text:'使用绿宝石完成任务领奖', checked: false, category: '系统', login: 2},
+            {text:'劳工节所有玩法+开卡包+小游戏', checked: false, category: '系统', login: 2},
+            {text:'劳工节各个促销跳转+购买', checked: false, category: '系统', login: 2},
+            {text:'merge游玩+Bpass收奖+关卡收奖+劳工节pass领奖', checked: false, category: '系统', login: 2},
+            {text:'rocket游玩+Bpass收奖+关卡收奖+购买token礼包booster礼包', checked: false, category: '系统', login: 2},
+            {text:'journey游玩+Bpass收奖+boss玩法+购买booster1使用', checked: false, category: '系统', login: 2},
+            {text:'cash go 登陆领奖，领取好友赠送spin', checked: false, category: '系统', login: 2},
+            {text:'10倍spin+建造切场景+偷钱+攻击+喂养+C活动付费', checked: false, category: '系统', login: 2},
+            {text:'mansion建造', checked: false, category: '系统', login: 2},
+            {text:'公会发消息+查看成员信息+完成公会任务领奖', checked: false, category: '系统', login: 2},
+            
+            // 登录次数3的系统预设（复制自登录1）
+            {text:'login bonus领奖+活动强弹+活动中心活动配置检查、遍历跳转、购买', checked: false, category: '系统', login: 3},
+            {text:'社区群跳转', checked: false, category: '系统', login: 3},
+            {text:'大厅广告位活动检查+跳转+购买、大厅主题集合及排序检查', checked: false, category: '系统', login: 3},
+            {text:'新主题spin、新主题内侧边栏活动检查+跳转', checked: false, category: '系统', login: 3},
+            {text:'inbox领奖', checked: false, category: '系统', login: 3},
+            {text:'劳工节排行榜结算+奖励发放', checked: false, category: '系统', login: 3},
+            {text:'15分钟赛', checked: false, category: '系统', login: 3},
+            {text:'商店入场特效+金币购买+spin up购买+hotdeal购买+deal购买', checked: false, category: '系统', login: 3},
+            {text:'横竖版MB购买', checked: false, category: '系统', login: 3},
+            {text:'bonus games游玩', checked: false, category: '系统', login: 3},
+            {text:'邮票玩法开邮票包+灯神小游戏+frenzy spin+浏览邮票+排行榜', checked: false, category: '系统', login: 3},
+            {text:'byd开仓库+领取每日奖励+唤起C礼包活动、跳转、购买', checked: false, category: '系统', login: 3},
+            {text:'atw开购物袋+浏览shop+浏览排行榜', checked: false, category: '系统', login: 3},
+            {text:'mansion建造+浏览', checked: false, category: '系统', login: 3},
+            {text:'公会消息浏览+公会任务领奖+发送消息', checked: false, category: '系统', login: 3},
+            {text:'inbox检查', checked: false, category: '系统', login: 3},
+            {text:'大厅任务集合查看+跳转', checked: false, category: '系统', login: 3},
+            {text:'新主题内spin，领取41016活动奖励', checked: false, category: '系统', login: 3},
+            {text:'奖励中心蓝刮刮卡+红刮刮卡', checked: false, category: '系统', login: 3},
+            {text:'商店入场特效+金币购买+hotdeal购买+deal购买', checked: false, category: '系统', login: 3},
+            {text:'横竖版MB购买', checked: false, category: '系统', login: 3},
+            {text:'MP等级购买+奖励领取', checked: false, category: '系统', login: 3},
+            {text:'奖励中心蓝刮刮卡+红刮刮卡+领取/赠送好友邮票，金币，礼盒', checked: false, category: '系统', login: 3},
+            {text:'cash go 登陆领奖+spin+好友+宠物喂养', checked: false, category: '系统', login: 3},
+            {text:'daily mission主题内spin+消耗第二货币完成任务领奖', checked: false, category: '系统', login: 3},
+            {text:'个人中心更换头像形象+成就系统领奖+更换大厅皮肤', checked: false, category: '系统', login: 3},
+            {text:'邮票开包+frenzy spin+灯神游玩+灯神开包', checked: false, category: '系统', login: 3},
+            {text:'BYD+开包+C活动查看，跳转，购买，领奖', checked: false, category: '系统', login: 3},
+            {text:'ATW开包，收奖，set收奖', checked: false, category: '系统', login: 3},
+            {text:'BC刷新，完成任务，任务跳转，领取奖励', checked: false, category: '系统', login: 3},
+            {text:'soc小游戏', checked: false, category: '系统', login: 3},
+            {text:'使用绿宝石完成任务领奖', checked: false, category: '系统', login: 3},
+            {text:'劳工节所有玩法+开卡包+小游戏', checked: false, category: '系统', login: 3},
+            {text:'劳工节各个促销跳转+购买', checked: false, category: '系统', login: 3},
+            {text:'merge游玩+Bpass收奖+关卡收奖+劳工节pass领奖', checked: false, category: '系统', login: 3},
+            {text:'rocket游玩+Bpass收奖+关卡收奖+购买token礼包booster礼包', checked: false, category: '系统', login: 3},
+            {text:'journey游玩+Bpass收奖+boss玩法+购买booster1使用', checked: false, category: '系统', login: 3},
+            {text:'cash go 登陆领奖，领取好友赠送spin', checked: false, category: '系统', login: 3},
+            {text:'10倍spin+建造切场景+偷钱+攻击+喂养+C活动付费', checked: false, category: '系统', login: 3},
+            {text:'mansion建造', checked: false, category: '系统', login: 3},
+            {text:'公会发消息+查看成员信息+完成公会任务领奖', checked: false, category: '系统', login: 3},
+            
+            // 登录次数4的系统预设（复制自登录1）
+            {text:'login bonus领奖+活动强弹+活动中心活动配置检查、遍历跳转、购买', checked: false, category: '系统', login: 4},
+            {text:'社区群跳转', checked: false, category: '系统', login: 4},
+            {text:'大厅广告位活动检查+跳转+购买、大厅主题集合及排序检查', checked: false, category: '系统', login: 4},
+            {text:'新主题spin、新主题内侧边栏活动检查+跳转', checked: false, category: '系统', login: 4},
+            {text:'inbox领奖', checked: false, category: '系统', login: 4},
+            {text:'劳工节排行榜结算+奖励发放', checked: false, category: '系统', login: 4},
+            {text:'15分钟赛', checked: false, category: '系统', login: 4},
+            {text:'商店入场特效+金币购买+spin up购买+hotdeal购买+deal购买', checked: false, category: '系统', login: 4},
+            {text:'横竖版MB购买', checked: false, category: '系统', login: 4},
+            {text:'bonus games游玩', checked: false, category: '系统', login: 4},
+            {text:'邮票玩法开邮票包+灯神小游戏+frenzy spin+浏览邮票+排行榜', checked: false, category: '系统', login: 4},
+            {text:'byd开仓库+领取每日奖励+唤起C礼包活动、跳转、购买', checked: false, category: '系统', login: 4},
+            {text:'atw开购物袋+浏览shop+浏览排行榜', checked: false, category: '系统', login: 4},
+            {text:'mansion建造+浏览', checked: false, category: '系统', login: 4},
+            {text:'公会消息浏览+公会任务领奖+发送消息', checked: false, category: '系统', login: 4},
+            {text:'inbox检查', checked: false, category: '系统', login: 4},
+            {text:'大厅任务集合查看+跳转', checked: false, category: '系统', login: 4},
+            {text:'新主题内spin，领取41016活动奖励', checked: false, category: '系统', login: 4},
+            {text:'奖励中心蓝刮刮卡+红刮刮卡', checked: false, category: '系统', login: 4},
+            {text:'商店入场特效+金币购买+hotdeal购买+deal购买', checked: false, category: '系统', login: 4},
+            {text:'横竖版MB购买', checked: false, category: '系统', login: 4},
+            {text:'MP等级购买+奖励领取', checked: false, category: '系统', login: 4},
+            {text:'奖励中心蓝刮刮卡+红刮刮卡+领取/赠送好友邮票，金币，礼盒', checked: false, category: '系统', login: 4},
+            {text:'cash go 登陆领奖+spin+好友+宠物喂养', checked: false, category: '系统', login: 4},
+            {text:'daily mission主题内spin+消耗第二货币完成任务领奖', checked: false, category: '系统', login: 4},
+            {text:'个人中心更换头像形象+成就系统领奖+更换大厅皮肤', checked: false, category: '系统', login: 4},
+            {text:'邮票开包+frenzy spin+灯神游玩+灯神开包', checked: false, category: '系统', login: 4},
+            {text:'BYD+开包+C活动查看，跳转，购买，领奖', checked: false, category: '系统', login: 4},
+            {text:'ATW开包，收奖，set收奖', checked: false, category: '系统', login: 4},
+            {text:'BC刷新，完成任务，任务跳转，领取奖励', checked: false, category: '系统', login: 4},
+            {text:'soc小游戏', checked: false, category: '系统', login: 4},
+            {text:'使用绿宝石完成任务领奖', checked: false, category: '系统', login: 4},
+            {text:'劳工节所有玩法+开卡包+小游戏', checked: false, category: '系统', login: 4},
+            {text:'劳工节各个促销跳转+购买', checked: false, category: '系统', login: 4},
+            {text:'merge游玩+Bpass收奖+关卡收奖+劳工节pass领奖', checked: false, category: '系统', login: 4},
+            {text:'rocket游玩+Bpass收奖+关卡收奖+购买token礼包booster礼包', checked: false, category: '系统', login: 4},
+            {text:'journey游玩+Bpass收奖+boss玩法+购买booster1使用', checked: false, category: '系统', login: 4},
+            {text:'cash go 登陆领奖，领取好友赠送spin', checked: false, category: '系统', login: 4},
+            {text:'10倍spin+建造切场景+偷钱+攻击+喂养+C活动付费', checked: false, category: '系统', login: 4},
+            {text:'mansion建造', checked: false, category: '系统', login: 4},
+            {text:'公会发消息+查看成员信息+完成公会任务领奖', checked: false, category: '系统', login: 4},
+            {text:'成就系统领奖；奖励中心跳转', checked: false, category: '系统', login: 1},
+            
+            // 主题相关的预设保持不变，只是添加login字段（默认为1）
+            {text:'主题所有玩法显示和奖励正常', checked: false, category: '主题', login: 1 },
+            {text:'base预售活动不同状态的多语显示和购买', checked: false, category: '主题', login: 1 },
+            {text:'base预售倒计时显示', checked: false, category: '主题', login: 1 },
+            {text:'base预售视频播放正常', checked: false, category: '主题', login: 1 },
+            {text:'mb活动多语显示和购买', checked: false, category: '主题', login: 1 },
+            {text:'mb视频播放正常', checked: false, category: '主题', login: 1 },
+            {text:'三合一倒计时时间', checked: false, category: '主题', login: 1 },
+            {text:'三合一活动多语显示和完成情况', checked: false, category: '主题', login: 1 },
+            {text:'三合一奖励兑换', checked: false, category: '主题', login: 1 },
+            {text:'newgame新机台多语显示', checked: false, category: '主题', login: 1 },
+            {text:'newgame视频播放正常', checked: false, category: '主题', login: 1 },
+            {text:'mega77倒计时显示', checked: false, category: '主题', login: 1 },
+            {text:'mega77未完成状态多语显示', checked: false, category: '主题', login: 1 },
+            {text:'mega77完成状态多语显示', checked: false, category: '主题', login: 1 },
+            {text:'mega77完成的弹窗奖励显示', checked: false, category: '主题', login: 1 },
+            {text:'badge多语显示和完成情况', checked: false, category: '主题', login: 1 },
+            {text:'游戏和主题loading多语显示', checked: false, category: '主题', login: 1 },
+            {text:'comming多语显示', checked: false, category: '主题', login: 1 },
+            {text:'新主题BC显示和完成情况', checked: false, category: '主题', login: 1 },
+            {text:'新主题GM多语显示和购买', checked: false, category: '主题', login: 1 },
+            {text:'新主题玩法高低级房第二货币额外消耗', checked: false, category: '主题', login: 1 },
+            {text:'game rule描述，pay值和JP倍数显示正确，多语链接跳转正常', checked: false, category: '主题', login: 1 },
+            {text:'主题活动界面各按钮跳转', checked: false, category: '主题', login: 1 },
+            {text:'新主题GM购买后GM功能正常', checked: false, category: '主题', login: 1 },
+            {text:'主题皮肤显示', checked: false, category: '主题', login: 1 },
+            {text:'主题大厅分类', checked: false, category: '主题', login: 1 },
+            {text:'高低级房选bet界面显示', checked: false, category: '主题', login: 1 },
+            {text:'主题大小icon多语显示', checked: false, category: '主题', login: 1 },
         ];
 
         // 保存预设数据到localStorage
@@ -213,29 +377,62 @@
         const editIndexInput = document.getElementById('edit-index');
         const saveEditBtn = document.getElementById('save-edit');
         const cancelEditBtn = document.getElementById('cancel-edit');
-        // 添加筛选器元素和状态变量
-        const categoryFilter = document.getElementById('category-filter');
-        // 从localStorage加载保存的筛选状态，默认为"系统"
-        let currentFilter = localStorage.getItem('categoryFilter') || '系统';
+        
+        // 添加筛选器状态变量
+        // 从localStorage加载保存的筛选状态
+        let filterType = localStorage.getItem('filterType') || 'category'; // 'category' 或 'login'
+        let currentCategory = localStorage.getItem('currentCategory') || '系统';
+        let currentLogin = localStorage.getItem('currentLogin') || 'all';
+        
+        // 根据login值返回对应的CSS类
+        function getLoginColorClass(login) {
+            switch(Number(login)) {
+                case 1:
+                    return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+                case 2:
+                    return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
+                case 3:
+                    return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+                case 4:
+                    return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+                default:
+                    return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+            }
+        }
+        
+
 
         // 渲染预设列表
+        // 1. 首先修改渲染预设列表函数中的复选框事件监听器，添加时间戳记录
         function renderPresets() {
             presetsList.innerHTML = '';
             
             // 根据当前筛选条件过滤预设项
-            const filteredPresets = currentFilter === 'all'
-                ? presets
-                : presets.filter(preset => preset.category === currentFilter);
+            let filteredPresets = presets;
+            
+            if (filterType === 'category') {
+                if (currentCategory !== 'all') {
+                    filteredPresets = presets.filter(preset => preset.category === currentCategory);
+                }
+            } else if (filterType === 'login') {
+                if (currentLogin !== 'all') {
+                    // 登录次数筛选只针对系统类别的预设项
+                    filteredPresets = presets.filter(preset => 
+                        preset.category === '系统' && preset.login === parseInt(currentLogin)
+                    );
+                }
+            }
             
             filteredPresets.forEach((preset, index) => {
                 // 获取原始索引，用于编辑和删除操作
                 const originalIndex = presets.findIndex(p => p.text === preset.text && p.category === preset.category);
                 const presetItem = document.createElement('div');
-                presetItem.className = 'flex items-center p-2 rounded-md preset-hover';
+                presetItem.className = 'flex items-center p-0.5 rounded-md preset-hover';
                 presetItem.innerHTML = `
                     <span class="mr-2 w-6 text-center">${index + 1}.</span>
                     <input type="checkbox" id="preset-${originalIndex}" class="mr-2 h-4 w-4 accent-primary" ${preset.checked ? 'checked' : ''}>
                     <label for="preset-${originalIndex}" class="flex-grow cursor-pointer">${preset.text}</label>
+                    <span class="px-2 py-1 rounded text-xs mr-2 ${getLoginColorClass(preset.login || 1)}">${preset.login || 1}</span>
                     <span class="px-2 py-1 rounded text-xs mr-2 ${preset.category === '系统' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}">${preset.category}</span>
                     <button class="edit-btn text-neutral hover:text-primary mr-2" data-index="${originalIndex}">
                         <i class="fa fa-pencil"></i>
@@ -247,9 +444,17 @@
                 presetsList.appendChild(presetItem);
                 
                 // 添加事件监听器（保持不变）
+                // 修改复选框事件监听器，添加时间戳记录
                 const checkbox = presetItem.querySelector('input[type="checkbox"]');
                 checkbox.addEventListener('change', () => {
                     preset.checked = checkbox.checked;
+                    // 记录勾选时间戳
+                    if (preset.checked) {
+                        preset.checkTime = Date.now();
+                    } else {
+                        // 取消勾选时移除时间戳
+                        delete preset.checkTime;
+                    }
                     updateOutput();
                 });
                 
@@ -263,41 +468,161 @@
 
         // 初始化筛选器状态
         function initFilter() {
-            // 设置下拉菜单选中状态
-            categoryFilter.value = currentFilter;
             // 应用筛选
             renderPresets();
+            // 更新筛选器选项卡样式
+            updateFilterTabs();
         }
-
-        // 修改筛选器事件监听器，添加保存功能
-        categoryFilter.addEventListener('change', function() {
-            currentFilter = this.value;
+        
+        // 更新筛选器选项卡样式
+        function updateFilterTabs() {
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            filterTabs.forEach(tab => tab.classList.remove('bg-white/20'));
+            
+            if (filterType === 'category') {
+                if (currentCategory === 'all') {
+                    document.getElementById('filter-all').classList.add('bg-white/20');
+                } else if (currentCategory === '系统') {
+                    document.getElementById('filter-system').classList.add('bg-white/20');
+                } else if (currentCategory === '主题') {
+                    document.getElementById('filter-theme').classList.add('bg-white/20');
+                }
+            } else if (filterType === 'login') {
+                if (currentLogin === 'all') {
+                    document.getElementById('filter-all').classList.add('bg-white/20');
+                } else {
+                    document.getElementById(`filter-login-${currentLogin}`).classList.add('bg-white/20');
+                }
+            }
+        }
+        
+        // 添加筛选器事件监听器
+        document.getElementById('filter-all').addEventListener('click', () => {
+            filterType = 'category';
+            currentCategory = 'all';
             // 保存筛选状态到localStorage
-            localStorage.setItem('categoryFilter', currentFilter);
+            localStorage.setItem('filterType', filterType);
+            localStorage.setItem('currentCategory', currentCategory);
+            updateFilterTabs();
+            renderPresets();
+        });
+        
+        document.getElementById('filter-system').addEventListener('click', () => {
+            filterType = 'category';
+            currentCategory = '系统';
+            // 保存筛选状态到localStorage
+            localStorage.setItem('filterType', filterType);
+            localStorage.setItem('currentCategory', currentCategory);
+            updateFilterTabs();
+            renderPresets();
+        });
+        
+        document.getElementById('filter-theme').addEventListener('click', () => {
+            filterType = 'category';
+            currentCategory = '主题';
+            // 保存筛选状态到localStorage
+            localStorage.setItem('filterType', filterType);
+            localStorage.setItem('currentCategory', currentCategory);
+            updateFilterTabs();
+            renderPresets();
+        });
+        
+        document.getElementById('filter-login-1').addEventListener('click', () => {
+            filterType = 'login';
+            currentLogin = '1';
+            // 保存筛选状态到localStorage
+            localStorage.setItem('filterType', filterType);
+            localStorage.setItem('currentLogin', currentLogin);
+            updateFilterTabs();
+            renderPresets();
+        });
+        
+        document.getElementById('filter-login-2').addEventListener('click', () => {
+            filterType = 'login';
+            currentLogin = '2';
+            // 保存筛选状态到localStorage
+            localStorage.setItem('filterType', filterType);
+            localStorage.setItem('currentLogin', currentLogin);
+            updateFilterTabs();
+            renderPresets();
+        });
+        
+        document.getElementById('filter-login-3').addEventListener('click', () => {
+            filterType = 'login';
+            currentLogin = '3';
+            // 保存筛选状态到localStorage
+            localStorage.setItem('filterType', filterType);
+            localStorage.setItem('currentLogin', currentLogin);
+            updateFilterTabs();
+            renderPresets();
+        });
+        
+        document.getElementById('filter-login-4').addEventListener('click', () => {
+            filterType = 'login';
+            currentLogin = '4';
+            // 保存筛选状态到localStorage
+            localStorage.setItem('filterType', filterType);
+            localStorage.setItem('currentLogin', currentLogin);
+            updateFilterTabs();
             renderPresets();
         });
 
-        // 更新输出内容
+        // 修改updateOutput函数，按勾选时间排序
         function updateOutput() {
             const checkedPresets = presets.filter(preset => preset.checked);
-
+        
             outputList.innerHTML = '';
-
+        
             if (checkedPresets.length === 0) {
                 emptyState.classList.remove('hidden');
                 return;
             }
-
+        
             emptyState.classList.add('hidden');
-
-            checkedPresets.forEach((preset, index) => {
-                const listItem = document.createElement('li');
-                listItem.className = 'flex items-start p-2 border-b border-gray-100 dark:border-gray-700 last:border-0';
-                listItem.innerHTML = `
-                    <span class="inline-block bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">${index + 1}</span>
-                    <span>${preset.text}</span>
-                `;
-                outputList.appendChild(listItem);
+        
+            // 按登录次数分组
+            const groupedByLogin = {};
+            checkedPresets.forEach(preset => {
+                const loginNumber = preset.login || 1; // 默认第1次登录
+                if (!groupedByLogin[loginNumber]) {
+                    groupedByLogin[loginNumber] = [];
+                }
+                groupedByLogin[loginNumber].push(preset);
+            });
+        
+            // 获取所有登录次数并排序
+            const loginNumbers = Object.keys(groupedByLogin).map(Number).sort((a, b) => a - b);
+        
+            // 为每个登录次数创建分组显示
+            loginNumbers.forEach(loginNumber => {
+                const loginGroup = groupedByLogin[loginNumber];
+                
+                // 按勾选时间排序
+                loginGroup.sort((a, b) => {
+                    // 如果有checkTime属性，则按时间戳排序
+                    if (a.checkTime && b.checkTime) {
+                        return a.checkTime - b.checkTime;
+                    }
+                    // 否则保持原有顺序
+                    return 0;
+                });
+                
+                // 创建登录次数标题
+                const groupHeader = document.createElement('div');
+                groupHeader.className = `font-bold text-lg mb-2 mt-0 first:mt-0 ${getLoginColorClass(loginNumber)}`;
+                groupHeader.textContent = `第${loginNumber}次登录：`;
+                outputList.appendChild(groupHeader);
+                
+                // 添加该登录次数下的所有项
+                loginGroup.forEach((preset, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'flex items-start p-2 border-b border-gray-100 dark:border-gray-700 last:border-0 ml-4';
+                    listItem.innerHTML = `
+                        <span class="inline-block bg-primary/10 text-primary rounded-full w-6 h-6 flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">${index + 1}</span>
+                        <span>${preset.text}</span>
+                    `;
+                    outputList.appendChild(listItem);
+                });
             });
         }
 
@@ -308,6 +633,9 @@
             // 设置类别选择
             const categorySelect = document.getElementById('preset-category');
             categorySelect.value = preset.category || '系统'; // 默认系统类别
+            // 设置登录次数选择
+            const loginSelect = document.getElementById('preset-login');
+            loginSelect.value = preset.login || 1; // 默认第1次登录
             editIndexInput.value = index;
             editModal.classList.remove('hidden');
             presetTextInput.focus();
@@ -329,6 +657,8 @@
                     presets[index].text = newText;
                     // 保存类别选择
                     presets[index].category = document.getElementById('preset-category').value;
+                    // 保存登录次数选择
+                    presets[index].login = parseInt(document.getElementById('preset-login').value);
                     renderPresets();
                     updateOutput();
                     savePresetsToLocalStorage(); // 保存到localStorage
@@ -349,8 +679,8 @@
 
         // 添加新预设
         function addPreset() {
-            // 添加默认类别为"系统"
-            presets.push({text:'新预设内容', checked: false, category: '系统' });
+            // 添加默认类别为"系统"，默认登录次数为1
+            presets.push({text:'新预设内容', checked: false, category: '系统', login: 1 });
             renderPresets();
             // 自动打开编辑框
             openEditModal(presets.length - 1);
@@ -385,9 +715,29 @@
 
             // 提取所有选中项文本
             let content = '验证内容：\n'; // 添加预设语句，不带有序号
-            outputItems.forEach((item, index) => {
-                const text = item.querySelector('span:last-child').textContent;
-                content += `${index + 1}. ${text}\n`;
+            
+            // 按登录次数分组准备复制内容
+            const groupedByLogin = {};
+            const checkedPresets = presets.filter(preset => preset.checked);
+            
+            checkedPresets.forEach(preset => {
+                const loginNumber = preset.login || 1; // 默认第1次登录
+                if (!groupedByLogin[loginNumber]) {
+                    groupedByLogin[loginNumber] = [];
+                }
+                groupedByLogin[loginNumber].push(preset.text);
+            });
+            
+            // 获取所有登录次数并排序
+            const loginNumbers = Object.keys(groupedByLogin).map(Number).sort((a, b) => a - b);
+            
+            // 构建分组格式的复制内容
+            loginNumbers.forEach(loginNumber => {
+                content += `第${loginNumber}次登录：\n`;
+                groupedByLogin[loginNumber].forEach((text, index) => {
+                    content += `${index + 1}、${text}\n`;
+                });
+                content += '\n'; // 分组之间添加空行
             });
 
             // 复制到剪贴板
@@ -412,10 +762,10 @@
                 closeEditModal();
             }
         });
-
+        // 在文件末尾，initFilter() 和 renderPresets() 调用之前添加辅助函数
+        // 获取登录次数对应的颜色类
         // 初始化
-        initFilter(); // 添加筛选器初始化
-        renderPresets();
+        initFilter();
         updateOutput();
     </script>
 </body>
