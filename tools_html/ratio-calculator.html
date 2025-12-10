@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>财富系统存钱利率累加计算器（指定起始次数版）</title>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .input-group label {
+            min-width: 140px;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 8px;
+            box-sizing: border-box;
+            flex: 1;
+            max-width: 300px;
+        }
+        .btn-group {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            font-size: 18px;
+        }
+        .rule-tip {
+            margin: 10px 0;
+            padding: 10px;
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.5;
+            border-radius: 4px;
+        }
+        .table-container {
+            margin-top: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        th, td {
+            padding: 8px 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+        .highlight {
+            background: #e8f5e9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>存钱利率累加计算器</h1>
+        
+        <!-- 规则提示 -->
+        <div class="rule-tip">
+            核心规则：<br>
+            1. 基础加成规则：1-20次每次+0.02 | 21-40次每次+0.01 | 41-90次每次+0.005 | 91-200次每次+0.002 | 201次+0.001<br>
+            2. 额外加成（仅指定次数）：第3次+0.05 | 第10次+0.05 | 第30次+0.1 | 其他次数无<br>
+            3. 惩罚系数：punish_score≥70<75→0.5 | ≥75<80→0.3 | ≥80<90→0.2 | ≥90→0.1 | 低于70→1<br>
+            4. 今日首次存钱：仅第1次计算时+0.04，后续次数无<br>
+            注：最终显示的加成和ratio值均为百分比（×100后）；列表从「当前存钱次数」开始生成到201次
+        </div>
+
+        <!-- 输入区域 -->
+        <div class="input-group">
+            <label for="currentRatio">当前ratio值（小数或百分比）：</label>
+            <input type="number" id="currentRatio" step="0.001" required placeholder="例如：0.19（19%）或19（自动转0.19）">
+        </div>
+        <div class="input-group">
+            <label for="currentTimes">当前存钱次数：</label>
+            <input type="number" id="currentTimes" min="1" max="201" step="1" required placeholder="例如：15（从该次数开始生成）">
+        </div>
+        <div class="input-group">
+            <label for="punishScore">punish_score值：</label>
+            <input type="number" id="punishScore" step="0.1" required placeholder="例如：60.0">
+        </div>
+        <div class="input-group">
+            <label for="isFirstToday">是否为今日首次存钱：</label>
+            <select id="isFirstToday">
+              <option value="0">否</option>
+              <option value="1">是</option>
+            </select>
+        </div>
+
+        <!-- 按钮区域（仅保留生成列表按钮） -->
+        <div class="btn-group">
+            <button onclick="generateFullList()">生成当前次数到201次列表</button>
+        </div>
+
+        <!-- 结果提示区域 -->
+        <div class="result" id="singleResultArea">填写信息后点击按钮生成列表</div>
+
+        <!-- 完整列表区域 -->
+        <div class="table-container" id="fullListArea" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>存钱次数</th>
+                        <th>基础加成（ratio_add×punish_k）</th>
+                        <th>每日首次加成</th>
+                        <th>额外奖励</th>
+                        <th>本次总加成（%）</th>
+                        <th>加成后ratio值（%）</th>
+                    </tr>
+                </thead>
+                <tbody id="listBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 预定义201个ratio_add值
+        function getRatioAddList() {
+            const list = [];
+            // 1-20次：0.02（20个）
+            for (let i=0; i<20; i++) list.push(0.02);
+            // 21-40次：0.01（20个）
+            for (let i=0; i<20; i++) list.push(0.01);
+            // 41-90次：0.005（50个）
+            for (let i=0; i<50; i++) list.push(0.005);
+            // 91-200次：0.002（110个）
+            for (let i=0; i<110; i++) list.push(0.002);
+            // 201次：0.001（1个）
+            list.push(0.001);
+            return list;
+        }
+        const ratioAddList = getRatioAddList();
+
+        // 获取惩罚系数
+        function getPunishK(punishScore) {
+            let punishK = 1;
+            if (punishScore >= 70 && punishScore < 75) punishK = 0.5;
+            else if (punishScore >= 75 && punishScore < 80) punishK = 0.3;
+            else if (punishScore >= 80 && punishScore < 90) punishK = 0.2;
+            else if (punishScore >= 90) punishK = 0.1;
+            return punishK;
+        }
+
+        // 获取额外奖励（仅3/10/30次）
+        function getExtraReward(saveTimes) {
+            let extra = 0;
+            if (saveTimes === 3) extra = 0.05;
+            else if (saveTimes === 10) extra = 0.05;
+            else if (saveTimes === 30) extra = 0.1;
+            return extra;
+        }
+
+        // 生成「当前次数到201次」的列表
+        function generateFullList() {
+            // 获取输入值
+            let initialRatio = parseFloat(document.getElementById('currentRatio').value);
+            // 如果输入值可能是百分比（大于等于1），则转换为小数
+            if (initialRatio >= 1) {
+                initialRatio = initialRatio / 100;
+            }
+            const currentTimes = parseInt(document.getElementById('currentTimes').value);
+            const punishScore = parseFloat(document.getElementById('punishScore').value);
+            const isFirstToday = parseInt(document.getElementById('isFirstToday').value);
+
+            // 输入验证
+            if (isNaN(initialRatio) || isNaN(currentTimes) || isNaN(punishScore)) {
+                document.getElementById('singleResultArea').textContent = "请填写所有必填数字（当前ratio、当前次数、punish_score）！";
+                return;
+            }
+            if (currentTimes < 1 || currentTimes > 201) {
+                document.getElementById('singleResultArea').textContent = "当前存钱次数需在1-201之间！";
+                return;
+            }
+
+            // 显示表格区域
+            document.getElementById('fullListArea').style.display = "block";
+            const listBody = document.getElementById('listBody');
+            listBody.innerHTML = ""; // 清空原有内容
+
+            let currentRatio = initialRatio;
+            const punishK = getPunishK(punishScore);
+
+            // 从当前次数循环到201次
+            for (let times = currentTimes; times <= 201; times++) {
+                // 计算单次数值
+                const ratioAdd = ratioAddList[times - 1];
+                const baseAdd = Math.max(0.001, ratioAdd * punishK);
+                const dailyFirstAdd = (times === 1 && isFirstToday) ? 0.04 : 0;
+                const extraReward = getExtraReward(times);
+                const totalAdd = baseAdd + dailyFirstAdd + extraReward;
+                currentRatio += totalAdd;
+
+                // 转百分比
+                const totalAddPercent = (totalAdd * 100).toFixed(1);
+                const currentRatioPercent = (currentRatio * 100).toFixed(1);
+
+                // 创建表格行
+                const tr = document.createElement('tr');
+                // 高亮3/10/30次行
+                if (times === 3 || times === 10 || times === 30) {
+                    tr.className = "highlight";
+                }
+
+                // 填充单元格
+                tr.innerHTML = `
+                    <td>${times}</td>
+                    <td>${baseAdd.toFixed(6)}</td>
+                    <td>${dailyFirstAdd.toFixed(6)}</td>
+                    <td>${extraReward.toFixed(6)}</td>
+                    <td>${totalAddPercent}%</td>
+                    <td>${currentRatioPercent}%</td>
+                `;
+
+                listBody.appendChild(tr);
+            }
+
+            // 提示完成
+            document.getElementById('singleResultArea').textContent = `已生成第${currentTimes}次到201次的完整加成列表！（数值已转百分比显示）`;
+        }
+    </script>
+</body>
+</html>
