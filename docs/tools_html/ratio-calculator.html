@@ -138,11 +138,11 @@
                 <thead>
                     <tr>
                         <th>存钱次数</th>
-                        <th>基础加成（ratio_add×punish_k）</th>
+                        <th>基础加成（ratio_add*punish_k）</th>
                         <th>每日首次加成</th>
-                        <th>额外奖励</th>
-                        <th>本次总加成（%）</th>
-                        <th>加成后ratio值（%）</th>
+                        <th>节点加成</th>
+                        <th>下次总加成（%）</th>
+                        <th>加成后的ratio（%）</th>
                     </tr>
                 </thead>
                 <tbody id="listBody"></tbody>
@@ -222,7 +222,7 @@
                 // 计算单次数值
                 const ratioAdd = ratioAddList[times - 1];
                 const baseAdd = Math.max(0.001, ratioAdd * punishK);
-                const dailyFirstAdd = (times === 1 && isFirstToday) ? 0.04 : 0;
+                const dailyFirstAdd = (times === currentTimes && isFirstToday) ? 0.04 : 0;
                 const extraReward = getExtraReward(times);
                 const totalAdd = baseAdd + dailyFirstAdd + extraReward;
                 currentRatio += totalAdd;
@@ -230,6 +230,9 @@
                 // 转百分比
                 const totalAddPercent = (totalAdd * 100).toFixed(1);
                 const currentRatioPercent = (currentRatio * 100).toFixed(1);
+                const baseAddPercent = (baseAdd * 100).toFixed(1);
+                const dailyFirstAddPercent = (dailyFirstAdd * 100).toFixed(1);
+                const extraRewardPercent = (extraReward * 100).toFixed(1);
 
                 // 创建表格行
                 const tr = document.createElement('tr');
@@ -241,9 +244,9 @@
                 // 填充单元格
                 tr.innerHTML = `
                     <td>${times}</td>
-                    <td>${baseAdd.toFixed(6)}</td>
-                    <td>${dailyFirstAdd.toFixed(6)}</td>
-                    <td>${extraReward.toFixed(6)}</td>
+                    <td>${baseAddPercent}%</td>
+                    <td>${dailyFirstAddPercent}%</td>
+                    <td>${extraRewardPercent}%</td>
                     <td>${totalAddPercent}%</td>
                     <td>${currentRatioPercent}%</td>
                 `;
