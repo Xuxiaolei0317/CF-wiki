@@ -164,6 +164,25 @@
             </div>
         </div>
     </main>
+    <!-- 编辑关联模态框 -->
+    <div id="editLinkModal" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">编辑关联描述</h3>
+                <button id="closeEditLinkModalBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="editLinkDesc">关联描述</label>
+                    <input type="text" id="editLinkDesc" class="form-input w-full" placeholder="输入关联描述（如：需要分行使用<br>）">
+                </div>
+                <button id="submitEditLinkBtn" class="btn btn-primary w-full">保存修改</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 添加节点模态框 -->
     <div id="nodeModal" class="hidden">
@@ -266,12 +285,11 @@
         // DOM元素缓存
         const nodeModal = document.getElementById('nodeModal');
         const linkModal = document.getElementById('linkModal');
-        const importModal = document.getElementById('importModal');
-        const mobileMenuPanel = document.getElementById('mobileMenuPanel');
-        const colorGrid = document.getElementById('colorGrid');
-        const nodeColorInput = document.getElementById('nodeColor');
-        const relationContent = document.getElementById('relationContent');
-        const graphContainer = document.getElementById('graphContainer');
+        const editLinkModal = document.getElementById('editLinkModal');
+        const editLinkDesc = document.getElementById('editLinkDesc');
+        const closeEditLinkModalBtn = document.getElementById('closeEditLinkModalBtn');
+        const submitEditLinkBtn = document.getElementById('submitEditLinkBtn');
+        let currentEditingLinkId = null; // 当前编辑的关联ID
 
         // 全局D3变量
         let svg, g, simulation;
@@ -279,7 +297,7 @@
 
         // ========== 核心存储函数（适配GitHub Pages） ==========
         // 从localStorage加载数据（核心存储方案）
-        function loadDataFromLocalStorage() {
+function loadDataFromLocalStorage() {
             const savedData = localStorage.getItem(STORAGE_KEY);
             if (savedData) {
                 try {
@@ -327,7 +345,7 @@
             // 创建下载链接
             const a = document.createElement('a');
             a.href = url;
-            a.download = `星图数据_${new Date().getTime()}.json`; // 带时间戳，避免覆盖
+            a.download = `星图关联数据_${new Date().getTime()}.json`; // 带时间戳，避免覆盖
             a.click();
             // 释放URL
             URL.revokeObjectURL(url);
@@ -338,7 +356,7 @@
         function importConfigFile(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+reader.onload = function(e) {
                     try {
                         const importedData = JSON.parse(e.target.result);
                         // 验证数据格式
@@ -452,7 +470,6 @@
             linkLabelElements = g.append('g').attr('class', 'link-labels');
             nodeElements = g.append('g').attr('class', 'nodes');
             nodeLabelElements = g.append('g').attr('class', 'node-labels');
-
             // 创建力模拟
             simulation = d3.forceSimulation(nodes)
                 .force('link', d3.forceLink(links).id(d => d.id).distance(150))
@@ -567,7 +584,7 @@
                 // 关联方向
                 const direction = sourceId === node.id ? '→' : '←';
                 
-                // 拼接单条关联HTML（新增删除按钮）
+                // 拼接单条关联HTML（新增编辑和删除按钮）
                 relationHtml += `
                     <div class="relation-item">
                         <div class="flex items-center gap-2">
@@ -576,10 +593,15 @@
                             <span class="font-medium">${otherNodeName}</span>
                         </div>
                         <div class="mt-1 text-sm text-gray-600 flex justify-between items-center">
-                            <span>关联描述：<span class="text-primary">${link.desc}</span></span>
-                            <button class="delete-link-btn btn btn-danger btn-sm" data-link-id="${link.id}">
-                                <i class="fa-solid fa-trash mr-1"></i>删除
-                            </button>
+                            <span>关联描述：<br><span class="text-primary">${link.desc}</span></span>
+                            <div class="flex gap-2">
+                                <button class="edit-link-btn btn btn-primary btn-sm" data-link-id="${link.id}">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i>编辑
+                                </button>
+                                <button class="delete-link-btn btn btn-danger btn-sm" data-link-id="${link.id}">
+                                    <i class="fa-solid fa-trash mr-1"></i>删除
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -596,17 +618,17 @@
                 .attr('y1', d => d.source.y)
                 .attr('x2', d => d.target.x)
                 .attr('y2', d => d.target.y);
-
-            // 更新关联标签位置
-            linkLabelElements.selectAll('text')
-                .attr('x', d => (d.source.x + d.target.x) / 2)
-                .attr('y', d => (d.source.y + d.target.y) / 2 - 5);
-
+        
+            // // 更新关联标签位置（已注释掉）
+            // linkLabelElements.selectAll('text')
+            //     .attr('x', d => (d.source.x + d.target.x) / 2)
+            //     .attr('y', d => (d.source.y + d.target.y) / 2 - 5);
+        
             // 更新节点位置
             nodeElements.selectAll('circle')
-                .attr('cx', d => d.x)
+.attr('cx', d => d.x)
                 .attr('cy', d => d.y);
-
+        
             // 更新节点标签位置
             nodeLabelElements.selectAll('text')
                 .attr('x', d => d.x)
@@ -620,10 +642,10 @@
             // 更新关联线
             const linkUpdate = linkElements.selectAll('line')
                 .data(links, d => d.id);
-
+        
             // 移除旧关联线
             linkUpdate.exit().remove();
-
+        
             // 添加新关联线
             const linkEnter = linkUpdate.enter()
                 .append('line')
@@ -635,37 +657,31 @@
                 })
                 .on('mouseout', function() {
                     d3.select(this).attr('stroke', '#999').attr('stroke-width', 2).attr('stroke-opacity', 0.6);
-                })
-                // .on('click', function(event, d) {
-                //     event.stopPropagation(); // 阻止冒泡到SVG（避免清空面板）
-                //     if (confirm(`确定删除关联：${d.desc}？`)) {
-                //         deleteLinkById(d.id);
-                //     }
-                // });
-
+                });
+        
             // 合并更新
             linkEnter.merge(linkUpdate);
-
-            // 更新关联标签
-            const linkLabelUpdate = linkLabelElements.selectAll('text')
-                .data(links, d => d.id);
-
-            linkLabelUpdate.exit().remove();
-
-            const linkLabelEnter = linkLabelUpdate.enter()
-                .append('text')
-                .attr('class', 'link-label')
-                .text(d => d.desc);
-
-            linkLabelEnter.merge(linkLabelUpdate);
-
+        
+            // // 更新关联标签（已注释掉）
+            // const linkLabelUpdate = linkLabelElements.selectAll('text')
+            //     .data(links, d => d.id);
+        
+            // linkLabelUpdate.exit().remove();
+        
+            // const linkLabelEnter = linkLabelUpdate.enter()
+            //     .append('text')
+            //     .attr('class', 'link-label')
+            //     .text(d => d.desc);
+        
+            // linkLabelEnter.merge(linkLabelUpdate);
+        
             // 更新节点
             const nodeUpdate = nodeElements.selectAll('circle')
                 .data(nodes, d => d.id);
-
+        
             // 移除旧节点
             nodeUpdate.exit().remove();
-
+        
             // 添加新节点
             const nodeEnter = nodeUpdate.enter()
                 .append('circle')
@@ -691,25 +707,25 @@
                 //         deleteNodeById(d.id);
                 //     }
                 // });
-
+        
             // 合并更新
             nodeEnter.merge(nodeUpdate);
-
+        
             // 更新节点标签
             const nodeLabelUpdate = nodeLabelElements.selectAll('text')
                 .data(nodes, d => d.id);
-
+        
             nodeLabelUpdate.exit().remove();
-
+        
             const nodeLabelEnter = nodeLabelUpdate.enter()
                 .append('text')
                 .attr('class', 'node-label')
                 .attr('text-anchor', 'middle')
                 .attr('dy', 5)
                 .text(d => d.name);
-
+        
             nodeLabelEnter.merge(nodeLabelUpdate);
-
+        
             // 更新力模拟数据并重启
             simulation.nodes(nodes);
             simulation.force('link').links(links);
@@ -755,7 +771,7 @@
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden'; // 禁止背景滚动
             // 打开节点模态框时初始化颜色选择器
-            if (modal === nodeModal) {
+if (modal === nodeModal) {
                 initColorGrid();
             }
         }
@@ -771,10 +787,10 @@
             } else if (modal === linkModal) {
                 document.getElementById('linkDesc').value = '';
                 document.getElementById('sourceNode').value = '';
-                document.getElementById('targetNode').value = '';
+document.getElementById('targetNode').value = '';
             } else if (modal === importModal) {
                 document.getElementById('configFileInput').value = '';
-            }
+}
         }
 
         // ========== 事件绑定 ==========
@@ -802,7 +818,7 @@
             mobileMenuPanel.classList.toggle('hidden');
         });
 
-        document.getElementById('mobileAddNodeBtn').addEventListener('click', () => {
+document.getElementById('mobileAddNodeBtn').addEventListener('click', () => {
             mobileMenuPanel.classList.add('hidden');
             openModal(nodeModal);
         });
@@ -929,7 +945,81 @@
             closeModal(linkModal);
             renderGraph();
         });
-
+        // 导入数据文件（恢复备份）
+        function importConfigFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        // 验证数据格式
+                        if (!Array.isArray(importedData.nodes) || !Array.isArray(importedData.links)) {
+                            reject('数据文件格式错误，缺少nodes或links数组');
+                            return;
+                        }
+                        
+                        // 处理节点数据（确保id唯一且为数字）
+                        const processedNodes = importedData.nodes.map(node => ({
+                            id: parseInt(node.id),
+                            name: node.name,
+                            color: node.color,
+                            x: node.x,
+                            y: node.y,
+                            vx: node.vx,
+                            vy: node.vy,
+                            fx: node.fx,
+                            fy: node.fy
+                        }));
+                        
+                        // 处理关联数据（确保source/target为节点ID）
+                        const processedLinks = importedData.links.map(link => {
+                            // 提取source ID
+                            const sourceId = typeof link.source === 'object' ? parseInt(link.source.id) : parseInt(link.source);
+                            // 提取target ID
+                            const targetId = typeof link.target === 'object' ? parseInt(link.target.id) : parseInt(link.target);
+                            
+                            return {
+                                id: parseInt(link.id),
+                                source: sourceId,
+                                target: targetId,
+                                desc: link.desc,
+                                index: link.index
+                            };
+                        });
+                        
+                        // 验证关联的节点是否存在
+                        const nodeIds = new Set(processedNodes.map(n => n.id));
+                        const validLinks = processedLinks.filter(link => 
+                            nodeIds.has(link.source) && nodeIds.has(link.target)
+                        );
+                        
+                        if (validLinks.length !== processedLinks.length) {
+                            console.warn(`有${processedLinks.length - validLinks.length}个关联指向不存在的节点，已自动过滤`);
+                        }
+                        
+                        // 更新数据
+                        nodes = processedNodes;
+                        links = validLinks;
+                        // 更新计数器
+                        nodeIdCounter = nodes.length > 0 ? Math.max(...nodes.map(n => n.id)) + 1 : 1;
+                        linkIdCounter = links.length > 0 ? Math.max(...links.map(l => l.id)) + 1 : 1;
+                        // 保存到缓存并刷新视图
+                        saveDataToLocalStorage();
+                        initD3Graph(); // 重新初始化D3
+                        renderGraph();
+                        updateNodeSelectors();
+                        updateRelationPanel(null);
+                        resolve('数据导入成功！');
+                    } catch (e) {
+                        reject(`解析数据文件失败：${e.message}`);
+                    }
+                };
+                reader.onerror = function() {
+                    reject('读取文件失败');
+                };
+                reader.readAsText(file);
+            });
+        }
         // 导入数据提交事件
         document.getElementById('submitImportBtn').addEventListener('click', async () => {
             const fileInput = document.getElementById('configFileInput');
@@ -974,11 +1064,20 @@
         });
 
         // 关联/节点删除按钮事件（事件委托）
+        // 事件委托：处理关联面板中的按钮点击
         relationContent.addEventListener('click', function(e) {
-            // 删除关联关系
-            const linkBtn = e.target.closest('.delete-link-btn');
-            if (linkBtn) {
-                const linkId = parseInt(linkBtn.dataset.linkId);
+            // 编辑关联
+            const editBtn = e.target.closest('.edit-link-btn');
+            if (editBtn) {
+                const linkId = parseInt(editBtn.dataset.linkId);
+                openEditLinkModal(linkId);
+                return;
+            }
+
+            // 删除关联（现有代码）
+            const deleteBtn = e.target.closest('.delete-link-btn');
+            if (deleteBtn) {
+                const linkId = parseInt(deleteBtn.dataset.linkId);
                 const link = links.find(l => l.id === linkId);
                 
                 if (link && confirm(`确定删除关联：${link.desc}？`)) {
@@ -987,7 +1086,7 @@
                 return;
             }
 
-            // 删除节点
+            // 删除节点（现有代码）
             const nodeBtn = e.target.closest('.delete-node-btn');
             if (nodeBtn) {
                 const nodeId = parseInt(nodeBtn.dataset.nodeId);
@@ -999,6 +1098,53 @@
                 return;
             }
         });
+
+        // 打开编辑关联模态框
+        function openEditLinkModal(linkId) {
+            currentEditingLinkId = linkId;
+            const link = links.find(l => l.id === linkId);
+            if (link) {
+                editLinkDesc.value = link.desc;
+                editLinkModal.classList.remove('hidden');
+                editLinkDesc.focus();
+            }
+        }
+
+        // 关闭编辑关联模态框
+        function closeEditLinkModal() {
+            currentEditingLinkId = null;
+            editLinkDesc.value = '';
+            editLinkModal.classList.add('hidden');
+        }
+
+        // 保存编辑的关联
+        function submitEditLink() {
+            if (currentEditingLinkId === null) return;
+            
+            const link = links.find(l => l.id === currentEditingLinkId);
+            if (!link) return;
+            
+            const newDesc = editLinkDesc.value.trim();
+            if (!newDesc) {
+                alert('请输入关联描述！');
+                return;
+            }
+            
+            // 更新关联描述
+            link.desc = newDesc;
+            
+            // 保存到本地存储
+            saveDataToLocalStorage();
+            
+            // 更新UI
+            closeEditLinkModal();
+            renderGraph();
+            updateRelationPanel(currentSelectedNode); // 如果有选中节点，更新其关联信息
+        }
+
+        // 编辑关联模态框事件监听
+        closeEditLinkModalBtn.addEventListener('click', closeEditLinkModal);
+        submitEditLinkBtn.addEventListener('click', submitEditLink);
 
         // ========== 初始化 ==========
         // 页面加载时优先从localStorage加载数据（GitHub Pages核心方案）
