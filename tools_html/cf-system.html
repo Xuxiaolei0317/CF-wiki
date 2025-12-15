@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关联星图可视化（GitHub Pages 版）</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome（图标） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- 自定义Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#10B981',
+                        danger: '#EF4444',
+                        neutral: '#6B7280',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .form-input {
+                @apply rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition;
+            }
+            .btn {
+                @apply rounded-md px-4 py-2 font-medium transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2;
+            }
+            .btn-primary {
+                @apply bg-primary text-white focus:ring-primary/50;
+            }
+            .btn-danger {
+                @apply bg-danger text-white focus:ring-danger/50;
+            }
+            .btn-secondary {
+                @apply bg-secondary text-white focus:ring-secondary/50;
+            }
+            .btn-sm {
+                @apply px-2 py-1 text-xs;
+            }
+            .node-label {
+                @apply pointer-events-none text-sm fill-gray-800;
+            }
+            .link-label {
+                @apply pointer-events-none text-xs fill-gray-600;
+            }
+            .relation-item {
+                @apply bg-gray-50 p-3 rounded-md hover:bg-gray-100 transition;
+            }
+            .modal-backdrop {
+                @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-40;
+            }
+            .modal-content {
+                @apply fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl p-6 w-full max-w-md z-50;
+            }
+            .file-input {
+                @apply w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer;
+            }
+            .color-grid-item {
+                @apply w-10 h-10 rounded-md cursor-pointer transition hover:ring-2 hover:ring-offset-1 hover:ring-gray-400;
+            }
+            .color-grid-item.active {
+                @apply ring-2 ring-offset-1 ring-primary;
+            }
+            .tip-box {
+                @apply bg-primary/10 text-primary p-3 rounded-md text-sm mb-4 border-l-4 border-primary;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white shadow-md sticky top-0 z-30">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- 标题 -->
+                <div class="flex items-center">
+                    <i class="fa-solid fa-sitemap text-primary text-2xl mr-3"></i>
+                    <span class="text-xl font-bold text-gray-800">关联星图可视化</span>
+                </div>
+
+                <!-- 桌面端功能按钮 -->
+                <div class="hidden md:flex space-x-3">
+                    <button id="openNodeModalBtn" class="btn btn-primary">
+                        <i class="fa-solid fa-circle-plus mr-2"></i>添加节点
+                    </button>
+                    <button id="openLinkModalBtn" class="btn btn-primary">
+                        <i class="fa-solid fa-link mr-2"></i>添加关联
+                    </button>
+                    <button id="exportConfigBtn" class="btn btn-secondary">
+                        <i class="fa-solid fa-download mr-2"></i>导出数据
+                    </button>
+                    <button id="openImportModalBtn" class="btn btn-secondary">
+                        <i class="fa-solid fa-upload mr-2"></i>导入数据
+                    </button>
+                    <button id="clearAllBtn" class="btn btn-danger">
+                        <i class="fa-solid fa-trash mr-2"></i>清空数据
+                    </button>
+                </div>
+
+                <!-- 移动端下拉菜单 -->
+                <div class="md:hidden">
+                    <button id="mobileMenuBtn" class="text-gray-700 hover:text-primary focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <!-- 移动端菜单面板 -->
+                    <div id="mobileMenuPanel" class="hidden absolute top-16 right-4 bg-white rounded-lg shadow-lg py-2 w-48 z-50">
+                        <button id="mobileAddNodeBtn" class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700">
+                            <i class="fa-solid fa-circle-plus mr-2 text-primary"></i>添加节点
+                        </button>
+                        <button id="mobileAddLinkBtn" class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700">
+                            <i class="fa-solid fa-link mr-2 text-primary"></i>添加关联
+                        </button>
+                        <button id="mobileExportConfigBtn" class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700">
+                            <i class="fa-solid fa-download mr-2 text-secondary"></i>导出数据
+                        </button>
+                        <button id="mobileImportConfigBtn" class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700">
+                            <i class="fa-solid fa-upload mr-2 text-secondary"></i>导入数据
+                        </button>
+                        <button id="mobileClearAllBtn" class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700">
+                            <i class="fa-solid fa-trash mr-2 text-danger"></i>清空数据
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 提示框（GitHub Pages 专属） -->
+        <div class="tip-box">
+            <i class="fa-solid fa-info-circle mr-2"></i>
+            数据默认保存在当前浏览器本地，更换设备/清空缓存会丢失！建议定期「导出数据」备份。
+        </div>
+        
+        <!-- 可视化区域 + 右侧信息面板 -->
+        <div class="flex flex-col md:flex-row gap-4">
+            <!-- 可视化容器 -->
+            <div class="bg-white rounded-lg shadow-md p-2 h-[70vh] relative overflow-hidden flex-1" id="graphContainer">
+                <div class="absolute top-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-md text-sm text-gray-600 shadow-sm">
+                    提示：单击节点看关联 | 双击删节点 | 点击关联删关系 | 拖拽调整位置
+                </div>
+            </div>
+
+            <!-- 右侧关联信息面板 -->
+            <div class="bg-white rounded-lg shadow-md p-4 h-[70vh] w-full md:w-96 overflow-y-auto" id="relationPanel">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+                    <i class="fa-solid fa-list-ul text-primary mr-2"></i>节点关联信息
+                </h3>
+                <div id="relationContent" class="space-y-3 text-gray-700">
+                    <p class="text-gray-500 italic text-center py-4">点击左侧节点查看关联信息</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- 编辑关联模态框 -->
+    <div id="editLinkModal" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">编辑关联描述</h3>
+                <button id="closeEditLinkModalBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="editLinkDesc">关联描述</label>
+                    <input type="text" id="editLinkDesc" class="form-input w-full" placeholder="输入关联描述（如：需要分行使用<br>）">
+                </div>
+                <button id="submitEditLinkBtn" class="btn btn-primary w-full">保存修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加节点模态框 -->
+    <div id="nodeModal" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">添加新节点</h3>
+                <button id="closeNodeModalBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="nodeName">节点名称</label>
+                    <input type="text" id="nodeName" class="form-input w-full" placeholder="输入节点名称（如：产品A）">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" for="nodeColor">节点颜色</label>
+                    <!-- 颜色宫格选择器 -->
+                    <div class="grid grid-cols-8 gap-2 mb-3" id="colorGrid">
+                        <!-- 预设颜色，通过JS动态生成 -->
+                    </div>
+                    <!-- 自定义颜色输入（补充） -->
+                    <input type="color" id="nodeColor" class="w-full h-10 border-0 rounded-md" value="#4F46E5">
+                </div>
+                <button id="submitNodeBtn" class="btn btn-primary w-full">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加关联模态框 -->
+    <div id="linkModal" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">添加新关联</h3>
+                <button id="closeLinkModalBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="sourceNode">源节点</label>
+                    <select id="sourceNode" class="form-input w-full">
+                        <option value="">请选择源节点</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="targetNode">目标节点</label>
+                    <select id="targetNode" class="form-input w-full">
+                        <option value="">请选择目标节点</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="linkDesc">关联描述</label>
+                    <input type="text" id="linkDesc" class="form-input w-full" placeholder="输入关联描述（如：包含）">
+                </div>
+                <button id="submitLinkBtn" class="btn btn-primary w-full">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导入数据模态框 -->
+    <div id="importModal" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">导入数据文件</h3>
+                <button id="closeImportModalBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="text-sm text-gray-600 mb-2">
+                    请选择导出的JSON格式数据文件（建议定期备份）
+                </div>
+                <div>
+                    <input type="file" id="configFileInput" accept=".json" class="file-input">
+                </div>
+                <button id="submitImportBtn" class="btn btn-secondary w-full">确认导入</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局数据
+        let nodes = []; // 节点数组：[{id, name, color}]
+        let links = []; // 关联数组：[{id, source, target, desc}]
+        let nodeIdCounter = 1;
+        let linkIdCounter = 1;
+        const STORAGE_KEY = 'starGraphData_GitHubPages'; // 专属Key，避免冲突
+        // 预设颜色面板（16个常用颜色）
+        const PRESET_COLORS = [
+            '#4F46E5', '#10B981', '#EF4444', '#F59E0B', '#8B5CF6',
+            '#EC4899', '#06B6D4', '#14B8A6', '#6366F1', '#F43F5E',
+            '#3B82F6', '#10B981', '#F97316', '#84CC16', '#A855F7', '#6B7280'
+        ];
+        let selectedColor = PRESET_COLORS[0]; // 默认选中颜色
+
+        // DOM元素缓存
+        const nodeModal = document.getElementById('nodeModal');
+        const linkModal = document.getElementById('linkModal');
+        const editLinkModal = document.getElementById('editLinkModal');
+        const editLinkDesc = document.getElementById('editLinkDesc');
+        const closeEditLinkModalBtn = document.getElementById('closeEditLinkModalBtn');
+        const submitEditLinkBtn = document.getElementById('submitEditLinkBtn');
+        let currentEditingLinkId = null; // 当前编辑的关联ID
+
+        // 全局D3变量
+        let svg, g, simulation;
+        let linkElements, linkLabelElements, nodeElements, nodeLabelElements;
+
+        // ========== 核心存储函数（适配GitHub Pages） ==========
+        // 从localStorage加载数据（核心存储方案）
+function loadDataFromLocalStorage() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    nodes = parsedData.nodes || [];
+                    links = parsedData.links || [];
+                    // 更新计数器（避免ID重复）
+                    nodeIdCounter = nodes.length > 0 ? Math.max(...nodes.map(n => n.id)) + 1 : 1;
+                    linkIdCounter = links.length > 0 ? Math.max(...links.map(l => l.id)) + 1 : 1;
+                    console.log('✅ 从浏览器本地缓存加载数据成功', nodes, links);
+                } catch (e) {
+                    console.error('❌ 解析缓存数据失败', e);
+                    // 解析失败时重置数据
+                    nodes = [];
+                    links = [];
+                }
+            }
+        }
+
+        // 保存数据到localStorage（增删改自动触发）
+        function saveDataToLocalStorage() {
+            const data = {
+                nodes: nodes,
+                links: links,
+                updateTime: new Date().toISOString(),
+                version: '1.0',
+                platform: 'GitHub Pages' // 标识部署平台
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            console.log('✅ 数据已保存到浏览器本地缓存', data);
+        }
+
+        // 导出数据为JSON文件（用户手动备份）
+        function exportConfigFile() {
+            const exportData = {
+                nodes: nodes,
+                links: links,
+                updateTime: new Date().toLocaleString(),
+                version: '1.0',
+                platform: 'GitHub Pages'
+            };
+            // 创建JSON文件
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            // 创建下载链接
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `星图关联数据_${new Date().getTime()}.json`; // 带时间戳，避免覆盖
+            a.click();
+            // 释放URL
+            URL.revokeObjectURL(url);
+            alert(`✅ 数据导出成功！\n文件已下载，请妥善保存（更换设备/清空缓存前务必导出）`);
+        }
+
+        // 导入数据文件（恢复备份）
+        function importConfigFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        // 验证数据格式
+                        if (!Array.isArray(importedData.nodes) || !Array.isArray(importedData.links)) {
+                            reject('数据文件格式错误，缺少nodes或links数组');
+                            return;
+                        }
+                        // 更新数据
+                        nodes = importedData.nodes;
+                        links = importedData.links;
+                        // 更新计数器
+                        nodeIdCounter = nodes.length > 0 ? Math.max(...nodes.map(n => n.id)) + 1 : 1;
+                        linkIdCounter = links.length > 0 ? Math.max(...links.map(l => l.id)) + 1 : 1;
+                        // 保存到缓存并刷新视图
+                        saveDataToLocalStorage();
+                        initD3Graph(); // 重新初始化D3
+                        renderGraph();
+                        updateNodeSelectors();
+                        updateRelationPanel(null);
+                        resolve('数据导入成功！');
+                    } catch (e) {
+                        reject(`解析数据文件失败：${e.message}`);
+                    }
+                };
+                reader.onerror = function() {
+                    reject('读取文件失败');
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        // 清空所有数据
+        function clearAllData() {
+            if (confirm('⚠️ 确定要清空所有节点和关联数据吗？此操作不可恢复！')) {
+                nodes = [];
+                links = [];
+                nodeIdCounter = 1;
+                linkIdCounter = 1;
+                // 清空缓存
+                localStorage.removeItem(STORAGE_KEY);
+                // 刷新视图
+                initD3Graph(); // 重新初始化D3
+                renderGraph();
+                updateNodeSelectors();
+                updateRelationPanel(null);
+                alert('✅ 所有数据已清空');
+            }
+        }
+
+        // ========== 颜色选择器初始化 ==========
+        function initColorGrid() {
+            // 清空颜色宫格
+            colorGrid.innerHTML = '';
+            // 生成预设颜色宫格
+            PRESET_COLORS.forEach(color => {
+                const colorItem = document.createElement('div');
+                colorItem.className = `color-grid-item ${color === selectedColor ? 'active' : ''}`;
+                colorItem.style.backgroundColor = color;
+                colorItem.dataset.color = color;
+                // 点击选择颜色
+                colorItem.addEventListener('click', () => {
+                    // 移除所有active类
+                    document.querySelectorAll('.color-grid-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    // 添加当前active类
+                    colorItem.classList.add('active');
+                    // 更新选中颜色和输入框值
+                    selectedColor = color;
+                    nodeColorInput.value = color;
+                });
+                colorGrid.appendChild(colorItem);
+            });
+
+            // 监听自定义颜色输入变化
+            nodeColorInput.addEventListener('change', () => {
+                selectedColor = nodeColorInput.value;
+                // 更新宫格选中状态
+                document.querySelectorAll('.color-grid-item').forEach(item => {
+                    if (item.dataset.color === selectedColor) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        // ========== D3可视化初始化 ==========
+        function initD3Graph() {
+            // 清空容器
+            graphContainer.innerHTML = '';
+            
+            const width = graphContainer.clientWidth;
+            const height = graphContainer.clientHeight;
+
+            // 创建SVG
+            svg = d3.select('#graphContainer')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .call(d3.zoom().on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                }));
+
+            // 创建分组容器（用于缩放）
+            g = svg.append('g');
+
+            // 初始化渲染元素分组
+            linkElements = g.append('g').attr('class', 'links');
+            linkLabelElements = g.append('g').attr('class', 'link-labels');
+            nodeElements = g.append('g').attr('class', 'nodes');
+            nodeLabelElements = g.append('g').attr('class', 'node-labels');
+            // 创建力模拟
+            simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(150))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(50))
+                .on('tick', ticked); // 绑定tick事件
+        }
+
+        // 拖拽功能
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        const drag = d3.drag()
+            .on('start', dragstarted)
+            .on('drag', dragged)
+            .on('end', dragended);
+
+        // 更新下拉选择框
+        function updateNodeSelectors() {
+            const sourceSelect = document.getElementById('sourceNode');
+            const targetSelect = document.getElementById('targetNode');
+            
+            // 清空现有选项（保留第一个）
+            while (sourceSelect.options.length > 1) {
+                sourceSelect.remove(1);
+            }
+            while (targetSelect.options.length > 1) {
+                targetSelect.remove(1);
+            }
+
+            // 添加节点选项
+            nodes.forEach(node => {
+                const sourceOption = document.createElement('option');
+                sourceOption.value = node.id;
+                sourceOption.textContent = node.name;
+                sourceSelect.appendChild(sourceOption);
+
+                const targetOption = document.createElement('option');
+                targetOption.value = node.id;
+                targetOption.textContent = node.name;
+                targetSelect.appendChild(targetOption);
+            });
+        }
+
+        // 更新右侧关联信息面板
+        function updateRelationPanel(node) {
+            const contentEl = document.getElementById('relationContent');
+            
+            // 清空面板（无节点选中）
+            if (!node) {
+                contentEl.innerHTML = '<p class="text-gray-500 italic text-center py-4">点击左侧节点查看关联信息</p>';
+                return;
+            }
+
+            // 筛选该节点的所有关联（兼容source/target为ID或对象的情况）
+            const relatedLinks = links.filter(link => {
+                const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+                const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+                return sourceId === node.id || targetId === node.id;
+            });
+
+            // 无关联的情况
+            if (relatedLinks.length === 0) {
+                contentEl.innerHTML = `
+                    <div class="text-center py-4">
+                        <div class="flex justify-between items-center font-medium mb-2">
+                            <span>${node.name}</span>
+                            <button class="delete-node-btn btn btn-danger btn-sm" data-node-id="${node.id}">
+                                <i class="fa-solid fa-trash mr-1"></i>删除节点
+                            </button>
+                        </div>
+                        <p class="text-gray-500">暂无关联关系</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 构建关联信息HTML（分行显示）
+            let relationHtml = `
+                <div class="flex justify-between items-center font-semibold text-gray-800 mb-3">
+                    <span>${node.name} 的关联关系（共${relatedLinks.length}条）</span>
+                    <button class="delete-node-btn btn btn-danger btn-sm" data-node-id="${node.id}">
+                        <i class="fa-solid fa-trash mr-1"></i>删除节点
+                    </button>
+                </div>
+            `;
+            
+            relatedLinks.forEach((link) => {
+                const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+                const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+                
+                // 找到关联的另一个节点
+                const otherNodeId = sourceId === node.id ? targetId : sourceId;
+                const otherNode = nodes.find(n => n.id === otherNodeId);
+                const otherNodeName = otherNode ? otherNode.name : '未知节点';
+                
+                // 关联方向
+                const direction = sourceId === node.id ? '→' : '←';
+                
+                // 拼接单条关联HTML（新增编辑和删除按钮）
+                relationHtml += `
+                    <div class="relation-item">
+                        <div class="flex items-center gap-2">
+                            <span class="font-medium">${node.name}</span>
+                            <span class="text-primary font-bold">${direction}</span>
+                            <span class="font-medium">${otherNodeName}</span>
+                        </div>
+                        <div class="mt-1 text-sm text-gray-600 flex justify-between items-center">
+                            <span>关联描述：<br><span class="text-primary">${link.desc}</span></span>
+                            <div class="flex gap-2">
+                                <button class="edit-link-btn btn btn-primary btn-sm" data-link-id="${link.id}">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i>编辑
+                                </button>
+                                <button class="delete-link-btn btn btn-danger btn-sm" data-link-id="${link.id}">
+                                    <i class="fa-solid fa-trash mr-1"></i>删除
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            contentEl.innerHTML = relationHtml;
+        }
+
+        // Tick事件处理（更新元素位置）
+        function ticked() {
+            // 更新关联线位置
+            linkElements.selectAll('line')
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+        
+            // // 更新关联标签位置（已注释掉）
+            // linkLabelElements.selectAll('text')
+            //     .attr('x', d => (d.source.x + d.target.x) / 2)
+            //     .attr('y', d => (d.source.y + d.target.y) / 2 - 5);
+        
+            // 更新节点位置
+            nodeElements.selectAll('circle')
+.attr('cx', d => d.x)
+                .attr('cy', d => d.y);
+        
+            // 更新节点标签位置
+            nodeLabelElements.selectAll('text')
+                .attr('x', d => d.x)
+                .attr('y', d => d.y);
+        }
+
+        // 渲染星图
+        function renderGraph() {
+            if (!svg) return;
+            
+            // 更新关联线
+            const linkUpdate = linkElements.selectAll('line')
+                .data(links, d => d.id);
+        
+            // 移除旧关联线
+            linkUpdate.exit().remove();
+        
+            // 添加新关联线
+            const linkEnter = linkUpdate.enter()
+                .append('line')
+                .attr('stroke', '#999')
+                .attr('stroke-width', 2)
+                .attr('stroke-opacity', 0.6)
+                .on('mouseover', function() {
+                    d3.select(this).attr('stroke', '#4F46E5').attr('stroke-width', 3);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('stroke', '#999').attr('stroke-width', 2).attr('stroke-opacity', 0.6);
+                });
+        
+            // 合并更新
+            linkEnter.merge(linkUpdate);
+        
+            // // 更新关联标签（已注释掉）
+            // const linkLabelUpdate = linkLabelElements.selectAll('text')
+            //     .data(links, d => d.id);
+        
+            // linkLabelUpdate.exit().remove();
+        
+            // const linkLabelEnter = linkLabelUpdate.enter()
+            //     .append('text')
+            //     .attr('class', 'link-label')
+            //     .text(d => d.desc);
+        
+            // linkLabelEnter.merge(linkLabelUpdate);
+        
+            // 更新节点
+            const nodeUpdate = nodeElements.selectAll('circle')
+                .data(nodes, d => d.id);
+        
+            // 移除旧节点
+            nodeUpdate.exit().remove();
+        
+            // 添加新节点
+            const nodeEnter = nodeUpdate.enter()
+                .append('circle')
+                .attr('r', 20)
+                .attr('fill', d => d.color)
+                .attr('cursor', 'move')
+                .call(drag)
+                .on('mouseover', function() {
+                    d3.select(this).attr('stroke', '#333').attr('stroke-width', 2);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).attr('stroke', 'none');
+                })
+                // 单击节点：显示关联信息
+                .on('click', function(event, d) {
+                    event.stopPropagation(); // 阻止冒泡到SVG
+                    updateRelationPanel(d);
+                })
+                // // 双击节点：删除节点
+                // .on('dblclick', function(event, d) {
+                //     event.stopPropagation();
+                //     if (confirm(`确定删除节点：${d.name}？（关联也会被删除）`)) {
+                //         deleteNodeById(d.id);
+                //     }
+                // });
+        
+            // 合并更新
+            nodeEnter.merge(nodeUpdate);
+        
+            // 更新节点标签
+            const nodeLabelUpdate = nodeLabelElements.selectAll('text')
+                .data(nodes, d => d.id);
+        
+            nodeLabelUpdate.exit().remove();
+        
+            const nodeLabelEnter = nodeLabelUpdate.enter()
+                .append('text')
+                .attr('class', 'node-label')
+                .attr('text-anchor', 'middle')
+                .attr('dy', 5)
+                .text(d => d.name);
+        
+            nodeLabelEnter.merge(nodeLabelUpdate);
+        
+            // 更新力模拟数据并重启
+            simulation.nodes(nodes);
+            simulation.force('link').links(links);
+            simulation.alpha(1).restart();
+        }
+
+        // 删除关联关系（独立函数）
+        function deleteLinkById(linkId) {
+            // 过滤掉要删除的关联
+            links = links.filter(link => link.id !== linkId);
+            // 保存数据
+            saveDataToLocalStorage();
+            // 重新渲染
+            renderGraph();
+            // 更新当前面板（如果有选中节点）
+            const activeNodeName = relationContent.querySelector('.font-semibold span')?.textContent?.split(' 的关联关系')[0];
+            if (activeNodeName) {
+                const activeNode = nodes.find(n => n.name === activeNodeName);
+                if (activeNode) updateRelationPanel(activeNode);
+            }
+        }
+
+        // 删除节点（独立函数）
+        function deleteNodeById(nodeId) {
+            // 过滤掉要删除的节点
+            nodes = nodes.filter(node => node.id !== nodeId);
+            // 过滤掉相关联的关联
+            links = links.filter(link => {
+                const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+                const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+                return sourceId !== nodeId && targetId !== nodeId;
+            });
+            // 保存数据
+            saveDataToLocalStorage();
+            // 重新渲染
+            renderGraph();
+            updateNodeSelectors();
+            updateRelationPanel(null); // 清空面板
+        }
+
+        // ========== 模态框控制函数 ==========
+        function openModal(modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // 禁止背景滚动
+            // 打开节点模态框时初始化颜色选择器
+if (modal === nodeModal) {
+                initColorGrid();
+            }
+        }
+
+        function closeModal(modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = ''; // 恢复背景滚动
+            // 清空表单
+            if (modal === nodeModal) {
+                document.getElementById('nodeName').value = '';
+                selectedColor = PRESET_COLORS[0];
+                nodeColorInput.value = selectedColor;
+            } else if (modal === linkModal) {
+                document.getElementById('linkDesc').value = '';
+                document.getElementById('sourceNode').value = '';
+document.getElementById('targetNode').value = '';
+            } else if (modal === importModal) {
+                document.getElementById('configFileInput').value = '';
+}
+        }
+
+        // ========== 事件绑定 ==========
+        // 导航栏按钮事件 - 桌面端
+        document.getElementById('openNodeModalBtn').addEventListener('click', () => {
+            openModal(nodeModal);
+        });
+
+        document.getElementById('openLinkModalBtn').addEventListener('click', () => {
+            updateNodeSelectors(); // 打开前更新节点列表
+            openModal(linkModal);
+        });
+
+        // 导出数据按钮（替代原同步配置文件）
+        document.getElementById('exportConfigBtn').addEventListener('click', exportConfigFile);
+
+        document.getElementById('openImportModalBtn').addEventListener('click', () => {
+            openModal(importModal);
+        });
+
+        document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
+
+        // 导航栏按钮事件 - 移动端
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            mobileMenuPanel.classList.toggle('hidden');
+        });
+
+document.getElementById('mobileAddNodeBtn').addEventListener('click', () => {
+            mobileMenuPanel.classList.add('hidden');
+            openModal(nodeModal);
+        });
+
+        document.getElementById('mobileAddLinkBtn').addEventListener('click', () => {
+            mobileMenuPanel.classList.add('hidden');
+            updateNodeSelectors();
+            openModal(linkModal);
+        });
+
+        document.getElementById('mobileExportConfigBtn').addEventListener('click', () => {
+            mobileMenuPanel.classList.add('hidden');
+            exportConfigFile();
+        });
+
+        document.getElementById('mobileImportConfigBtn').addEventListener('click', () => {
+            mobileMenuPanel.classList.add('hidden');
+            openModal(importModal);
+        });
+
+        document.getElementById('mobileClearAllBtn').addEventListener('click', () => {
+            mobileMenuPanel.classList.add('hidden');
+            clearAllData();
+        });
+
+        // 模态框关闭按钮事件
+        document.getElementById('closeNodeModalBtn').addEventListener('click', () => {
+            closeModal(nodeModal);
+        });
+
+        document.getElementById('closeLinkModalBtn').addEventListener('click', () => {
+            closeModal(linkModal);
+        });
+
+        document.getElementById('closeImportModalBtn').addEventListener('click', () => {
+            closeModal(importModal);
+        });
+
+        // 点击模态框遮罩层关闭
+        nodeModal.querySelector('.modal-backdrop').addEventListener('click', () => {
+            closeModal(nodeModal);
+        });
+
+        linkModal.querySelector('.modal-backdrop').addEventListener('click', () => {
+            closeModal(linkModal);
+        });
+
+        importModal.querySelector('.modal-backdrop').addEventListener('click', () => {
+            closeModal(importModal);
+        });
+
+        // 添加节点提交事件
+        document.getElementById('submitNodeBtn').addEventListener('click', () => {
+            const nodeName = document.getElementById('nodeName').value.trim();
+
+            if (!nodeName) {
+                alert('请输入节点名称！');
+                return;
+            }
+
+            // 添加新节点
+            const newNode = {
+                id: nodeIdCounter++,
+                name: nodeName,
+                color: selectedColor
+            };
+            nodes.push(newNode);
+
+            // 添加后保存缓存
+            saveDataToLocalStorage();
+
+            // 更新UI
+            closeModal(nodeModal);
+            updateNodeSelectors();
+            renderGraph();
+        });
+
+        // 添加关联提交事件
+        document.getElementById('submitLinkBtn').addEventListener('click', () => {
+            const sourceId = parseInt(document.getElementById('sourceNode').value);
+            const targetId = parseInt(document.getElementById('targetNode').value);
+            const linkDesc = document.getElementById('linkDesc').value.trim();
+
+            if (!sourceId || !targetId) {
+                alert('请选择源节点和目标节点！');
+                return;
+            }
+
+            if (sourceId === targetId) {
+                alert('源节点和目标节点不能相同！');
+                return;
+            }
+
+            if (!linkDesc) {
+                alert('请输入关联描述！');
+                return;
+            }
+
+            // 检查是否已存在相同关联
+            const linkExists = links.some(link => {
+                const sId = typeof link.source === 'object' ? link.source.id : link.source;
+                const tId = typeof link.target === 'object' ? link.target.id : link.target;
+                return (sId === sourceId && tId === targetId) || (sId === targetId && tId === sourceId);
+            });
+
+            if (linkExists) {
+                alert('这两个节点之间已存在关联！');
+                return;
+            }
+
+            // 添加新关联
+            const newLink = {
+                id: linkIdCounter++,
+                source: sourceId,
+                target: targetId,
+                desc: linkDesc
+            };
+            links.push(newLink);
+
+            // 添加后保存缓存
+            saveDataToLocalStorage();
+
+            // 更新UI
+            closeModal(linkModal);
+            renderGraph();
+        });
+        // 导入数据文件（恢复备份）
+        function importConfigFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        // 验证数据格式
+                        if (!Array.isArray(importedData.nodes) || !Array.isArray(importedData.links)) {
+                            reject('数据文件格式错误，缺少nodes或links数组');
+                            return;
+                        }
+                        
+                        // 处理节点数据（确保id唯一且为数字）
+                        const processedNodes = importedData.nodes.map(node => ({
+                            id: parseInt(node.id),
+                            name: node.name,
+                            color: node.color,
+                            x: node.x,
+                            y: node.y,
+                            vx: node.vx,
+                            vy: node.vy,
+                            fx: node.fx,
+                            fy: node.fy
+                        }));
+                        
+                        // 处理关联数据（确保source/target为节点ID）
+                        const processedLinks = importedData.links.map(link => {
+                            // 提取source ID
+                            const sourceId = typeof link.source === 'object' ? parseInt(link.source.id) : parseInt(link.source);
+                            // 提取target ID
+                            const targetId = typeof link.target === 'object' ? parseInt(link.target.id) : parseInt(link.target);
+                            
+                            return {
+                                id: parseInt(link.id),
+                                source: sourceId,
+                                target: targetId,
+                                desc: link.desc,
+                                index: link.index
+                            };
+                        });
+                        
+                        // 验证关联的节点是否存在
+                        const nodeIds = new Set(processedNodes.map(n => n.id));
+                        const validLinks = processedLinks.filter(link => 
+                            nodeIds.has(link.source) && nodeIds.has(link.target)
+                        );
+                        
+                        if (validLinks.length !== processedLinks.length) {
+                            console.warn(`有${processedLinks.length - validLinks.length}个关联指向不存在的节点，已自动过滤`);
+                        }
+                        
+                        // 更新数据
+                        nodes = processedNodes;
+                        links = validLinks;
+                        // 更新计数器
+                        nodeIdCounter = nodes.length > 0 ? Math.max(...nodes.map(n => n.id)) + 1 : 1;
+                        linkIdCounter = links.length > 0 ? Math.max(...links.map(l => l.id)) + 1 : 1;
+                        // 保存到缓存并刷新视图
+                        saveDataToLocalStorage();
+                        initD3Graph(); // 重新初始化D3
+                        renderGraph();
+                        updateNodeSelectors();
+                        updateRelationPanel(null);
+                        resolve('数据导入成功！');
+                    } catch (e) {
+                        reject(`解析数据文件失败：${e.message}`);
+                    }
+                };
+                reader.onerror = function() {
+                    reject('读取文件失败');
+                };
+                reader.readAsText(file);
+            });
+        }
+        // 导入数据提交事件
+        document.getElementById('submitImportBtn').addEventListener('click', async () => {
+            const fileInput = document.getElementById('configFileInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('请选择要导入的JSON数据文件！');
+                return;
+            }
+
+            try {
+                const result = await importConfigFile(fileInput.files[0]);
+                alert(result);
+                closeModal(importModal);
+            } catch (error) {
+                alert(`❌ 导入失败：${error}`);
+            }
+        });
+
+        // 窗口大小调整时更新
+        window.addEventListener('resize', () => {
+            const newWidth = graphContainer.clientWidth;
+            const newHeight = graphContainer.clientHeight;
+            
+            if (svg) {
+                svg.attr('width', newWidth).attr('height', newHeight);
+                simulation.force('center', d3.forceCenter(newWidth / 2, newHeight / 2));
+                simulation.alpha(1).restart();
+            }
+        });
+
+        // 点击SVG空白处清空关联面板
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'svg' || e.target === graphContainer) {
+                updateRelationPanel(null);
+            }
+        });
+
+        // 点击页面空白处关闭移动端菜单
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#mobileMenuBtn') && !e.target.closest('#mobileMenuPanel')) {
+                mobileMenuPanel.classList.add('hidden');
+            }
+        });
+
+        // 关联/节点删除按钮事件（事件委托）
+        // 事件委托：处理关联面板中的按钮点击
+        relationContent.addEventListener('click', function(e) {
+            // 编辑关联
+            const editBtn = e.target.closest('.edit-link-btn');
+            if (editBtn) {
+                const linkId = parseInt(editBtn.dataset.linkId);
+                openEditLinkModal(linkId);
+                return;
+            }
+
+            // 删除关联（现有代码）
+            const deleteBtn = e.target.closest('.delete-link-btn');
+            if (deleteBtn) {
+                const linkId = parseInt(deleteBtn.dataset.linkId);
+                const link = links.find(l => l.id === linkId);
+                
+                if (link && confirm(`确定删除关联：${link.desc}？`)) {
+                    deleteLinkById(linkId);
+                }
+                return;
+            }
+
+            // 删除节点（现有代码）
+            const nodeBtn = e.target.closest('.delete-node-btn');
+            if (nodeBtn) {
+                const nodeId = parseInt(nodeBtn.dataset.nodeId);
+                const node = nodes.find(n => n.id === nodeId);
+                
+                if (node && confirm(`确定删除节点：${node.name}？（关联也会被删除）`)) {
+                    deleteNodeById(nodeId);
+                }
+                return;
+            }
+        });
+
+        // 打开编辑关联模态框
+        function openEditLinkModal(linkId) {
+            currentEditingLinkId = linkId;
+            const link = links.find(l => l.id === linkId);
+            if (link) {
+                editLinkDesc.value = link.desc;
+                editLinkModal.classList.remove('hidden');
+                editLinkDesc.focus();
+            }
+        }
+
+        // 关闭编辑关联模态框
+        function closeEditLinkModal() {
+            currentEditingLinkId = null;
+            editLinkDesc.value = '';
+            editLinkModal.classList.add('hidden');
+        }
+
+        // 保存编辑的关联
+        function submitEditLink() {
+            if (currentEditingLinkId === null) return;
+            
+            const link = links.find(l => l.id === currentEditingLinkId);
+            if (!link) return;
+            
+            const newDesc = editLinkDesc.value.trim();
+            if (!newDesc) {
+                alert('请输入关联描述！');
+                return;
+            }
+            
+            // 更新关联描述
+            link.desc = newDesc;
+            
+            // 保存到本地存储
+            saveDataToLocalStorage();
+            
+            // 更新UI
+            closeEditLinkModal();
+            renderGraph();
+            updateRelationPanel(currentSelectedNode); // 如果有选中节点，更新其关联信息
+        }
+
+        // 编辑关联模态框事件监听
+        closeEditLinkModalBtn.addEventListener('click', closeEditLinkModal);
+        submitEditLinkBtn.addEventListener('click', submitEditLink);
+
+        // ========== 初始化 ==========
+        // 页面加载时优先从localStorage加载数据（GitHub Pages核心方案）
+        loadDataFromLocalStorage();
+        // 初始化D3图表
+        initD3Graph();
+        // 初始化渲染
+        renderGraph();
+        // 初始化节点选择器
+        updateNodeSelectors();
+    </script>
+</body>
+</html>
