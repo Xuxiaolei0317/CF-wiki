@@ -19,6 +19,9 @@
             .current-info {
                 @apply bg-gray-50 rounded-lg p-4 mb-6;
             }
+            .section-divider {
+                @apply border-t border-gray-200 my-8;
+            }
         }
     </style>
 </head>
@@ -109,6 +112,44 @@
                 </div>
             </div>
         </div>
+
+        <!-- 分隔线 -->
+        <div class="section-divider"></div>
+
+        <!-- 时间转时间戳功能 -->
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                <i class="fa-solid fa-clock-rotate-left text-blue-500 mr-2"></i>时间转时间戳
+            </h2>
+            <div class="flex flex-col md:flex-row gap-3 mb-4">
+                <input 
+                    type="datetime-local" 
+                    id="dateTimeInput" 
+                    class="input-box flex-1"
+                >
+            </div>
+            <button id="convertBtn" class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition font-medium">
+                <i class="fa-solid fa-exchange-alt mr-2"></i>转换为时间戳
+            </button>
+        </div>
+
+        <!-- 时间转时间戳结果 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="result-card">
+                <p class="text-gray-600 text-sm mb-1">秒级时间戳</p>
+                <p class="text-lg font-semibold mb-2" id="convertedTimestamp">-</p>
+                <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('convertedTimestamp')">
+                    <i class="fa-solid fa-copy mr-1"></i>复制秒级时间戳
+                </button>
+            </div>
+            <div class="result-card">
+                <p class="text-gray-600 text-sm mb-1">毫秒级时间戳</p>
+                <p class="text-lg font-semibold mb-2" id="convertedTimestampMs">-</p>
+                <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('convertedTimestampMs')">
+                    <i class="fa-solid fa-copy mr-1"></i>复制毫秒级时间戳
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -125,12 +166,18 @@
         const afterTimestampEl = document.getElementById('afterTimestamp');
         const afterTimestampMsEl = document.getElementById('afterTimestampMs');
         const afterTimeEl = document.getElementById('afterTime');
+        
+        // 时间转时间戳相关变量
+        const dateTimeInput = document.getElementById('dateTimeInput');
+        const convertBtn = document.getElementById('convertBtn');
+        const convertedTimestamp = document.getElementById('convertedTimestamp');
+        const convertedTimestampMs = document.getElementById('convertedTimestampMs');
 
         // 1. 实时更新当前时间和时间戳（每秒更新）
         function updateCurrentInfo() {
             const now = new Date();
-            // 格式化当前时间：YYYY/MM/DD HH:mm:ss
-            const formattedTime = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            // 格式化当前时间：YYYY-MM-DD HH:mm:ss
+            const formattedTime = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
             // 当前时间戳（秒，取整）
             const timestamp = Math.floor(now.getTime() / 1000);
             // 当前时间戳（毫秒）
@@ -152,10 +199,10 @@
             }
         }
 
-        // 3. 时间戳转可读时间（YYYY/MM/DD HH:mm:ss）
+        // 3. 时间戳转可读时间（YYYY-MM-DD HH:mm:ss）
         function timestampToTime(timestamp) {
             const date = new Date(timestamp * 1000);
-            return `${date.getFullYear()}/${(date.getMonth()+1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+            return `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
         }
 
         // 4. 计算逻辑 - 使用querySelectorAll批量更新
@@ -203,6 +250,24 @@
             afterTimeEl.textContent = `对应时间：${timestampToTime(afterTimestamp)}`;
         }
         
+        // 5. 时间转时间戳逻辑
+        function convertTimeToTimestamp() {
+            const dateTimeValue = dateTimeInput.value;
+            
+            if (!dateTimeValue) {
+                alert('请选择一个时间！');
+                dateTimeInput.focus();
+                return;
+            }
+            
+            const selectedDate = new Date(dateTimeValue);
+            const timestamp = Math.floor(selectedDate.getTime() / 1000);
+            const timestampMs = selectedDate.getTime();
+            
+            convertedTimestamp.textContent = timestamp;
+            convertedTimestampMs.textContent = timestampMs;
+        }
+        
         // 辅助函数：获取单位中文名称
         function getUnitName(unit) {
             switch(unit) {
@@ -214,7 +279,7 @@
             }
         }
 
-        // 5. 复制到剪贴板
+        // 6. 复制到剪贴板
         function copyToClipboard(elementId) {
             const text = document.getElementById(elementId).textContent;
             navigator.clipboard.writeText(text).then(() => {
@@ -227,10 +292,19 @@
         // 初始化
         updateCurrentInfo();
         setInterval(updateCurrentInfo, 1000); // 每秒更新当前时间
+        
+        // 事件监听
         calcBtn.addEventListener('click', calculateTimestamp);
         // 回车触发计算
         timeValueEl.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') calculateTimestamp();
+        });
+        
+        // 时间转时间戳事件监听
+        convertBtn.addEventListener('click', convertTimeToTimestamp);
+        // 回车触发转换
+        dateTimeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') convertTimeToTimestamp();
         });
     </script>
 </body>
