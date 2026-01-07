@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间戳计算工具</title>
+    <!-- 引入Tailwind CSS简化样式 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .input-box {
+                @apply rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition;
+            }
+            .result-card {
+                @apply bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500;
+            }
+            .current-info {
+                @apply bg-gray-50 rounded-lg p-4 mb-6;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">
+            <i class="fa-solid fa-clock text-blue-500 mr-2"></i>时间戳计算工具
+        </h1>
+
+        <!-- 当前时间/时间戳展示区 -->
+        <div class="current-info">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <p class="text-gray-600 text-sm">当前时间</p>
+                    <p class="text-xl font-semibold text-gray-800" id="currentTime">2026/1/7 15:20:50</p>
+                </div>
+                <div class="h-6 w-px bg-gray-300 hidden md:block"></div>
+                <div>
+                    <p class="text-gray-600 text-sm">当前时间戳（秒）</p>
+                    <p class="text-xl font-semibold text-gray-800" id="currentTimestamp">1767770450</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 输入计算区 -->
+        <div class="mb-6">
+            <div class="flex flex-col md:flex-row gap-3 mb-4">
+                <input 
+                    type="number" 
+                    id="timeValue" 
+                    placeholder="请输入数值（如：10）" 
+                    class="input-box flex-1"
+                    min="0"
+                    step="1"
+                >
+                <select id="timeUnit" class="input-box w-full md:w-40">
+                    <option value="second">秒</option>
+                    <option value="minute">分钟</option>
+                    <option value="hour">小时</option>
+                    <option value="day">天</option>
+                </select>
+            </div>
+            <button id="calcBtn" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition font-medium">
+                <i class="fa-solid fa-calculator mr-2"></i>计算时间戳
+            </button>
+        </div>
+
+        <!-- 结果展示区 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 单位之前的时间戳 -->
+            <div class="result-card">
+                <p class="text-gray-600 text-sm mb-1">「输入值」之前的时间戳</p>
+                <p class="text-lg font-semibold mb-2" id="beforeTimestamp">-</p>
+                <p class="text-gray-500 text-sm" id="beforeTime">-</p>
+                <button class="mt-2 text-blue-500 text-sm hover:underline" onclick="copyToClipboard('beforeTimestamp')">
+                    <i class="fa-solid fa-copy mr-1"></i>复制时间戳
+                </button>
+            </div>
+
+            <!-- 单位之后的时间戳 -->
+            <div class="result-card">
+                <p class="text-gray-600 text-sm mb-1">「输入值」之后的时间戳</p>
+                <p class="text-lg font-semibold mb-2" id="afterTimestamp">-</p>
+                <p class="text-gray-500 text-sm" id="afterTime">-</p>
+                <button class="mt-2 text-blue-500 text-sm hover:underline" onclick="copyToClipboard('afterTimestamp')">
+                    <i class="fa-solid fa-copy mr-1"></i>复制时间戳
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 核心变量
+        const currentTimeEl = document.getElementById('currentTime');
+        const currentTimestampEl = document.getElementById('currentTimestamp');
+        const timeValueEl = document.getElementById('timeValue');
+        const timeUnitEl = document.getElementById('timeUnit');
+        const calcBtn = document.getElementById('calcBtn');
+        const beforeTimestampEl = document.getElementById('beforeTimestamp');
+        const beforeTimeEl = document.getElementById('beforeTime');
+        const afterTimestampEl = document.getElementById('afterTimestamp');
+        const afterTimeEl = document.getElementById('afterTime');
+
+        // 1. 实时更新当前时间和时间戳（每秒更新）
+        function updateCurrentInfo() {
+            const now = new Date();
+            // 格式化当前时间：YYYY/MM/DD HH:mm:ss
+            const formattedTime = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            // 当前时间戳（秒，取整）
+            const timestamp = Math.floor(now.getTime() / 1000);
+            
+            currentTimeEl.textContent = formattedTime;
+            currentTimestampEl.textContent = timestamp;
+        }
+
+        // 2. 单位换算：转换为秒
+        function convertToSeconds(value, unit) {
+            switch(unit) {
+                case 'second': return value * 1;
+                case 'minute': return value * 60;
+                case 'hour': return value * 3600;
+                case 'day': return value * 86400;
+                default: return value * 1;
+            }
+        }
+
+        // 3. 时间戳转可读时间（YYYY/MM/DD HH:mm:ss）
+        function timestampToTime(timestamp) {
+            const date = new Date(timestamp * 1000);
+            return `${date.getFullYear()}/${(date.getMonth()+1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+        }
+
+        // 4. 计算逻辑
+        function calculateTimestamp() {
+            const value = Number(timeValueEl.value.trim());
+            const unit = timeUnitEl.value;
+
+            // 校验输入
+            if (isNaN(value) || value < 0) {
+                alert('请输入有效的非负数值！');
+                timeValueEl.focus();
+                return;
+            }
+
+            // 当前时间戳（秒）
+            const currentTimestamp = Number(currentTimestampEl.textContent);
+            // 转换输入值为秒
+            const valueInSeconds = convertToSeconds(value, unit);
+            
+            // 计算前后时间戳
+            const beforeTimestamp = currentTimestamp - valueInSeconds;
+            const afterTimestamp = currentTimestamp + valueInSeconds;
+            
+            // 更新结果展示
+            beforeTimestampEl.textContent = beforeTimestamp;
+            beforeTimeEl.textContent = `对应时间：${timestampToTime(beforeTimestamp)}`;
+            afterTimestampEl.textContent = afterTimestamp;
+            afterTimeEl.textContent = `对应时间：${timestampToTime(afterTimestamp)}`;
+        }
+
+        // 5. 复制到剪贴板
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('时间戳已复制到剪贴板！');
+            }).catch(() => {
+                alert('复制失败，请手动复制！');
+            });
+        }
+
+        // 初始化
+        updateCurrentInfo();
+        setInterval(updateCurrentInfo, 1000); // 每秒更新当前时间
+        calcBtn.addEventListener('click', calculateTimestamp);
+        // 回车触发计算
+        timeValueEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') calculateTimestamp();
+        });
+    </script>
+</body>
+</html>
