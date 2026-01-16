@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>模块解锁状态转换工具</title>
     <style>
+        /* 保持原有样式不变 */
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
@@ -21,6 +22,9 @@
         h1 {
             text-align: center;
             color: #333;
+        }
+        h2, h3 {
+            color: #555;
         }
         .input-group {
             margin-bottom: 15px;
@@ -51,37 +55,54 @@
         button:hover {
             background-color: #45a049;
         }
-        .modules {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 15px 0;
+        button.secondary {
+            background-color: #f44336;
         }
-        .module {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
+        button.secondary:hover {
+            background-color: #d32f2f;
         }
-        .module.locked {
-            background-color: #ffcccc;
+        button.reset {
+            background-color: #2196F3;
         }
-        .module.unlocked {
-            background-color: #ccffcc;
+        button.reset:hover {
+            background-color: #1976D2;
         }
-        .result {
-            margin-top: 20px;
+        .status-section {
+            margin: 20px 0;
             padding: 15px;
             background-color: #f0f0f0;
             border-radius: 4px;
-            font-family: monospace;
-            white-space: pre-wrap;
         }
-        .error {
-            color: red;
-            margin-top: 10px;
+        .status-box {
+            margin: 5px 0;
+        }
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .module-card {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .module-card.unlocked {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .module-card.locked {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .module-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .module-status {
+            font-style: italic;
         }
     </style>
 </head>
@@ -89,70 +110,46 @@
     <div class="container">
         <h1>模块解锁状态转换工具</h1>
         
+        <h2>初始设置:</h2>
         <div class="input-group">
-            <label for="byteInput">初始字节序列:</label>
-            <input type="text" id="byteInput" placeholder="如: \xff\x01\x00" value="\x00\x00\x00">
+            <label for="initialState">输入当前字节序列，去GM搜索：解锁标记（如:\xff\x01\x00 ）:</label>
+            <input type="text" id="initialState" placeholder="输入字节序列，如: \x00\x00\x00" value="\x00\x00\x00">
         </div>
         
+        <h2>操作:</h2>
         <div class="input-group">
-            <label for="moduleIndex">模块索引 (0-8):</label>
-            <input type="number" id="moduleIndex" min="0" max="8" value="0">
+            <label for="moduleIndex">模块索引:</label>
+            <input type="number" id="moduleIndex" min="0" max="9" value="0">
         </div>
-        
         <div class="input-group">
             <button id="unlockBtn">解锁模块</button>
             <button id="lockBtn">锁定模块</button>
             <button id="resetBtn">重置</button>
         </div>
         
-        <div class="modules">
-            <div class="module locked" data-index="0">日常任务</div>
-            <div class="module locked" data-index="1">Quest</div>
-            <div class="module locked" data-index="2">mission_pass</div>
-            <div class="module locked" data-index="3">邮票</div>
-            <div class="module locked" data-index="4">login_bonus</div>
-            <div class="module locked" data-index="5">好友系统</div>
-            <div class="module locked" data-index="6">C活动</div>
-            <div class="module locked" data-index="7">OOS 促销</div>
-            <div class="module locked" data-index="8">推送开关奖励</div>
+        <h2>当前状态:</h2>
+        <div class="status-section">
+            <div class="status-box">
+                <strong style="color: #ef4f05;">字节序列: { </strong> <span id="bytesStatus">\xa9\x01\x00</span><strong style="color: #ef4f05;"> }复制过去</strong>
+            </div>
+            <div class="status-box">
+                <strong>十六进制表示:</strong> <span id="hexStatus">0xa90200</span>
+            </div>
+            <div class="status-box">
+                <strong>二进制表示:</strong> <span id="binaryStatus">10101001 00000010 00000000</span>
+            </div>
         </div>
         
-        <div class="result">
-            <strong>结果:</strong>
-            <div id="resultText"></div>
+        <h3>模块状态:</h3>
+        <div class="modules-grid" id="modulesGrid">
+            <!-- 模块状态将通过JavaScript动态生成 -->
         </div>
-        
-        <div class="error" id="errorMsg"></div>
     </div>
-
+    
     <script>
-        // 模块名称映射
-        const MODULE_UNLOCK_FLAG_INDEX = { 
-            'mission_infinite': 0, 
-            'quest_slots': 1, 
-            'mission_pass': 2, 
-            'stamp_career': 3, 
-            'login_bonus': 4, 
-            'friends_infomanager': 5, 
-            'c_processor': 6, 
-            'oos_promotion': 7, 
-            'broadcast_reward': 8 
-        };
-        
-        // 模块索引到中文名称的映射
-        const MODULE_INDEX_TO_NAME = {
-            0: '日常任务',
-            1: 'Quest',
-            2: 'MP',
-            3: '邮票',
-            4: 'login bonus',
-            5: '好友系统',
-            6: 'C 活动',
-            7: 'OOS 促销',
-            8: '推送奖励'
-        };
-
+        // ModuleUnlockManager类的JavaScript实现
         class ModuleUnlockManager {
+            // 保持原有实现不变
             constructor(initialState) {
                 this._state = initialState;
                 this.num_modules = 8 * this._state.length;
@@ -196,119 +193,171 @@
                 this._state = state_array;
             }
             
-            state() {
-                return Array.from(this._state).map(b => b.toString(16).padStart(2, '0')).join('');
+            getHexString() {
+                return '0x' + Array.from(this._state).map(b => b.toString(16).padStart(2, '0')).join('');
             }
             
-            to_hex_string() {
-                return "b'" + Array.from(this._state).map(b => `\\x${b.toString(16).padStart(2, '0')}`).join('') + "'";
+            getBinaryString() {
+                return Array.from(this._state)
+                    .map(byte => byte.toString(2).padStart(8, '0'))
+                    .join(' ');
             }
             
-            to_simple_hex_string() {
-                return Array.from(this._state).map(b => `\\x${b.toString(16).padStart(2, '0')}`).join('');
+            getBytesString() {
+                // 返回不带b''的字节序列
+                return Array.from(this._state)
+                    .map(byte => '\\x' + byte.toString(16).padStart(2, '0'))
+                    .join('');
             }
         }
         
-        // 辅助函数：将字符串转换为字节数组
-        function parse_byte_string(str) {
-            // 移除可能存在的b'和'
-            const cleanStr = str.replace(/^b'|'$/g, '');
+        // 页面相关的JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const initialStateInput = document.getElementById('initialState');
+            const moduleIndexInput = document.getElementById('moduleIndex');
+            const unlockBtn = document.getElementById('unlockBtn');
+            const lockBtn = document.getElementById('lockBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const hexStatus = document.getElementById('hexStatus');
+            const binaryStatus = document.getElementById('binaryStatus');
+            const bytesStatus = document.getElementById('bytesStatus');
+            const modulesGrid = document.getElementById('modulesGrid');
             
-            // 匹配所有\xXX格式的十六进制数
-            const matches = cleanStr.match(/\\x[0-9a-fA-F]{2}/g);
+            // 模块名称映射
+            const MODULE_NAMES = {
+                0: '0-日常任务',
+                1: '1-Quest',
+                2: '2-mission pass',
+                3: '3-邮票生涯',
+                4: '4-login bonus',
+                5: '5-好友系统',
+                6: '6-C 活动',
+                7: '7-OOS 促销',
+                8: '8-推送开关', 
+                9: '9-个人名称',
+                10: '10-补位'
+            };
             
-            if (!matches) {
-                throw new Error('无效的字节序列格式');
+            // 获取最大模块索引
+            const maxModuleIndex = Math.max(...Object.keys(MODULE_NAMES).map(Number));
+            
+            // 更新输入框的max属性和标签文本
+            moduleIndexInput.max = maxModuleIndex;
+            const moduleIndexLabel = moduleIndexInput.previousElementSibling;
+            if (moduleIndexLabel && moduleIndexLabel.tagName === 'LABEL') {
+                moduleIndexLabel.textContent = `模块索引 (0 - ${maxModuleIndex}):`;
             }
             
-            // 转换为Uint8Array
-            const bytes = new Uint8Array(matches.map(match => parseInt(match.slice(2), 16)));
-            return bytes;
-        }
-        
-        // 页面元素
-        const byteInput = document.getElementById('byteInput');
-        const moduleIndex = document.getElementById('moduleIndex');
-        const unlockBtn = document.getElementById('unlockBtn');
-        const lockBtn = document.getElementById('lockBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const resultText = document.getElementById('resultText');
-        const errorMsg = document.getElementById('errorMsg');
-        const moduleElements = document.querySelectorAll('.module');
-        
-        let manager = null;
-        
-        // 初始化
-        function init() {
-            try {
-                const initialBytes = parse_byte_string(byteInput.value);
-                manager = new ModuleUnlockManager(initialBytes);
+            let manager = null;
+            
+            // 初始化管理器
+            function initManager() {
+                // 保持原有实现不变
+                try {
+                    // 解析初始状态
+                    let initialValue = initialStateInput.value.trim();
+                    let bytes;
+                    
+                    // 检查是否是字节序列格式 (\xXX\xYY\xZZ)
+                    if (initialValue.includes('\\x')) {
+                        // 移除可能的b''前缀和后缀
+                        initialValue = initialValue.replace(/^b'|'$/g, '');
+                        // 匹配所有\xXX格式的十六进制数
+                        const matches = initialValue.match(/\\x([0-9a-fA-F]{2})/g);
+                        if (!matches) {
+                            throw new Error('无效的字节序列格式');
+                        }
+                        // 转换为字节数组
+                        bytes = new Uint8Array(matches.map(match => parseInt(match.slice(2), 16)));
+                    } else {
+                        // 保持原有十六进制解析逻辑
+                        let initialHex = initialValue;
+                        // 移除可能的0x前缀
+                        if (initialHex.startsWith('0x')) {
+                            initialHex = initialHex.slice(2);
+                        }
+                        // 确保长度为偶数
+                        if (initialHex.length % 2 !== 0) {
+                            initialHex = '0' + initialHex;
+                        }
+                        // 转换为字节数组
+                        bytes = new Uint8Array(initialHex.length / 2);
+                        for (let i = 0; i < initialHex.length; i += 2) {
+                            bytes[i / 2] = parseInt(initialHex.substr(i, 2), 16);
+                        }
+                    }
+                    
+                    manager = new ModuleUnlockManager(bytes);
+                    updateDisplay();
+                } catch (error) {
+                    alert('初始化失败: ' + error.message);
+                }
+            }
+            
+            // 更新显示
+            function updateDisplay() {
+                // 保持原有实现不变
+                hexStatus.textContent = manager.getHexString();
+                binaryStatus.textContent = manager.getBinaryString();
+                bytesStatus.textContent = manager.getBytesString();
                 
-                // 更新模块显示
-                update_module_display();
-                
-                // 显示初始状态
-                resultText.textContent = `初始状态: ${manager.to_simple_hex_string()}`;
-                errorMsg.textContent = '';
-            } catch (error) {
-                errorMsg.textContent = '错误: ' + error.message;
+                // 更新模块状态
+                updateModulesGrid();
             }
-        }
-        
-        // 更新模块显示
-        function update_module_display() {
-            moduleElements.forEach((element, index) => {
-                const moduleIndex = index; // JavaScript索引从0开始
-                if (manager.is_unlocked(moduleIndex)) {
-                    element.classList.remove('locked');
-                    element.classList.add('unlocked');
-                    element.textContent = `${MODULE_INDEX_TO_NAME[moduleIndex]} (已解锁)`;
-                } else {
-                    element.classList.remove('unlocked');
-                    element.classList.add('locked');
-                    element.textContent = `${MODULE_INDEX_TO_NAME[moduleIndex]} (已锁定)`;
+            
+            // 更新模块网格
+            function updateModulesGrid() {
+                // 清空现有模块
+                modulesGrid.innerHTML = '';
+                
+                // 生成每个模块的状态
+                for (let i = 0; i <= maxModuleIndex; i++) {
+                    const moduleCard = document.createElement('div');
+                    moduleCard.className = `module-card ${manager.is_unlocked(i) ? 'unlocked' : 'locked'}`;
+                    
+                    const moduleName = document.createElement('div');
+                    moduleName.className = 'module-name';
+                    moduleName.textContent = MODULE_NAMES[i] || `模块 ${i}`;
+                    
+                    const moduleStatus = document.createElement('div');
+                    moduleStatus.className = 'module-status';
+                    moduleStatus.textContent = manager.is_unlocked(i) ? '已解锁' : '已锁定';
+                    
+                    moduleCard.appendChild(moduleName);
+                    moduleCard.appendChild(moduleStatus);
+                    modulesGrid.appendChild(moduleCard);
+                }
+            }
+            
+            // 事件监听
+            unlockBtn.addEventListener('click', function() {
+                // 保持原有实现不变
+                try {
+                    const moduleIndex = parseInt(moduleIndexInput.value);
+                    manager.unlock(moduleIndex);
+                    updateDisplay();
+                } catch (error) {
+                    alert('解锁失败: ' + error.message);
                 }
             });
-        }
-        
-        // 解锁按钮点击事件
-        unlockBtn.addEventListener('click', () => {
-            try {
-                const index = parseInt(moduleIndex.value) - 1; // 转换为0-based索引
-                manager.unlock(index);
-                update_module_display();
-                resultText.textContent = `解锁模块 ${index + 1} (${MODULE_INDEX_TO_NAME[index]}) 后: ${manager.to_simple_hex_string()}`;
-                errorMsg.textContent = '';
-            } catch (error) {
-                errorMsg.textContent = '错误: ' + error.message;
-            }
-        });
-        
-        // 锁定按钮点击事件
-        lockBtn.addEventListener('click', () => {
-            try {
-                const index = parseInt(moduleIndex.value) - 1; // 转换为0-based索引
-                manager.lock(index);
-                update_module_display();
-                resultText.textContent = `锁定模块 ${index + 1} (${MODULE_INDEX_TO_NAME[index]}) 后: ${manager.to_simple_hex_string()}`;
-                errorMsg.textContent = '';
-            } catch (error) {
-                errorMsg.textContent = '错误: ' + error.message;
-            }
-        });
-        
-        // 重置按钮点击事件
-        resetBtn.addEventListener('click', init);
-        
-        // 模块点击事件
-        moduleElements.forEach((element, index) => {
-            element.addEventListener('click', () => {
-                moduleIndex.value = index + 1;
+            
+            lockBtn.addEventListener('click', function() {
+                // 保持原有实现不变
+                try {
+                    const moduleIndex = parseInt(moduleIndexInput.value);
+                    manager.lock(moduleIndex);
+                    updateDisplay();
+                } catch (error) {
+                    alert('锁定失败: ' + error.message);
+                }
             });
+            
+            resetBtn.addEventListener('click', initManager);
+            
+            // 初始加载
+            initManager();
         });
-        
-        // 初始加载
-        init();
     </script>
 </body>
 </html>
