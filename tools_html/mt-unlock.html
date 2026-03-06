@@ -130,7 +130,8 @@
         <h2>当前状态:</h2>
         <div class="status-section">
             <div class="status-box">
-                <strong style="color: #ef4f05;">字节序列: { </strong> <span id="bytesStatus">\xa9\x01\x00</span><strong style="color: #ef4f05;"> }复制过去</strong>
+                <strong style="color: #ef4f05;">字节序列: { </strong> <span id="bytesStatus">\xa9\x01\x00</span><strong style="color: #ef4f05;"> }</strong>
+                <button id="copyBytesBtn" style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">复制</button>
             </div>
             <div class="status-box">
                 <strong>十六进制表示:</strong> <span id="hexStatus">0xa90200</span>
@@ -223,6 +224,7 @@
             const binaryStatus = document.getElementById('binaryStatus');
             const bytesStatus = document.getElementById('bytesStatus');
             const modulesGrid = document.getElementById('modulesGrid');
+            const copyBytesBtn = document.getElementById('copyBytesBtn');
             
             // 模块名称映射
             const MODULE_NAMES = {
@@ -359,6 +361,28 @@
             });
             
             resetBtn.addEventListener('click', initManager);
+            
+            // 复制字节序列按钮事件
+            copyBytesBtn.addEventListener('click', function() {
+                try {
+                    const bytesToCopy = bytesStatus.textContent;
+                    navigator.clipboard.writeText(bytesToCopy).then(function() {
+                        // 显示复制成功提示
+                        const originalText = copyBytesBtn.textContent;
+                        copyBytesBtn.textContent = '已复制!';
+                        copyBytesBtn.style.backgroundColor = '#4CAF50';
+                        setTimeout(function() {
+                            copyBytesBtn.textContent = originalText;
+                            copyBytesBtn.style.backgroundColor = '';
+                        }, 2000);
+                    }).catch(function(err) {
+                        console.error('复制失败:', err);
+                        alert('复制失败，请手动复制');
+                    });
+                } catch (error) {
+                    alert('复制失败: ' + error.message);
+                }
+            });
             
             // 初始加载
             initManager();

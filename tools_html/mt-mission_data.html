@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON数据处理工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Consolas, monospace;
+        }
+        body {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            background-color: #f5f7fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 22px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .label-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+            font-size: 16px;
+        }
+        .copy-btn {
+            padding: 6px 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .copy-btn:hover {
+            background-color: #218838;
+        }
+        .copy-btn.copied {
+            background-color: #17a2b8;
+        }
+        textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            background-color: #f9f9f9;
+            font-family: Consolas, monospace;
+            white-space: pre;
+            overflow-x: auto;
+            tab-size: 4; /* 保证tab缩进为4个空格，和示例一致 */
+        }
+        .btn-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .process-btn {
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+        .process-btn:hover {
+            background-color: #0056b3;
+        }
+        #resultArea {
+            background-color: #f0f8ff;
+        }
+        .error {
+            color: #dc3545;
+            text-align: center;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .tip {
+            color: #6c757d;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JSON数据处理 - mission_ls字段修改</h1>
+        
+        <!-- 原始数据输入区 -->
+        <div class="section">
+            <div class="label-container">
+                <label>📥 原始JSON数据</label>
+            </div>
+            <textarea id="originalData" placeholder="请粘贴需要处理的JSON数据...">{"mission_fresh_ts":-1,"target_reward":{"reward_list":[["RID3",20],["RID1",40000]]},"mission_ls":[{"mission_type_id":2,"current":0,"target":5,"collect":0,"skip_prop_need":0,"reward_config":{"reward_list":[["RID1",1000]]}},{"mission_type_id":7,"current":0,"target":1,"collect":0,"skip_prop_need":0,"reward_config":{"reward_list":[["RID1",5000]]}},{"mission_type_id":2,"current":0,"target":10,"collect":0,"skip_prop_need":0,"reward_config":{"reward_list":[["RID1",1000]]}},{"mission_type_id":2,"current":0,"target":15,"collect":0,"skip_prop_need":0,"reward_config":{"reward_list":[["RID1",1000]]}},{"mission_type_id":2,"current":0,"target":20,"collect":0,"skip_prop_need":0,"reward_config":{"reward_list":[["RID1",1000]]}},{"mission_type_id":5,"current":0,"target":1,"collect":0,"skip_prop_need":0,"reward_config":{"reward_list":[["RID1",20000]]}},{"mission_type_id":2,"current":0,"target":35,"collect":0,"skip_prop_need":0,"reward_config":{"reward_list":[["RID1",1000]]}},{"mission_type_id":9,"current":0,"target":60,"collect":0,"skip_prop_need":0,"reward_config":{"reward_list":[["RID1",1000]]}}],"target":15,"progress":0}</textarea>
+        </div>
+        
+        <!-- 处理按钮 -->
+        <div class="btn-container">
+            <button class="process-btn" onclick="processData()">🔧 处理数据（current设为target值）</button>
+        </div>
+        
+        <!-- 结果展示区 -->
+        <div class="section">
+            <div class="label-container">
+                <label>📤 处理后的JSON结果</label>
+                <button id="copyBtn" class="copy-btn" onclick="copyResult()">📋 复制结果</button>
+            </div>
+            <textarea id="resultArea" readonly placeholder="处理后的结果将显示在这里..."></textarea>
+            <div id="copyTip" class="tip"></div>
+        </div>
+        
+        <!-- 错误提示区 -->
+        <div id="errorTip" class="error"></div>
+    </div>
+
+    <script>
+        // 核心处理函数
+        function processData() {
+            document.getElementById('errorTip').textContent = '';
+            document.getElementById('copyTip').textContent = '';
+            
+            const originalText = document.getElementById('originalData').value.trim();
+            if (!originalText) {
+                document.getElementById('errorTip').textContent = '错误：请输入需要处理的JSON数据！';
+                return;
+            }
+
+            try {
+                let data = JSON.parse(originalText);
+                
+                if (!data.mission_ls || !Array.isArray(data.mission_ls)) {
+                    document.getElementById('errorTip').textContent = '错误：数据中未找到有效的mission_ls数组！';
+                    return;
+                }
+
+                // 核心逻辑：current设为target，collect保持原有逻辑（可根据需求调整）
+                data.mission_ls.forEach(mission => {
+                    if (mission.hasOwnProperty('target')) {
+                        mission.current = mission.target;
+                    }
+                    // 如果你需要自定义collect的值，可在这里修改，示例中collect有1/0两种值
+                    // mission.collect = 0; // 如需强制设为0，取消注释；如需保留原逻辑则删除这行
+                });
+
+                // 关键：JSON.stringify使用4空格缩进，保证和示例格式完全一致
+                const formattedResult = JSON.stringify(data, null, 4);
+                document.getElementById('resultArea').value = formattedResult;
+
+            } catch (e) {
+                document.getElementById('errorTip').textContent = `错误：JSON格式解析失败 - ${e.message}`;
+            }
+        }
+
+        // 复制功能
+        function copyResult() {
+            const resultArea = document.getElementById('resultArea');
+            const copyBtn = document.getElementById('copyBtn');
+            const copyTip = document.getElementById('copyTip');
+            
+            if (!resultArea.value.trim()) {
+                copyTip.textContent = '⚠️ 暂无可复制的内容！';
+                copyTip.style.color = '#ffc107';
+                return;
+            }
+
+            resultArea.select();
+            document.execCommand('copy');
+            
+            copyBtn.textContent = '✅ 已复制';
+            copyBtn.classList.add('copied');
+            copyTip.textContent = '✔️ 复制成功！结果已复制到剪贴板';
+            copyTip.style.color = '#28a745';
+            
+            setTimeout(() => {
+                copyBtn.textContent = '📋 复制结果';
+                copyBtn.classList.remove('copied');
+                copyTip.textContent = '';
+            }, 2000);
+        }
+
+        // 页面加载后自动处理
+        window.onload = function() {
+            processData();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>性别命名文件检索工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+        }
+        body {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 0 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 40px;
+            font-size: 24px;
+        }
+        .upload-section, .search-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .file-item {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 15px;
+        }
+        .file-input {
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            width: 100%;
+            background-color: #f9fafb;
+            cursor: pointer;
+        }
+        .name-input {
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            width: 75%;
+            margin-right: 10px;
+            font-size: 15px;
+        }
+        .search-btn {
+            padding: 12px 25px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.2s;
+        }
+        .search-btn:hover {
+            background-color: #1d4ed8;
+        }
+        .result-section {
+            padding: 20px;
+            border-radius: 6px;
+            background-color: #f9fafb;
+            min-height: 120px;
+        }
+        .result-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .success {
+            color: #059669;
+        }
+        .error {
+            color: #dc2626;
+        }
+        .file-result {
+            margin: 8px 0;
+            padding-left: 20px;
+            color: #1f2937;
+            font-size: 15px;
+        }
+        .hint-text {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>性别命名文件 - 名字检索工具</h1>
+        
+        <!-- 文件上传区 -->
+        <div class="upload-section">
+            <label>📁 上传需要检索的文件</label>
+            <div class="file-item">
+                <label for="femaleFile">女性命名文件 (.txt)</label>
+                <input type="file" id="femaleFile" class="file-input" accept=".txt">
+            </div>
+            <div class="file-item">
+                <label for="maleFile">男性命名文件 (.txt)</label>
+                <input type="file" id="maleFile" class="file-input" accept=".txt">
+            </div>
+            <p class="hint-text">提示：仅支持.txt格式文件，上传后会自动读取内容</p>
+        </div>
+        
+        <!-- 检索区 -->
+        <div class="search-section">
+            <label>🔍 输入要检索的名字</label>
+            <input type="text" id="searchName" class="name-input" placeholder="例如：张三、李四">
+            <button class="search-btn" onclick="searchNameInFiles()">检索</button>
+        </div>
+        
+        <!-- 结果展示区 -->
+        <div class="result-section">
+            <div id="resultContent" class="result-title">请上传文件并输入名字后点击检索</div>
+        </div>
+    </div>
+
+    <script>
+        // 存储上传的文件内容：{文件名: 按行存储的内容数组}
+        let fileContents = {
+            female: { name: "", lines: [] },  // 女性文件：文件名 + 行内容数组
+            male: { name: "", lines: [] }     // 男性文件：文件名 + 行内容数组
+        };
+
+        // 监听女性文件上传
+        document.getElementById('femaleFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // 读取文件内容
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                // 按换行分割内容，得到每行的数组
+                const lines = event.target.result.split(/\r?\n/).map(line => line.trim());
+                fileContents.female.name = file.name;
+                fileContents.female.lines = lines;
+                updateResult(`✅ 已成功读取女性命名文件：${file.name}`);
+            };
+            reader.readAsText(file, 'utf-8');
+        });
+
+        // 监听男性文件上传
+        document.getElementById('maleFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // 读取文件内容
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const lines = event.target.result.split(/\r?\n/).map(line => line.trim());
+                fileContents.male.name = file.name;
+                fileContents.male.lines = lines;
+                updateResult(`✅ 已成功读取男性命名文件：${file.name}`);
+            };
+            reader.readAsText(file, 'utf-8');
+        });
+
+        // 核心检索函数
+        function searchNameInFiles() {
+            // 获取输入的名字并去除空格
+            const searchName = document.getElementById('searchName').value.trim();
+            if (!searchName) {
+                updateResult('❌ 请输入要检索的名字！', 'error');
+                return;
+            }
+
+            // 检查是否上传了文件
+            if (!fileContents.female.name && !fileContents.male.name) {
+                updateResult('❌ 请先上传至少一个性别命名文件！', 'error');
+                return;
+            }
+
+            // 存储检索结果
+            const result = {
+                female: [],  // 女性文件中匹配的行号
+                male: []     // 男性文件中匹配的行号
+            };
+
+            // 检索女性文件
+            if (fileContents.female.lines.length > 0) {
+                fileContents.female.lines.forEach((line, index) => {
+                    // 行号从1开始计数
+                    if (line.includes(searchName)) {
+                        result.female.push(index + 1);
+                    }
+                });
+            }
+
+            // 检索男性文件
+            if (fileContents.male.lines.length > 0) {
+                fileContents.male.lines.forEach((line, index) => {
+                    if (line.includes(searchName)) {
+                        result.male.push(index + 1);
+                    }
+                });
+            }
+
+            // 组装并显示结果
+            let resultHtml = `<span class="success">✅ 名字「${searchName}」的检索结果：</span><br>`;
+            let hasResult = false;
+
+            // 女性文件结果
+            if (result.female.length > 0) {
+                hasResult = true;
+                const lineStr = result.female.join(', ');
+                resultHtml += `<div class="file-result">- 女性命名文件 ${fileContents.female.name}：出现在第 ${lineStr} 行</div>`;
+            }
+
+            // 男性文件结果
+            if (result.male.length > 0) {
+                hasResult = true;
+                const lineStr = result.male.join(', ');
+                resultHtml += `<div class="file-result">- 男性命名文件 ${fileContents.male.name}：出现在第 ${lineStr} 行</div>`;
+            }
+
+            // 无匹配结果
+            if (!hasResult) {
+                resultHtml = `<span class="error">❌ 名字「${searchName}」在已上传的文件中均未找到</span>`;
+            }
+
+            updateResult(resultHtml);
+        }
+
+        // 更新结果展示区
+        function updateResult(content, type = 'normal') {
+            const resultEl = document.getElementById('resultContent');
+            resultEl.innerHTML = content;
+            if (type === 'error') {
+                resultEl.className = 'result-title error';
+            } else if (content.includes('✅')) {
+                resultEl.className = 'result-title success';
+            } else {
+                resultEl.className = 'result-title';
+            }
+        }
+    </script>
+</body>
+</html>
