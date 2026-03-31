@@ -637,4 +637,3 @@
 活动配置项 promotion_display: 43003 = promotion_display
 活动配置项 welcome_home_v2: 30311 = welcome_home_v2
 活动配置项 coin_bonanza: 43007 = coin_bonanza
-return = 	nil
