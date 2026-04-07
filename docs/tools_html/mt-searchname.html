@@ -122,9 +122,13 @@
         
         <!-- 检索区 -->
         <div class="search-section">
-            <label>🔍 输入要检索的名字</label>
-            <input type="text" id="searchName" class="name-input" placeholder="例如：张三、李四">
-            <button class="search-btn" onclick="searchNameInFiles()">检索</button>
+            <label>🔍 输入要检索的名字（一行一个名字）</label>
+            <textarea id="searchName" class="name-input" style="height: 120px; width: 100%; margin-right: 0; margin-bottom: 10px;" placeholder="例如：
+张三
+李四
+王五"></textarea>
+            <button class="search-btn" style="width: 100%;" onclick="searchNameInFiles()">批量检索</button>
+            <button class="search-btn" style="background-color: #6b7280; margin-top: 10px; width: 100%;" onclick="clearCache()">清除缓存</button>
         </div>
         
         <!-- 结果展示区 -->
@@ -140,6 +144,26 @@
             male: { name: "", lines: [] }     // 男性文件：文件名 + 行内容数组
         };
 
+        // 页面加载时检查缓存
+        window.onload = function() {
+            // 检查本地存储中是否有缓存的文件内容
+            const cachedData = localStorage.getItem('genderNameFiles');
+            if (cachedData) {
+                fileContents = JSON.parse(cachedData);
+                if (fileContents.female.name || fileContents.male.name) {
+                    let message = '✅ 已加载缓存的文件：';
+                    if (fileContents.female.name) message += ` 女：${fileContents.female.name}`;
+                    if (fileContents.male.name) message += ` 男：${fileContents.male.name}`;
+                    updateResult(message);
+                }
+            }
+        };
+
+        // 保存文件内容到本地存储
+        function saveToLocalStorage() {
+            localStorage.setItem('genderNameFiles', JSON.stringify(fileContents));
+        }
+
         // 监听女性文件上传
         document.getElementById('femaleFile').addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -152,6 +176,7 @@
                 const lines = event.target.result.split(/\r?\n/).map(line => line.trim());
                 fileContents.female.name = file.name;
                 fileContents.female.lines = lines;
+                saveToLocalStorage(); // 保存到本地存储
                 updateResult(`✅ 已成功读取女性命名文件：${file.name}`);
             };
             reader.readAsText(file, 'utf-8');
@@ -168,16 +193,17 @@
                 const lines = event.target.result.split(/\r?\n/).map(line => line.trim());
                 fileContents.male.name = file.name;
                 fileContents.male.lines = lines;
+                saveToLocalStorage(); // 保存到本地存储
                 updateResult(`✅ 已成功读取男性命名文件：${file.name}`);
             };
             reader.readAsText(file, 'utf-8');
         });
 
-        // 核心检索函数
+        // 核心检索函数 - 支持批量检索
         function searchNameInFiles() {
-            // 获取输入的名字并去除空格
-            const searchName = document.getElementById('searchName').value.trim();
-            if (!searchName) {
+            // 获取输入的名字并去除空格，按换行分割成数组
+            const searchText = document.getElementById('searchName').value.trim();
+            if (!searchText) {
                 updateResult('❌ 请输入要检索的名字！', 'error');
                 return;
             }
@@ -188,55 +214,91 @@
                 return;
             }
 
-            // 存储检索结果
-            const result = {
-                female: [],  // 女性文件中匹配的行号
-                male: []     // 男性文件中匹配的行号
-            };
-
-            // 检索女性文件
-            if (fileContents.female.lines.length > 0) {
-                fileContents.female.lines.forEach((line, index) => {
-                    // 行号从1开始计数
-                    if (line.includes(searchName)) {
-                        result.female.push(index + 1);
-                    }
-                });
-            }
-
-            // 检索男性文件
-            if (fileContents.male.lines.length > 0) {
-                fileContents.male.lines.forEach((line, index) => {
-                    if (line.includes(searchName)) {
-                        result.male.push(index + 1);
-                    }
-                });
+            // 按换行分割名字，去除空行和空格
+            const searchNames = searchText.split(/\r?\n/).map(name => name.trim()).filter(name => name);
+            
+            if (searchNames.length === 0) {
+                updateResult('❌ 请输入有效的名字！', 'error');
+                return;
             }
 
             // 组装并显示结果
-            let resultHtml = `<span class="success">✅ 名字「${searchName}」的检索结果：</span><br>`;
-            let hasResult = false;
+            let resultHtml = `<span class="success">✅ 批量检索结果（共 ${searchNames.length} 个名字）：</span><br><br>`;
+            let totalFound = 0;
 
-            // 女性文件结果
-            if (result.female.length > 0) {
-                hasResult = true;
-                const lineStr = result.female.join(', ');
-                resultHtml += `<div class="file-result">- 女性命名文件 ${fileContents.female.name}：出现在第 ${lineStr} 行</div>`;
-            }
+            // 逐个处理每个名字
+            searchNames.forEach((searchName, index) => {
+                // 存储检索结果
+                const result = {
+                    female: [],  // 女性文件中匹配的行号
+                    male: []     // 男性文件中匹配的行号
+                };
 
-            // 男性文件结果
-            if (result.male.length > 0) {
-                hasResult = true;
-                const lineStr = result.male.join(', ');
-                resultHtml += `<div class="file-result">- 男性命名文件 ${fileContents.male.name}：出现在第 ${lineStr} 行</div>`;
-            }
+                // 检索女性文件
+                if (fileContents.female.lines.length > 0) {
+                    fileContents.female.lines.forEach((line, lineIndex) => {
+                        // 行号从1开始计数
+                        if (line === searchName) {
+                            result.female.push(lineIndex + 1);
+                        }
+                    });
+                }
 
-            // 无匹配结果
-            if (!hasResult) {
-                resultHtml = `<span class="error">❌ 名字「${searchName}」在已上传的文件中均未找到</span>`;
-            }
+                // 检索男性文件
+                if (fileContents.male.lines.length > 0) {
+                    fileContents.male.lines.forEach((line, lineIndex) => {
+                        if (line === searchName) {
+                            result.male.push(lineIndex + 1);
+                        }
+                    });
+                }
+
+                // 显示单个名字的结果
+                resultHtml += `<div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb;">
+                    <strong>名字 ${index + 1}：${searchName}</strong><br>`;
+                
+                let hasResult = false;
+
+                // 女性文件结果
+                if (result.female.length > 0) {
+                    hasResult = true;
+                    totalFound++;
+                    const lineStr = result.female.join(', ');
+                    resultHtml += `<div class="file-result">- 女性命名文件 ${fileContents.female.name}：出现在第 ${lineStr} 行</div>`;
+                }
+
+                // 男性文件结果
+                if (result.male.length > 0) {
+                    hasResult = true;
+                    totalFound++;
+                    const lineStr = result.male.join(', ');
+                    resultHtml += `<div class="file-result">- 男性命名文件 ${fileContents.male.name}：出现在第 ${lineStr} 行</div>`;
+                }
+
+                // 无匹配结果
+                if (!hasResult) {
+                    resultHtml += `<div class="file-result error">- 未找到匹配结果</div>`;
+                }
+                
+                resultHtml += `</div>`;
+            });
+
+            // 显示总结
+            resultHtml += `<div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
+                <strong>检索完成：</strong>共检索 ${searchNames.length} 个名字，找到 ${totalFound} 个匹配结果
+            </div>`;
 
             updateResult(resultHtml);
+        }
+
+        // 清除缓存
+        function clearCache() {
+            localStorage.removeItem('genderNameFiles');
+            fileContents = {
+                female: { name: "", lines: [] },
+                male: { name: "", lines: [] }
+            };
+            updateResult('✅ 已清除缓存，下次需要重新上传文件', 'success');
         }
 
         // 更新结果展示区
