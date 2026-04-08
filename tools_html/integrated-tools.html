@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CF 工具集合</title>
+    <!-- 引入Tailwind CSS简化样式 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .input-box {
+                @apply rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition;
+            }
+            .result-card {
+                @apply bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500;
+            }
+            .tool-card {
+                @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-all duration-300 cursor-pointer;
+            }
+            .tool-icon {
+                @apply w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600;
+            }
+            .tab-content {
+                @apply hidden;
+            }
+            .tab-content.active {
+                @apply block;
+            }
+            .notification {
+                @apply fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md shadow-lg transform transition-all duration-300 ease-in-out opacity-0 translate-y-4;
+            }
+            .notification.show {
+                @apply opacity-100 translate-y-0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- 头部 -->
+        <header class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 text-center">
+                <i class="fa-solid fa-tools text-blue-500 mr-2"></i>CF 工具集合
+            </h1>
+            <p class="text-gray-600 text-center mt-2">一站式管理所有 CF 相关工具</p>
+        </header>
+
+        <!-- 工具导航 -->
+        <div class="bg-white rounded-xl shadow-lg p-4 mb-8 overflow-x-auto">
+            <nav class="flex flex-wrap gap-2">
+                <button class="tab-button active px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition" data-tab="time-test">
+                    <i class="fa-solid fa-clock mr-1"></i>时间戳工具
+                </button>
+                <button class="tab-button px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-tab="abtest-calculator">
+                    <i class="fa-solid fa-flask mr-1"></i>AB 测试计算
+                </button>
+                <button class="tab-button px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-tab="coins-calculator">
+                    <i class="fa-solid fa-coins mr-1"></i>金币计算
+                </button>
+                <button class="tab-button px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-tab="bigwin-calculator">
+                    <i class="fa-solid fa-trophy mr-1"></i>BigWin 计算
+                </button>
+                <button class="tab-button px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-tab="income-calculator">
+                    <i class="fa-solid fa-chart-line mr-1"></i>财富系统计算
+                </button>
+                <button class="tab-button px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-tab="ratio-calculator">
+                    <i class="fa-solid fa-percent mr-1"></i>利率计算
+                </button>
+                <button class="tab-button px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-tab="cross-day-validator">
+                    <i class="fa-solid fa-calendar-check mr-1"></i>跨天验证
+                </button>
+                <button class="tab-button px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-tab="cf-system">
+                    <i class="fa-solid fa-sitemap mr-1"></i>系统关联图
+                </button>
+                <button class="tab-button px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition" data-tab="mt-unlock">
+                    <i class="fa-solid fa-lock-open mr-1"></i>模块解锁状态
+                </button>
+            </nav>
+        </div>
+
+        <!-- 工具内容区域 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <!-- 时间戳工具 -->
+            <div id="time-test" class="tab-content active">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-clock text-blue-500 mr-2"></i>时间戳计算工具
+                </h2>
+                
+                <!-- 当前时间/时间戳展示区 -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div>
+                            <p class="text-gray-600 text-sm">当前时间</p>
+                            <p class="text-xl font-semibold text-gray-800" id="currentTime">2026/1/7 15:20:50</p>
+                        </div>
+                        <div class="h-6 w-px bg-gray-300 hidden md:block"></div>
+                        <div>
+                            <p class="text-gray-600 text-sm">当前时间戳（秒）</p>
+                            <p class="text-xl font-semibold text-gray-800" id="currentTimestamp">1767770450</p>
+                        </div>
+                        <div class="h-6 w-px bg-gray-300 hidden md:block"></div>
+                        <div>
+                            <p class="text-gray-600 text-sm">当前时间戳（毫秒）</p>
+                            <p class="text-xl font-semibold text-gray-800" id="currentTimestampMs">1767770450000</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 输入计算区 -->
+                <div class="mb-6">
+                    <div class="flex flex-col md:flex-row gap-3 mb-4">
+                        <input 
+                            type="number" 
+                            id="timeValue" 
+                            placeholder="请输入数值（如：10）" 
+                            class="input-box flex-1"
+                            min="0"
+                            step="1"
+                        >
+                        <select id="timeUnit" class="input-box w-full md:w-40">
+                            <option value="second">秒</option>
+                            <option value="minute">分钟</option>
+                            <option value="hour">小时</option>
+                            <option value="day">天</option>
+                        </select>
+                    </div>
+                    <button id="calcBtn" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition font-medium">
+                        <i class="fa-solid fa-calculator mr-2"></i>计算时间戳
+                    </button>
+                </div>
+
+                <!-- 结果展示区 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <!-- 单位之前的时间戳 -->
+                    <div class="result-card">
+                        <p class="text-gray-600 text-sm mb-1">
+                            <span class="inputValueDisplay">「输入值」</span>之前的时间戳
+                        </p>
+                        <p class="text-lg font-semibold mb-1" id="beforeTimestamp">-</p>
+                        <p class="text-sm text-gray-700 mb-2" id="beforeTimestampMs">-</p>
+                        <p class="text-gray-500 text-sm" id="beforeTime">-</p>
+                        <div class="flex gap-2 mt-2">
+                            <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('beforeTimestamp')">
+                                <i class="fa-solid fa-copy mr-1"></i>复制秒级时间戳
+                            </button>
+                            <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('beforeTimestampMs')">
+                                <i class="fa-solid fa-copy mr-1"></i>复制毫秒级时间戳
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 单位之后的时间戳 -->
+                    <div class="result-card">
+                        <p class="text-gray-600 text-sm mb-1">
+                            <span class="inputValueDisplay">「输入值」</span>之后的时间戳
+                        </p>
+                        <p class="text-lg font-semibold mb-1" id="afterTimestamp">-</p>
+                        <p class="text-sm text-gray-700 mb-2" id="afterTimestampMs">-</p>
+                        <p class="text-gray-500 text-sm" id="afterTime">-</p>
+                        <div class="flex gap-2 mt-2">
+                            <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('afterTimestamp')">
+                                <i class="fa-solid fa-copy mr-1"></i>复制秒级时间戳
+                            </button>
+                            <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('afterTimestampMs')">
+                                <i class="fa-solid fa-copy mr-1"></i>复制毫秒级时间戳
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 时间转时间戳功能 -->
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                        <i class="fa-solid fa-clock-rotate-left text-blue-500 mr-2"></i>时间转时间戳
+                    </h3>
+                    <div class="flex flex-col md:flex-row gap-3 mb-4">
+                        <input 
+                            type="datetime-local" 
+                            id="dateTimeInput" 
+                            class="input-box flex-1"
+                        >
+                    </div>
+                    <button id="convertBtn" class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition font-medium">
+                        <i class="fa-solid fa-exchange-alt mr-2"></i>转换为时间戳
+                    </button>
+                </div>
+
+                <!-- 时间转时间戳结果 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="result-card">
+                        <p class="text-gray-600 text-sm mb-1">秒级时间戳</p>
+                        <p class="text-lg font-semibold mb-2" id="convertedTimestamp">-</p>
+                        <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('convertedTimestamp')">
+                            <i class="fa-solid fa-copy mr-1"></i>复制秒级时间戳
+                        </button>
+                    </div>
+                    <div class="result-card">
+                        <p class="text-gray-600 text-sm mb-1">毫秒级时间戳</p>
+                        <p class="text-lg font-semibold mb-2" id="convertedTimestampMs">-</p>
+                        <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('convertedTimestampMs')">
+                            <i class="fa-solid fa-copy mr-1"></i>复制毫秒级时间戳
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 时间戳转时间功能 -->
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                        <i class="fa-solid fa-clock-rotate-left fa-flip-horizontal text-blue-500 mr-2"></i>时间戳转时间
+                    </h3>
+                    <div class="flex flex-col md:flex-row gap-3 mb-4">
+                        <input 
+                            type="number" 
+                            id="timestampInput" 
+                            placeholder="请输入时间戳（秒或毫秒）" 
+                            class="input-box flex-1"
+                        >
+                        <select id="timestampUnit" class="input-box w-full md:w-40">
+                            <option value="second">秒级</option>
+                            <option value="millisecond">毫秒级</option>
+                        </select>
+                    </div>
+                    <button id="convertTimeBtn" class="w-full bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition font-medium">
+                        <i class="fa-solid fa-exchange-alt mr-2"></i>转换为时间
+                    </button>
+                </div>
+
+                <!-- 时间戳转时间结果 -->
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="result-card">
+                        <p class="text-gray-600 text-sm mb-1">转换结果</p>
+                        <p class="text-lg font-semibold mb-2" id="convertedTime">-</p>
+                        <button class="text-blue-500 text-sm hover:underline" onclick="copyToClipboard('convertedTime')">
+                            <i class="fa-solid fa-copy mr-1"></i>复制转换结果
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AB 测试计算工具 -->
+            <div id="abtest-calculator" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-flask text-blue-500 mr-2"></i>AB 测试计算
+                </h2>
+                <div class="max-w-md mx-auto">
+                    <label for="id_input" class="block text-gray-600 text-sm font-medium mb-2">输入要计算的 ID：多个 ID 使用空格隔开</label>
+                    <input type="text" id="id_input" class="input-box mb-4">
+                    <label for="mod_input_1" class="block text-gray-600 text-sm font-medium mb-2">模一：</label>
+                    <input type="number" id="mod_input_1" class="input-box mb-4">
+                    <label for="mod_input_2" class="block text-gray-600 text-sm font-medium mb-2">模二：</label>
+                    <input type="number" id="mod_input_2" class="input-box mb-4" value="2">
+                    <button id="calculate_button" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition font-medium mb-4">
+                        <i class="fa-solid fa-calculator mr-2"></i>计算
+                    </button>
+                    <label for="output_text" class="block text-gray-600 text-sm font-medium mb-2">数据展示：</label>
+                    <textarea id="output_text" class="input-box min-h-[100px]" readonly></textarea>
+                </div>
+            </div>
+
+            <!-- 金币计算工具 -->
+            <div id="coins-calculator" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-coins text-blue-500 mr-2"></i>金币计算
+                </h2>
+                <div class="max-w-md mx-auto">
+                    <label for="coins_input" class="block text-gray-600 text-sm font-medium mb-2">输入商店 100$ 的金币值:</label>
+                    <input type="text" id="coins_input" class="input-box mb-4" value="8400000">
+                    <label for="coins_cash_input" class="block text-gray-600 text-sm font-medium mb-2">计算多少 $:</label>
+                    <input type="text" id="coins_cash_input" class="input-box mb-4" value="1">
+                    <label for="config_text" class="block text-gray-600 text-sm font-medium mb-2">结果显示:</label>
+                    <textarea id="config_text" class="input-box min-h-[75px] mb-4" readonly></textarea>
+                    <button id="coins_calculate_button" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition font-medium">
+                        <i class="fa-solid fa-calculator mr-2"></i>计算
+                    </button>
+                </div>
+            </div>
+
+            <!-- 其他工具（占位） -->
+            <div id="bigwin-calculator" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-trophy text-blue-500 mr-2"></i>BigWin 计算
+                </h2>
+                <div class="text-center py-12">
+                    <i class="fa-solid fa-construction text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-500">功能开发中...</p>
+                </div>
+            </div>
+
+            <div id="income-calculator" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-chart-line text-blue-500 mr-2"></i>财富系统计算
+                </h2>
+                <div class="text-center py-12">
+                    <i class="fa-solid fa-construction text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-500">功能开发中...</p>
+                </div>
+            </div>
+
+            <div id="ratio-calculator" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-percent text-blue-500 mr-2"></i>利率计算
+                </h2>
+                <div class="text-center py-12">
+                    <i class="fa-solid fa-construction text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-500">功能开发中...</p>
+                </div>
+            </div>
+
+            <div id="cross-day-validator" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-calendar-check text-blue-500 mr-2"></i>跨天验证
+                </h2>
+                <div class="text-center py-12">
+                    <i class="fa-solid fa-construction text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-500">功能开发中...</p>
+                </div>
+            </div>
+
+            <div id="cf-system" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-sitemap text-blue-500 mr-2"></i>系统关联图
+                </h2>
+                <div class="text-center py-12">
+                    <i class="fa-solid fa-construction text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-500">功能开发中...</p>
+                </div>
+            </div>
+
+            <div id="mt-unlock" class="tab-content">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fa-solid fa-lock-open text-blue-500 mr-2"></i>模块解锁状态
+                </h2>
+                <div class="text-center py-12">
+                    <i class="fa-solid fa-construction text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-500">功能开发中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知容器 -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // 标签页切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+
+                    // 更新标签按钮状态
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-blue-500', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    this.classList.add('active', 'bg-blue-500', 'text-white');
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+
+                    // 更新标签内容显示
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // 时间戳工具功能
+            initTimeTestTool();
+            
+            // AB测试计算工具功能
+            initABTestTool();
+            
+            // 金币计算工具功能
+            initCoinsCalculatorTool();
+        });
+
+        // 时间戳工具初始化
+        function initTimeTestTool() {
+            // 核心变量
+            const currentTimeEl = document.getElementById('currentTime');
+            const currentTimestampEl = document.getElementById('currentTimestamp');
+            const currentTimestampMsEl = document.getElementById('currentTimestampMs');
+            const timeValueEl = document.getElementById('timeValue');
+            const timeUnitEl = document.getElementById('timeUnit');
+            const calcBtn = document.getElementById('calcBtn');
+            const beforeTimestampEl = document.getElementById('beforeTimestamp');
+            const beforeTimestampMsEl = document.getElementById('beforeTimestampMs');
+            const beforeTimeEl = document.getElementById('beforeTime');
+            const afterTimestampEl = document.getElementById('afterTimestamp');
+            const afterTimestampMsEl = document.getElementById('afterTimestampMs');
+            const afterTimeEl = document.getElementById('afterTime');
+            
+            // 时间转时间戳相关变量
+            const dateTimeInput = document.getElementById('dateTimeInput');
+            const convertBtn = document.getElementById('convertBtn');
+            const convertedTimestamp = document.getElementById('convertedTimestamp');
+            const convertedTimestampMs = document.getElementById('convertedTimestampMs');
+            
+            // 时间戳转时间相关变量
+            const timestampInput = document.getElementById('timestampInput');
+            const timestampUnit = document.getElementById('timestampUnit');
+            const convertTimeBtn = document.getElementById('convertTimeBtn');
+            const convertedTime = document.getElementById('convertedTime');
+            
+            // 通知相关变量
+            const notificationEl = document.getElementById('notification');
+
+            // 1. 实时更新当前时间和时间戳（每秒更新）
+            function updateCurrentInfo() {
+                const now = new Date();
+                // 格式化当前时间：YYYY-MM-DD HH:mm:ss
+                const formattedTime = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+                // 当前时间戳（秒，取整）
+                const timestamp = Math.floor(now.getTime() / 1000);
+                // 当前时间戳（毫秒）
+                const timestampMs = now.getTime();
+                
+                currentTimeEl.textContent = formattedTime;
+                currentTimestampEl.textContent = timestamp;
+                currentTimestampMsEl.textContent = timestampMs;
+            }
+
+            // 2. 单位换算：转换为秒
+            function convertToSeconds(value, unit) {
+                switch(unit) {
+                    case 'second': return value * 1;
+                    case 'minute': return value * 60;
+                    case 'hour': return value * 3600;
+                    case 'day': return value * 86400;
+                    default: return value * 1;
+                }
+            }
+
+            // 3. 时间戳转可读时间（YYYY-MM-DD HH:mm:ss）
+            function timestampToTime(timestamp) {
+                const date = new Date(timestamp * 1000);
+                return `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+            }
+
+            // 4. 计算逻辑 - 使用querySelectorAll批量更新
+            function calculateTimestamp() {
+                const inputValue = timeValueEl.value.trim();
+                const value = inputValue === '' ? 10 : Number(inputValue);
+                const unit = timeUnitEl.value;
+            
+                // 校验输入
+                if (isNaN(value) || value < 0) {
+                    alert('请输入有效的非负数值！');
+                    timeValueEl.focus();
+                    return;
+                }
+            
+                // 更新输入值显示 - 使用querySelectorAll批量更新所有元素
+                const displayText = `${value} ${getUnitName(unit)}`;
+                document.querySelectorAll('.inputValueDisplay').forEach(element => {
+                    element.textContent = displayText;
+                });
+            
+                // 当前时间戳（秒）
+                const currentTimestamp = Number(currentTimestampEl.textContent);
+                // 当前时间戳（毫秒）
+                const currentTimestampMs = Number(currentTimestampMsEl.textContent);
+                // 转换输入值为秒
+                const valueInSeconds = convertToSeconds(value, unit);
+                // 转换输入值为毫秒
+                const valueInMs = valueInSeconds * 1000;
+                
+                // 计算前后时间戳（秒）
+                const beforeTimestamp = currentTimestamp - valueInSeconds;
+                const afterTimestamp = currentTimestamp + valueInSeconds;
+                
+                // 计算前后时间戳（毫秒）
+                const beforeTimestampMs = currentTimestampMs - valueInMs;
+                const afterTimestampMs = currentTimestampMs + valueInMs;
+                
+                // 更新结果展示
+                beforeTimestampEl.textContent = beforeTimestamp;
+                beforeTimestampMsEl.textContent = beforeTimestampMs;
+                beforeTimeEl.textContent = `对应时间：${timestampToTime(beforeTimestamp)}`;
+                afterTimestampEl.textContent = afterTimestamp;
+                afterTimestampMsEl.textContent = afterTimestampMs;
+                afterTimeEl.textContent = `对应时间：${timestampToTime(afterTimestamp)}`;
+            }
+            
+            // 5. 时间转时间戳逻辑
+            function convertTimeToTimestamp() {
+                const dateTimeValue = dateTimeInput.value;
+                
+                if (!dateTimeValue) {
+                    alert('请选择一个时间！');
+                    dateTimeInput.focus();
+                    return;
+                }
+                
+                const selectedDate = new Date(dateTimeValue);
+                const timestamp = Math.floor(selectedDate.getTime() / 1000);
+                const timestampMs = selectedDate.getTime();
+                
+                convertedTimestamp.textContent = timestamp;
+                convertedTimestampMs.textContent = timestampMs;
+            }
+            
+            // 6. 时间戳转时间逻辑
+            function convertTimestampToTime() {
+                const timestampValue = timestampInput.value.trim();
+                const unit = timestampUnit.value;
+                
+                if (!timestampValue) {
+                    alert('请输入时间戳！');
+                    timestampInput.focus();
+                    return;
+                }
+                
+                const timestamp = Number(timestampValue);
+                
+                if (isNaN(timestamp)) {
+                    alert('请输入有效的时间戳！');
+                    timestampInput.focus();
+                    return;
+                }
+                
+                // 根据选择的单位转换为秒级时间戳
+                const secondsTimestamp = unit === 'second' ? timestamp : Math.floor(timestamp / 1000);
+                
+                // 转换为可读时间
+                const formattedTime = timestampToTime(secondsTimestamp);
+                
+                convertedTime.textContent = formattedTime;
+            }
+            
+            // 辅助函数：获取单位中文名称
+            function getUnitName(unit) {
+                switch(unit) {
+                    case 'second': return '秒';
+                    case 'minute': return '分钟';
+                    case 'hour': return '小时';
+                    case 'day': return '天';
+                    default: return unit;
+                }
+            }
+            
+            // 显示自动消失的通知
+            function showNotification(message) {
+                notificationEl.textContent = message;
+                notificationEl.classList.add('show');
+                
+                // 2秒后自动隐藏通知
+                setTimeout(() => {
+                    notificationEl.classList.remove('show');
+                }, 2000);
+            }
+
+            // 7. 复制到剪贴板
+            window.copyToClipboard = function(elementId) {
+                const text = document.getElementById(elementId).textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('已复制到剪贴板！');
+                }).catch(() => {
+                    alert('复制失败，请手动复制！');
+                });
+            }
+
+            // 初始化
+            updateCurrentInfo();
+            setInterval(updateCurrentInfo, 1000); // 每秒更新当前时间
+            
+            // 事件监听
+            if (calcBtn) calcBtn.addEventListener('click', calculateTimestamp);
+            // 回车触发计算
+            if (timeValueEl) timeValueEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') calculateTimestamp();
+            });
+            
+            // 时间转时间戳事件监听
+            if (convertBtn) convertBtn.addEventListener('click', convertTimeToTimestamp);
+            // 回车触发转换
+            if (dateTimeInput) dateTimeInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') convertTimeToTimestamp();
+            });
+            
+            // 时间戳转时间事件监听
+            if (convertTimeBtn) convertTimeBtn.addEventListener('click', convertTimestampToTime);
+            // 回车触发转换
+            if (timestampInput) timestampInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') convertTimestampToTime();
+            });
+        }
+
+        // AB测试工具初始化
+        function initABTestTool() {
+            // 获取 DOM 元素
+            const idInput = document.getElementById('id_input');
+            const modInput1 = document.getElementById('mod_input_1');
+            const modInput2 = document.getElementById('mod_input_2');
+            const outputText = document.getElementById('output_text');
+            const calculateButton = document.getElementById('calculate_button');
+
+            // 计算 ID 所属的 AB 分组
+            function ABtest() {
+                const idList = idInput.value.split(' ').map(Number);
+                const divideNumber1 = parseInt(modInput1.value) || 1;
+                const divideNumber2 = parseInt(modInput2.value) || 2;
+                let outputStr = '';
+
+                idList.forEach(function(id) {
+                    outputStr += `${id} ÷ ${divideNumber1} ÷ ${divideNumber2} = ${id % divideNumber1 % divideNumber2}\n`;
+                });
+
+                outputText.value = outputStr;
+            }
+
+            // 绑定计算事件
+            if (calculateButton) calculateButton.addEventListener('click', ABtest);
+
+            // 绑定回车键事件
+            document.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter' && document.activeElement !== outputText) {
+                    ABtest();
+                }
+            });
+        }
+
+        // 金币计算工具初始化
+        function initCoinsCalculatorTool() {
+            // 获取 DOM 元素
+            const coinsInput = document.getElementById('coins_input');
+            const coinsCashInput = document.getElementById('coins_cash_input');
+            const configText = document.getElementById('config_text');
+            const calculateButton = document.getElementById('coins_calculate_button');
+
+            // 集成打印到文本框里
+            function cg_ps(name, str) {
+                name.value = str;
+            }
+
+            // 转换单位
+            function float_en(num, num_digits = 1) {
+                const units = ['', 'K', 'M', 'B', 'T', 'Q', 'SQ'];
+                function flo_str(num) {
+                    const s = num.toString();
+                    if (s.endsWith('0')) {
+                        return s.slice(0, -2);
+                    }
+                    return s;
+                }
+                function strofsize(num, level) {
+                    if (level >= units.length - 1) {
+                        return [num, level];
+                    } else if (Math.abs(num) >= 1000) {
+                        num /= 1000;
+                        level += 1;
+                        return strofsize(num, level);
+                    } else {
+                        return [num, level];
+                    }
+                }
+                const [result, level] = strofsize(num, 0);
+                return `${flo_str(Math.round(result * Math.pow(10, num_digits)) / Math.pow(10, num_digits))}${units[level]}`;
+            }
+
+            // 计算金币值
+            function Coins(buy_100, cash = 1) {
+                return Math.floor(buy_100 / 100 * cash);
+            }
+
+            // 计算函数
+            function coins_item() {
+                try {
+                    const num = parseInt(coinsInput.value);
+                    const cash = parseFloat(coinsCashInput.value);
+                    const result = Coins(num, cash);
+                    const text = `商店100$价值：${num.toLocaleString()}\n${cash}$ 价值：${result.toLocaleString()} = ${float_en(result)}`;
+                    cg_ps(configText, text);
+                } catch (error) {
+                    if (coinsCashInput.value === '' && coinsInput.value === '') {
+                        cg_ps(configText, "ValueError 输入金币值");
+                    } else if (coinsCashInput.value === '') {
+                        const num = parseInt(coinsInput.value);
+                        const cash = 1;
+                        const result = Coins(num, cash);
+                        const text = `商店100$价值：${num.toLocaleString()}\n${cash}$ 价值：${result.toLocaleString()} = ${float_en(result)}`;
+                        cg_ps(configText, text);
+                    } else {
+                        cg_ps(configText, "ValueError 输入金币值");
+                    }
+                }
+            }
+
+            // 绑定计算事件
+            if (calculateButton) calculateButton.addEventListener('click', coins_item);
+        }
+    </script>
+</body>
+</html>

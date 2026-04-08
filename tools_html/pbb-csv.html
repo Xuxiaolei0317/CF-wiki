@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>排班表转CSV工具</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #409eff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background: #337ecc;
+        }
+        .tips {
+            margin-top: 15px;
+            color: #666;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>值班排班表 → CSV文件转换工具</h2>
+        
+        <div class="input-group">
+            <label>人员名单（一行一个）</label>
+            <textarea id="nameInput">苏磊
+                梁煦
+                孙一
+                徐泽昊
+                马旭妍
+            </textarea>
+        </div>
+
+        <div class="input-group">
+            <label>开始日期（格式：YYYY-MM-DD）</label>
+            <input type="text" id="startDate" value="2026-03-19">
+        </div>
+
+        <div class="input-group">
+            <label>结束日期（格式：YYYY-MM-DD）</label>
+            <input type="text" id="endDate" value="2026-03-29">
+        </div>
+
+        <button class="btn" onclick="generateCSV()">生成CSV文件</button>
+        <button class="btn" onclick="clearAll()">清空输入</button>
+
+        <div class="tips">
+            ✅ 输出格式（完全匹配你的表格）：<br>
+            列顺序：日期,周末/节假日,9点跨天(工),6点跨天(工),备注<br>
+            - 周末：2人放在同一个格子，用英文逗号 , 分隔<br>
+            - 工作日：9点跨天、6点跨天各1人<br>
+            - 备注：自动标记工作日/周末
+        </div>
+    </div>
+
+    <script>
+        // 格式化日期
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}年${month}月${day}日`;
+        }
+
+        // 判断周末
+        function isWeekend(date) {
+            const day = date.getDay();
+            return day === 0 || day === 6;
+        }
+
+        // 周末备注
+        function getWeekendRemark(date) {
+            const day = date.getDay();
+            if (day === 6) return '周末（周六）';
+            if (day === 0) return '周末（周日）';
+            return '工作日';
+        }
+
+        // 生成CSV
+        function generateCSV() {
+            const nameInput = document.getElementById('nameInput').value.trim();
+            const startDateStr = document.getElementById('startDate').value;
+            const endDateStr = document.getElementById('endDate').value;
+
+            if (!nameInput) { alert('请输入人员名单！'); return; }
+            if (!startDateStr || !endDateStr) { alert('请输入日期！'); return; }
+
+            const names = nameInput.split('\n').map(n => n.trim()).filter(n => n);
+            if (names.length < 2) { alert('至少2人'); return; }
+
+            const start = new Date(startDateStr);
+            const end = new Date(endDateStr);
+            if (start > end) { alert('开始日期不能晚于结束日期'); return; }
+
+            // 表头完全匹配你的格式
+            let csv = "日期,周末/节假日,9点跨天(工),6点跨天(工),备注\n";
+            let current = new Date(start);
+            let idx = 0;
+            const total = names.length;
+
+            while (current <= end) {
+                const dateStr = formatDate(current);
+                const weekend = isWeekend(current);
+                const remark = getWeekendRemark(current);
+                
+                let weekendCol = "";
+                let nineCol = "";
+                let sixCol = "";
+
+                if (weekend) {
+                    // ✅ 核心修改：周末2人放在同一个格子，用 , 分隔
+                    weekendCol = `"${names[idx % total]},${names[(idx+1) % total]}"`;
+                    idx += 2;
+                } else {
+                    // 工作日：9点、6点各1人
+                    nineCol = names[idx % total];
+                    sixCol = names[(idx+1) % total];
+                    idx += 2;
+                }
+
+                // 拼接行
+                csv += `${dateStr},${weekendCol},${nineCol},${sixCol},${remark}\n`;
+
+                // 下一天
+                current.setDate(current.getDate() + 1);
+            }
+
+            // 下载
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "值班排班表.csv";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // 清空
+        function clearAll() {
+            document.getElementById('nameInput').value = "";
+            document.getElementById('startDate').value = "2026-03-19";
+            document.getElementById('endDate').value = "2026-03-29";
+        }
+    </script>
+</body>
+</html>

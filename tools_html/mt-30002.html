@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>任务数据批量修改工具</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: vertical;
+            font-size: 14px;
+            font-family: monospace;
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #409eff;
+            color: white;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #337ecc;
+        }
+        .tip {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>任务数据批量修改工具</h2>
+        <p class="tip">功能：仅修改 collect=0 的任务 → current=target；collect=1 跳过不修改</p>
+        
+        <textarea id="inputData" placeholder="请粘贴你的 JSON 任务数据..."></textarea>
+        
+        <div class="btn-group">
+            <button onclick="processData()">处理数据</button>
+            <button onclick="copyResult()">复制结果</button>
+            <button onclick="clearAll()">清空内容</button>
+        </div>
+
+        <textarea id="outputData" placeholder="处理后的数据会显示在这里..."></textarea>
+    </div>
+
+    <script>
+        /**
+         * 处理数据：仅修改 collect=0 的任务，collect=1 跳过
+         */
+        function processData() {
+            try {
+                // 1. 获取输入数据
+                const inputText = document.getElementById('inputData').value.trim();
+                if (!inputText) {
+                    alert('请先粘贴数据！');
+                    return;
+                }
+
+                // 2. 解析JSON
+                const data = JSON.parse(inputText);
+
+                // 3. 遍历修改数据
+                data.forEach(group => {
+                    if (group.mission_ls && Array.isArray(group.mission_ls)) {
+                        group.mission_ls.forEach(mission => {
+                            // =============== 核心修改：加了判断 ===============
+                            // 只有 collect = 0 时才修改，=1 直接跳过
+                            if (mission.collect === 0) {
+                                mission.current = mission.target;
+                                // 这里不需要再改 collect，保持原来的 0
+                            }
+                            // =================================================
+                        });
+                    }
+                });
+
+                // 4. 格式化输出
+                const result = JSON.stringify(data, null, 2);
+                document.getElementById('outputData').value = result;
+                
+            } catch (error) {
+                alert('数据格式错误，请检查JSON是否正确！\n错误信息：' + error.message);
+                console.error('处理失败：', error);
+            }
+        }
+
+        /**
+         * 复制结果到剪贴板
+         */
+        function copyResult() {
+            const output = document.getElementById('outputData');
+            if (!output.value) {
+                alert('暂无处理后的数据！');
+                return;
+            }
+            output.select();
+            document.execCommand('copy');
+            alert('复制成功！');
+        }
+
+        /**
+         * 清空所有内容
+         */
+        function clearAll() {
+            document.getElementById('inputData').value = '';
+            document.getElementById('outputData').value = '';
+        }
+    </script>
+</body>
+</html>
