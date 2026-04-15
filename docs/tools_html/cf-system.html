@@ -407,7 +407,7 @@ reader.onload = function(e) {
         }
 
         // ========== 颜色选择器初始化 ==========
-        function initColorGrid() {
+        function initColorGrid(nodeColorInput) {
             // 清空颜色宫格
             colorGrid.innerHTML = '';
             // 生成预设颜色宫格
@@ -772,7 +772,8 @@ reader.onload = function(e) {
             document.body.style.overflow = 'hidden'; // 禁止背景滚动
             // 打开节点模态框时初始化颜色选择器
 if (modal === nodeModal) {
-                initColorGrid();
+                const nodeColorInput = document.getElementById('nodeColor');
+                initColorGrid(nodeColorInput);
             }
         }
 
@@ -783,7 +784,10 @@ if (modal === nodeModal) {
             if (modal === nodeModal) {
                 document.getElementById('nodeName').value = '';
                 selectedColor = PRESET_COLORS[0];
-                nodeColorInput.value = selectedColor;
+                const nodeColorInput = document.getElementById('nodeColor');
+                if (nodeColorInput) {
+                    nodeColorInput.value = selectedColor;
+                }
             } else if (modal === linkModal) {
                 document.getElementById('linkDesc').value = '';
                 document.getElementById('sourceNode').value = '';
@@ -886,6 +890,8 @@ document.getElementById('mobileAddNodeBtn').addEventListener('click', () => {
                 color: selectedColor
             };
             nodes.push(newNode);
+            console.log('添加新节点:', newNode);
+            console.log('当前节点数量:', nodes.length);
 
             // 添加后保存缓存
             saveDataToLocalStorage();
@@ -893,7 +899,18 @@ document.getElementById('mobileAddNodeBtn').addEventListener('click', () => {
             // 更新UI
             closeModal(nodeModal);
             updateNodeSelectors();
+            
+            // 确保SVG存在，如果不存在则初始化
+            console.log('SVG是否存在:', !!svg);
+            if (!svg) {
+                console.log('初始化SVG...');
+                initD3Graph();
+                console.log('SVG初始化完成');
+            }
+            // 调用renderGraph()渲染
+            console.log('调用renderGraph()...');
             renderGraph();
+            console.log('renderGraph()调用完成');
         });
 
         // 添加关联提交事件
@@ -943,6 +960,12 @@ document.getElementById('mobileAddNodeBtn').addEventListener('click', () => {
 
             // 更新UI
             closeModal(linkModal);
+            
+            // 确保SVG存在，如果不存在则初始化
+            if (!svg) {
+                initD3Graph();
+            }
+            // 调用renderGraph()渲染
             renderGraph();
         });
         // 导入数据文件（恢复备份）
