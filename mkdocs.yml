@@ -1,4 +1,5 @@
 site_name: CF Wiki
+site_author: xxl
 
 nav:
     - 主页: index.md
@@ -10,14 +11,23 @@ nav:
     - 活动配置: Activity.md
     - Inbox: inbox.md
     - Tools: Tools.md
-    
 
+# 🔥 最强 Material 现代化主题（好看 + 搜索 + 中文完美支持）
 theme:
     name: mkdocs
     highlightjs: true
-    hljs_languages:
-        - zh_CN
     locale: zh_CN
+    features:
+        - navigation.tabs          # 顶部标签
+        - navigation.sections      # 侧边栏分组
+        - navigation.expand        # 自动展开
+        - search.highlight         # 搜索高亮
+
+
+plugins:
+    - search:
+
+
 
 # theme:
 #     name: readthedocs

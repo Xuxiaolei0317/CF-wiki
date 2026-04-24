@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地块金币计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 480px;
+            padding: 35px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 26px;
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .card-desc {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            color: #334155;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        #plotCount {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        #plotCount:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .total-box {
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.02); }
+        }
+
+        .progress-container {
+            margin: 30px 0;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #22c55e, #f59e0b, #ef4444, #7c3aed);
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .stage-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .result-grid {
+            display: grid;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .bag-item {
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 5px solid;
+            background: #f8fafc;
+            transition: all 0.3s;
+        }
+
+        .bag-item.active {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .bag-small { border-color: #22c55e; }
+        .bag-middle { border-color: #f59e0b; }
+        .bag-big { border-color: #ef4444; }
+        .bag-max { border-color: #7c3aed; background: #f0e7ff; }
+
+        .bag-name {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .bag-range {
+            color: #475569;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="calculator-card">
+        <div class="card-title">💰 地块金币计算器</div>
+        <div class="card-desc">输入地块数量，自动计算钱袋子区间与进度</div>
+
+        <div class="input-group">
+            <label class="input-label">请输入地块数量</label>
+            <input type="number" id="plotCount" min="1" placeholder="例如：60" oninput="calculate()">
+        </div>
+
+        <div class="total-box" id="totalGold">总上限金币：0</div>
+
+        <div class="progress-container">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+            <div class="stage-labels">
+                <span>小钱袋子</span>
+                <span>中钱袋子</span>
+                <span>大钱袋子</span>
+                <span>MAX</span>
+            </div>
+        </div>
+
+        <div class="result-grid" id="resultGrid"></div>
+    </div>
+
+    <script>
+        const MAX_PER_PLOT = 1200;
+
+        function calculate() {
+            let count = parseInt(document.getElementById("plotCount").value) || 0;
+            let totalMax = count * MAX_PER_PLOT;
+            
+            let smallMax = Math.floor(totalMax * 0.3);
+            let middleMax = Math.floor(totalMax * 0.7);
+            let bigMax = totalMax - 1;
+            let maxGold = totalMax;
+
+            document.getElementById("totalGold").innerText = `总上限金币：${totalMax}`;
+            document.getElementById("progressBar").style.width = "100%";
+
+            document.getElementById("resultGrid").innerHTML = `
+                <div class="bag-item bag-small active">
+                    <div class="bag-name">🟢 小钱袋子</div>
+                    <div class="bag-range">0 ~ ${smallMax}</div>
+                </div>
+                <div class="bag-item bag-middle active">
+                    <div class="bag-name">🟡 中钱袋子</div>
+                    <div class="bag-range">${smallMax + 1} ~ ${middleMax}</div>
+                </div>
+                <div class="bag-item bag-big active">
+                    <div class="bag-name">🔴 大钱袋子</div>
+                    <div class="bag-range">${middleMax + 1} ~ ${bigMax}</div>
+                </div>
+                <div class="bag-item bag-max active">
+                    <div class="bag-name">🟣 MAX 已满</div>
+                    <div class="bag-range">${maxGold}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

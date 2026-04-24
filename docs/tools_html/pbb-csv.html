@@ -2,203 +2,159 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>排班表转CSV工具</title>
+    <title>2026值班排班表生成器（最终匹配版）</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: "Microsoft YaHei", sans-serif;
-        }
-        body {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
-            background: #f5f7fa;
-        }
-        .container {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            resize: vertical;
-            margin-bottom: 15px;
-        }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background: #409eff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-            margin-right: 10px;
-        }
-        .btn:hover {
-            background: #337ecc;
-        }
-        .tips {
-            margin-top: 15px;
-            color: #666;
-            font-size: 13px;
-            line-height: 1.5;
-        }
+        *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei"}
+        body{max-width:900px;margin:30px auto;padding:0 20px;background:#f5f7fa}
+        .box{background:#fff;padding:25px;border-radius:10px;box-shadow:0 2px 10px #0001}
+        h2{text-align:center;color:#333;margin-bottom:20px}
+        textarea{width:100%;height:120px;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;margin-bottom:15px}
+        .item{margin-bottom:12px}
+        .item label{display:block;margin-bottom:5px;color:#555}
+        .item input{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px}
+        .btn{padding:12px 24px;background:#409eff;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:10px}
+        .btn:hover{background:#337ecc}
+        .tip{margin-top:16px;color:#666;font-size:13px;line-height:1.6}
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>值班排班表 → CSV文件转换工具</h2>
-        
-        <div class="input-group">
-            <label>人员名单（一行一个）</label>
-            <textarea id="nameInput">苏磊
-                梁煦
-                孙一
-                徐泽昊
-                马旭妍
-            </textarea>
-        </div>
+<div class="box">
+    <h2>2026值班排班表生成器（最终匹配版）</h2>
 
-        <div class="input-group">
-            <label>开始日期（格式：YYYY-MM-DD）</label>
-            <input type="text" id="startDate" value="2026-03-19">
-        </div>
-
-        <div class="input-group">
-            <label>结束日期（格式：YYYY-MM-DD）</label>
-            <input type="text" id="endDate" value="2026-03-29">
-        </div>
-
-        <button class="btn" onclick="generateCSV()">生成CSV文件</button>
-        <button class="btn" onclick="clearAll()">清空输入</button>
-
-        <div class="tips">
-            ✅ 输出格式（完全匹配你的表格）：<br>
-            列顺序：日期,周末/节假日,9点跨天(工),6点跨天(工),备注<br>
-            - 周末：2人放在同一个格子，用英文逗号 , 分隔<br>
-            - 工作日：9点跨天、6点跨天各1人<br>
-            - 备注：自动标记工作日/周末
-        </div>
+    <div class="item">
+        <label>值班人员（已去掉华子骏，一行一个）</label>
+        <textarea id="names">苏磊
+梁煦
+孙一
+徐泽昊
+马旭妍</textarea>
     </div>
 
-    <script>
-        // 格式化日期
-        function formatDate(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}年${month}月${day}日`;
+    <div class="item">
+        <label>开始日期 YYYY-MM-DD</label>
+        <input id="start" value="2026-04-16">
+    </div>
+    <div class="item">
+        <label>结束日期 YYYY-MM-DD</label>
+        <input id="end" value="2026-04-21">
+    </div>
+
+    <button class="btn" onclick="makeCSV()">一键生成CSV排班表</button>
+    <button class="btn" onclick="reset()">重置</button>
+
+    <div class="tip">
+        ✔ 工作日：9点跨天1人、6点跨天1人，周末/节假日列空<br>
+        ✔ 周末/节假日：仅周末/节假日列填2人（中文逗号分隔），9点/6点列空<br>
+        ✔ 自动备注：工作日/周末（周六/周日）/节假日<br>
+        ✔ 格式100%匹配你的Excel截图
+    </div>
+</div>
+
+<script>
+// 格式化日期 2026年04月16日
+function fmtDate(d){
+    const y=d.getFullYear(),m=(d.getMonth()+1).toString().padStart(2,0),da=d.getDate().toString().padStart(2,0);
+    return `${y}年${m}月${da}日`;
+}
+
+// 2026年法定节假日判断 + 备注
+function getHolidayRemark(d){
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    const w = d.getDay();
+
+    // 元旦：1月1日-1月3日
+    if(m===1 && day>=1 && day<=3) return "节假日（元旦）";
+    // 春节：1月22日-1月28日
+    if(m===1 && day>=22 && day<=28) return "节假日（春节）";
+    // 清明：4月4日-4月6日
+    if(m===4 && day>=4 && day<=6) return "节假日（清明）";
+    // 五一：5月1日-5月5日
+    if(m===5 && day>=1 && day<=5) return "节假日（五一）";
+    // 端午：5月30日-5月31日
+    if(m===5 && day>=30 && day<=31) return "节假日（端午）";
+    // 中秋：9月25日-9月27日
+    if(m===9 && day>=25 && day<=27) return "节假日（中秋）";
+    // 国庆：10月1日-10月7日
+    if(m===10 && day>=1 && day<=7) return "节假日（国庆）";
+    // 周末
+    if(w===6) return "周末（周六）";
+    if(w===0) return "周末（周日）";
+    // 工作日
+    return "工作日";
+}
+
+// 判断是否为 节假日/周末（特殊日）
+function isSpecialDay(d){
+    const rm = getHolidayRemark(d);
+    return rm.includes("节假日") || rm.includes("周末");
+}
+
+// 生成CSV核心函数（完全匹配截图格式）
+function makeCSV(){
+    const nameList=document.getElementById('names').value.trim().split('\n').map(s=>s.trim()).filter(s=>s);
+    const startStr=document.getElementById('start').value;
+    const endStr=document.getElementById('end').value;
+    
+    if(nameList.length<2)return alert('人员至少2人');
+    if(!startStr || !endStr)return alert('请填写起止日期');
+
+    // 表头严格匹配你的Excel
+    let csv="日期,周末/节假日,9点跨天（工）,6点跨天（工）,备注\n";
+    let cur=new Date(startStr);
+    const end=new Date(endStr);
+    let idx=0;
+    const totalPeople = nameList.length;
+
+    // 核心循环（完全匹配截图逻辑）
+    while(cur<=end){
+        const dateStr=fmtDate(cur);
+        const remark = getHolidayRemark(cur);
+        const isSpecial = isSpecialDay(cur);
+
+        let holidayCol = "";  // 周末/节假日列
+        let nineCol = "";     // 9点跨天列
+        let sixCol = "";      // 6点跨天列
+
+        if(isSpecial){
+            // ✅ 节假日/周末：仅周末/节假日列填2人（中文逗号分隔），9点/6点列空
+            holidayCol = `${nameList[idx % totalPeople]}，${nameList[(idx + 1) % totalPeople]}`;
+            nineCol = "";
+            sixCol = "";
+            idx += 2;
+        }else{
+            // ✅ 工作日：9点/6点列各1人，周末/节假日列空
+            holidayCol = "";
+            nineCol = nameList[idx % totalPeople];
+            sixCol = nameList[(idx + 1) % totalPeople];
+            idx += 2;
         }
 
-        // 判断周末
-        function isWeekend(date) {
-            const day = date.getDay();
-            return day === 0 || day === 6;
-        }
+        // 拼接行（严格匹配列顺序）
+        csv += `${dateStr},${holidayCol},${nineCol},${sixCol},${remark}\n`;
+        
+        // 日期+1
+        cur.setDate(cur.getDate() + 1);
+    }
 
-        // 周末备注
-        function getWeekendRemark(date) {
-            const day = date.getDay();
-            if (day === 6) return '周末（周六）';
-            if (day === 0) return '周末（周日）';
-            return '工作日';
-        }
+    // 下载CSV（解决中文乱码）
+    const bom = "\uFEFF";
+    const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '2026值班排班表_最终版.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
 
-        // 生成CSV
-        function generateCSV() {
-            const nameInput = document.getElementById('nameInput').value.trim();
-            const startDateStr = document.getElementById('startDate').value;
-            const endDateStr = document.getElementById('endDate').value;
-
-            if (!nameInput) { alert('请输入人员名单！'); return; }
-            if (!startDateStr || !endDateStr) { alert('请输入日期！'); return; }
-
-            const names = nameInput.split('\n').map(n => n.trim()).filter(n => n);
-            if (names.length < 2) { alert('至少2人'); return; }
-
-            const start = new Date(startDateStr);
-            const end = new Date(endDateStr);
-            if (start > end) { alert('开始日期不能晚于结束日期'); return; }
-
-            // 表头完全匹配你的格式
-            let csv = "日期,周末/节假日,9点跨天(工),6点跨天(工),备注\n";
-            let current = new Date(start);
-            let idx = 0;
-            const total = names.length;
-
-            while (current <= end) {
-                const dateStr = formatDate(current);
-                const weekend = isWeekend(current);
-                const remark = getWeekendRemark(current);
-                
-                let weekendCol = "";
-                let nineCol = "";
-                let sixCol = "";
-
-                if (weekend) {
-                    // ✅ 核心修改：周末2人放在同一个格子，用 , 分隔
-                    weekendCol = `"${names[idx % total]},${names[(idx+1) % total]}"`;
-                    idx += 2;
-                } else {
-                    // 工作日：9点、6点各1人
-                    nineCol = names[idx % total];
-                    sixCol = names[(idx+1) % total];
-                    idx += 2;
-                }
-
-                // 拼接行
-                csv += `${dateStr},${weekendCol},${nineCol},${sixCol},${remark}\n`;
-
-                // 下一天
-                current.setDate(current.getDate() + 1);
-            }
-
-            // 下载
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "值班排班表.csv";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-
-        // 清空
-        function clearAll() {
-            document.getElementById('nameInput').value = "";
-            document.getElementById('startDate').value = "2026-03-19";
-            document.getElementById('endDate').value = "2026-03-29";
-        }
-    </script>
+function reset(){
+    document.getElementById('names').value='苏磊\n梁煦\n孙一\n徐泽昊\n马旭妍';
+    document.getElementById('start').value='2026-04-16';
+    document.getElementById('end').value='2026-04-21';
+}
+</script>
 </body>
 </html>
