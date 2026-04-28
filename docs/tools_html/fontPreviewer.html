@@ -187,7 +187,7 @@ function redraw() {
     
     // 显示缺失字符提示
     if (missingChars.length > 0) {
-        statusText.textContent = `⚠️ 字体中缺少以下字符：${missingChars.join('')}`;
+        statusText.textContent = `⚠️ 字体中缺少以下字符：${missingChars.join(' ')}`;
     } else {
         statusText.textContent = "✅ 字体加载完成！可以输入文字预览";
     }
