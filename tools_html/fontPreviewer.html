@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FNT + PNG 位图字体预览器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #1a1a1a;
+            color: white;
+            padding: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .title {
+            text-align: center;
+            color: #4da6ff;
+            margin-bottom: 10px;
+        }
+        .tip {
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .status {
+            text-align: center;
+            color: #ff9900;
+            margin: 10px 0;
+            font-size: 15px;
+        }
+        .file-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .file-item {
+            flex: 1;
+            min-width: 250px;
+        }
+        input {
+            padding: 8px;
+            width: 100%;
+            background: #2a2a2a;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 6px;
+            margin-top: 5px;
+        }
+        #inputText {
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .canvas-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px solid #444;
+        }
+        canvas {
+            height: 200px;
+            background: #2a2a2a;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title">FNT + PNG 位图字体预览器</h1>
+    <div class="tip">先选 .fnt 文件 → 再选 .png 文件 → 输入文字即可显示</div>
+    <div id="status" class="status">请选择字体文件...</div>
+
+    <div class="file-box">
+        <div class="file-item">
+            <label>✅ 选择 .fnt 配置文件：</label>
+            <input type="file" id="fileFnt" accept=".fnt">
+        </div>
+        <div class="file-item">
+            <label>✅ 选择 .png 图片文件：</label>
+            <input type="file" id="filePng" accept=".png">
+        </div>
+    </div>
+
+    <input type="text" id="inputText" placeholder="输入要显示的文字..." value="Hello 123 Test">
+
+    <div class="canvas-container">
+        <canvas id="canvas"></canvas>
+    </div>
+
+<script>
+let fontData = null;
+let fontImage = null;
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const statusText = document.getElementById('status');
+
+// 画布高度固定，宽度根据内容自动调整
+canvas.height = 200;
+
+// 选择 FNT
+document.getElementById('fileFnt').addEventListener('change', async function(e) {
+    if (!e.target.files[0]) return;
+    statusText.textContent = "正在解析 FNT 文件...";
+    
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        try {
+            parseFnt(evt.target.result);
+            statusText.textContent = "✅ FNT 解析成功！请选择 PNG 文件";
+        } catch (err) {
+            statusText.textContent = "❌ FNT 解析失败：" + err.message;
+        }
+    };
+    reader.readAsText(e.target.files[0]);
+});
+
+// 选择 PNG
+document.getElementById('filePng').addEventListener('change', function(e) {
+    if (!e.target.files[0]) return;
+    statusText.textContent = "正在加载图片...";
+
+    const img = new Image();
+    img.onload = function() {
+        fontImage = img;
+        statusText.textContent = "✅ 字体加载完成！可以输入文字预览";
+        redraw();
+    };
+    img.onerror = function() {
+        statusText.textContent = "❌ 图片加载失败";
+    };
+    img.src = URL.createObjectURL(e.target.files[0]);
+});
+
+// 输入监听
+document.getElementById('inputText').addEventListener('input', redraw);
+
+// 解析 FNT（修复版）
+function parseFnt(text) {
+    const chars = {};
+    const lines = text.split(/\r?\n/);
+
+    for (let line of lines) {
+        line = line.trim();
+        if (!line.startsWith('char ')) continue;
+
+        const obj = {};
+        const matches = line.match(/(\w+)\=([\d\-]+)/g);
+        
+        if (!matches) continue;
+        
+        matches.forEach(p => {
+            const [k, v] = p.split('=');
+            obj[k] = parseInt(v);
+        });
+
+        if (obj.id !== undefined) {
+            chars[String.fromCharCode(obj.id)] = obj;
+        }
+    }
+
+    fontData = chars;
+    console.log("解析到字符：", chars);
+}
+
+// 绘制（100% 统一下对齐 · 终极版）
+function redraw() {
+    if (!fontData || !fontImage) return;
+
+    const text = document.getElementById('inputText').value || ' ';
+    
+    // 检测缺失的字符
+    const missingChars = [];
+    for (const c of text) {
+        if (!fontData[c] && !missingChars.includes(c)) {
+            missingChars.push(c);
+        }
+    }
+    
+    // 显示缺失字符提示
+    if (missingChars.length > 0) {
+        statusText.textContent = `⚠️ 字体中缺少以下字符：${missingChars.join('')}`;
+    } else {
+        statusText.textContent = "✅ 字体加载完成！可以输入文字预览";
+    }
+    
+    // 先计算所需宽度
+    let totalWidth = 40; // 左右边距
+    for (const c of text) {
+        const d = fontData[c];
+        if (d) {
+            totalWidth += d.xadvance;
+        } else {
+            totalWidth += 20; // 默认字符宽度
+        }
+    }
+    
+    // 设置画布宽度
+    canvas.width = Math.max(totalWidth, 850);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    let x = 20;
+    const canvasHeight = canvas.height;
+
+    // 🌟 核心：定义统一的底部基线（所有字符底部贴这条线）
+    // 数值 140 可以微调：越大越靠下，越小越靠上
+    const bottomBaseline = 140;
+
+    for (const c of text) {
+        const d = fontData[c];
+        if (!d) continue;
+
+        // ✅ 统一下对齐关键：字符底部 = 基线位置
+        const drawY = bottomBaseline - d.height;
+        
+        ctx.drawImage(
+            fontImage,
+            d.x, d.y, d.width, d.height,
+            x, drawY, d.width, d.height
+        );
+
+        x += d.xadvance;
+    }
+}
+</script>
+</body>
+</html>
