@@ -2,7 +2,6 @@
 description: 
 alwaysApply: true
 ---
-
 # Git 提交信息
 
 在建议、撰写或润色 **Git 提交说明**（含 SCM「生成提交信息」、对话里基于 diff 写 commit 等场景）时：
