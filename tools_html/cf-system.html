@@ -295,6 +295,42 @@
         let svg, g, simulation;
         let linkElements, linkLabelElements, nodeElements, nodeLabelElements;
 
+        /**
+         * 将单条关联的 source/target 规范为节点 id（数字）。
+         * D3 运行后 link 端点会变成节点对象引用；JSON 序列化后再解析会得到孤立副本，
+         * forceLink 不会对 object 端点重新绑定 simulation.nodes，导致边与圆点错位。
+         */
+        function normalizeLinkEndpoints(link) {
+            const sid = typeof link.source === 'object' && link.source !== null ? link.source.id : link.source;
+            const tid = typeof link.target === 'object' && link.target !== null ? link.target.id : link.target;
+            const source = typeof sid === 'number' ? sid : parseInt(sid, 10);
+            const target = typeof tid === 'number' ? tid : parseInt(tid, 10);
+            return {
+                id: link.id,
+                source,
+                target,
+                desc: link.desc
+            };
+        }
+
+        /** 将关联数组规范为 id 形式，并剔除无效或悬挂边（端点不在当前 nodes 中） */
+        function normalizeLinksArray(linksInput) {
+            const nodeIds = new Set(nodes.map(n => n.id));
+            return linksInput
+                .map(normalizeLinkEndpoints)
+                .filter((l) => {
+                    if (!Number.isFinite(l.source) || !Number.isFinite(l.target)) {
+                        console.warn('跳过无效关联（端点 id 无效）', l);
+                        return false;
+                    }
+                    if (!nodeIds.has(l.source) || !nodeIds.has(l.target)) {
+                        console.warn('跳过悬挂关联（端点节点不存在）', l);
+                        return false;
+                    }
+                    return true;
+                });
+        }
+
         // ========== 核心存储函数（适配GitHub Pages） ==========
         // 从localStorage加载数据（核心存储方案）
 function loadDataFromLocalStorage() {
@@ -303,7 +339,7 @@ function loadDataFromLocalStorage() {
                 try {
                     const parsedData = JSON.parse(savedData);
                     nodes = parsedData.nodes || [];
-                    links = parsedData.links || [];
+                    links = normalizeLinksArray(parsedData.links || []);
                     // 更新计数器（避免ID重复）
                     nodeIdCounter = nodes.length > 0 ? Math.max(...nodes.map(n => n.id)) + 1 : 1;
                     linkIdCounter = links.length > 0 ? Math.max(...links.map(l => l.id)) + 1 : 1;
@@ -319,9 +355,13 @@ function loadDataFromLocalStorage() {
 
         // 保存数据到localStorage（增删改自动触发）
         function saveDataToLocalStorage() {
+            const plainLinks = normalizeLinksArray(links);
+            if (plainLinks.length !== links.length) {
+                links = plainLinks;
+            }
             const data = {
                 nodes: nodes,
-                links: links,
+                links: plainLinks,
                 updateTime: new Date().toISOString(),
                 version: '1.0',
                 platform: 'GitHub Pages' // 标识部署平台
@@ -332,9 +372,10 @@ function loadDataFromLocalStorage() {
 
         // 导出数据为JSON文件（用户手动备份）
         function exportConfigFile() {
+            const plainLinks = normalizeLinksArray(links);
             const exportData = {
                 nodes: nodes,
-                links: links,
+                links: plainLinks,
                 updateTime: new Date().toLocaleString(),
                 version: '1.0',
                 platform: 'GitHub Pages'
@@ -350,42 +391,6 @@ function loadDataFromLocalStorage() {
             // 释放URL
             URL.revokeObjectURL(url);
             alert(`✅ 数据导出成功！\n文件已下载，请妥善保存（更换设备/清空缓存前务必导出）`);
-        }
-
-        // 导入数据文件（恢复备份）
-        function importConfigFile(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-reader.onload = function(e) {
-                    try {
-                        const importedData = JSON.parse(e.target.result);
-                        // 验证数据格式
-                        if (!Array.isArray(importedData.nodes) || !Array.isArray(importedData.links)) {
-                            reject('数据文件格式错误，缺少nodes或links数组');
-                            return;
-                        }
-                        // 更新数据
-                        nodes = importedData.nodes;
-                        links = importedData.links;
-                        // 更新计数器
-                        nodeIdCounter = nodes.length > 0 ? Math.max(...nodes.map(n => n.id)) + 1 : 1;
-                        linkIdCounter = links.length > 0 ? Math.max(...links.map(l => l.id)) + 1 : 1;
-                        // 保存到缓存并刷新视图
-                        saveDataToLocalStorage();
-                        initD3Graph(); // 重新初始化D3
-                        renderGraph();
-                        updateNodeSelectors();
-                        updateRelationPanel(null);
-                        resolve('数据导入成功！');
-                    } catch (e) {
-                        reject(`解析数据文件失败：${e.message}`);
-                    }
-                };
-                reader.onerror = function() {
-                    reject('读取文件失败');
-                };
-                reader.readAsText(file);
-            });
         }
 
         // 清空所有数据
@@ -994,35 +999,13 @@ document.getElementById('mobileAddNodeBtn').addEventListener('click', () => {
                             fy: node.fy
                         }));
                         
-                        // 处理关联数据（确保source/target为节点ID）
-                        const processedLinks = importedData.links.map(link => {
-                            // 提取source ID
-                            const sourceId = typeof link.source === 'object' ? parseInt(link.source.id) : parseInt(link.source);
-                            // 提取target ID
-                            const targetId = typeof link.target === 'object' ? parseInt(link.target.id) : parseInt(link.target);
-                            
-                            return {
-                                id: parseInt(link.id),
-                                source: sourceId,
-                                target: targetId,
-                                desc: link.desc,
-                                index: link.index
-                            };
-                        });
-                        
-                        // 验证关联的节点是否存在
-                        const nodeIds = new Set(processedNodes.map(n => n.id));
-                        const validLinks = processedLinks.filter(link => 
-                            nodeIds.has(link.source) && nodeIds.has(link.target)
-                        );
-                        
-                        if (validLinks.length !== processedLinks.length) {
-                            console.warn(`有${processedLinks.length - validLinks.length}个关联指向不存在的节点，已自动过滤`);
-                        }
-                        
-                        // 更新数据
+                        // 更新数据（先设置 nodes，再规范关联为仅 id，与 forceLink 初始化一致）
                         nodes = processedNodes;
-                        links = validLinks;
+                        const beforeLen = importedData.links.length;
+                        links = normalizeLinksArray(importedData.links);
+                        if (links.length !== beforeLen) {
+                            console.warn(`有${beforeLen - links.length}个关联无效或指向不存在的节点，已自动过滤`);
+                        }
                         // 更新计数器
                         nodeIdCounter = nodes.length > 0 ? Math.max(...nodes.map(n => n.id)) + 1 : 1;
                         linkIdCounter = links.length > 0 ? Math.max(...links.map(l => l.id)) + 1 : 1;
