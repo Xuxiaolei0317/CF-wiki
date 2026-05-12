@@ -40,6 +40,9 @@
                                 <a href="./" class="nav-link">系统</a>
                             </li>
                             <li class="navitem">
+                                <a href="../Run_Cheat/" class="nav-link">Run作弊</a>
+                            </li>
+                            <li class="navitem">
                                 <a href="../A_Activity/" class="nav-link">A级活动</a>
                             </li>
                             <li class="navitem">
@@ -71,7 +74,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../A_Activity/" class="nav-link">
+                                <a rel="next" href="../Run_Cheat/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -259,6 +262,10 @@
               <ul class="nav flex-column">
               </ul>
             </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">财富系统（字段释义）</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -327,7 +334,7 @@
 <code>first_play_b_system</code>: B级九选一的选中游玩状态<br>
 <code>lounge_guide</code>: 高级房引导<br>
 <code>lounge_free_collected</code>: 高级房引导中的free pass卡领取状态<br>
-<code>lounge_transform_info</code>: 待确认<br>
+<code>lounge_transform_info</code>: 【一般待确认】高级房形态/状态转换信息，可能影响 lounge 引导或展示逻辑<br>
 <code>mp_send_free_booster_flag</code>: 赠送免费的mission star booster弹窗<br>
 <code>novice_end_first_login</code>: <a href="../quest/">新手基金</a><br>
 <code>novice_reward</code>: <a href="../quest/">新手基金</a><br>
@@ -335,35 +342,34 @@
 <code>store_stamp_count</code> lucky chames的数量<br>
 <code>lounge_store_week_ts</code>: lounge兑换商店道具刷新倒计时<br>
 <code>daily_login_count</code>: 当天的第几次login，一般用于看login强弹<br>
-<code>mp_buy_bundle_season</code>: 待确认<br>
-<code>stamp_easter_egg_ts</code>: 待确认<br>
+<code>mp_buy_bundle_season</code>: 【高风险待确认】MP 购买 bundle 的赛季字段；页面下方有同名字段的已确认说明，修改前先核对两处是否为同一来源<br>
+<code>stamp_easter_egg_ts</code>: 【一般待确认】stamp 彩蛋活动时间戳（疑似活动周期控制字段）<br>
 <code>no_adv_return_end</code>: 7天内免费看广告的结束时间戳<br>
 <code>total_purchase</code>: 用户的全部付费额<br>
 <code>another_first_quest_flag</code>: 新手ABtes，取消了<br>
 <code>new_ad_theme_fg_limit</code>: 主题内FG后，广告翻倍播报弹出次数上限<br>
 <code>new_ad_theme_fg_ts</code>: 主题内FG后，广告翻倍播报CD时间<br>
-<code>welcome_back_free_soc</code>: <br>
-<code>welcome_end_ts</code>: <br>
+<code>welcome_back_free_soc</code>: 回归活动赠送 SoC 的状态标记（通常与回归弹窗联动）<br>
+<code>welcome_end_ts</code>: 回归活动总结束时间戳；改成过去时间可让活动在下次登录视为结束<br>
 <code>p_user_ad_type</code>: 广告用户type<br>
 <code>welcome_type</code>: 回归用户的type，对应回归的分类逻辑<br>
-<code>welcome_first_day_end_ts</code>: <br>
+<code>welcome_first_day_end_ts</code>: 回归活动首日阶段结束时间戳<br>
 <code>welcome_no_popup</code>: 回归活动的禁止活动强弹的状态<br>
 <code>welcome_no_popup_end_ts</code>: 回归用户的禁止活动强弹结束时间<br>
 <code>welcome_bundle_flag</code>: 回归bundle的触发状态<br>
 <code>login_load_ts</code>: 下载逻辑，锁定用户状态的时间戳<br>
 <code>login_load_type</code>: 下载逻辑，不同用户的type<br>
-<code>welcome_upgrade</code>: <br>
+<code>welcome_upgrade</code>: 回归升级链路状态标记（是否进入升级型回归流程）<br>
 <code>new_ad_byd_ts</code>: BYD看广告，广告间隔的CD时间<br>
 <code>new_ad_byd_count</code>: BYD看广告次数，上限<code>10</code>次<br>
-<code>new_ad_byd_reset</code>: BYD看广告的每日重置时间戳<br>
-<code>new_ad_byd_reset</code>: <br>
-<code>send_coupon_reset_ts</code> 0<br>
-<code>welcome_upgrade_booster</code> 0<br>
-<code>welcome_upgrade_coins_ends</code> 0<br>
+<code>new_ad_byd_reset</code>: BYD 看广告的每日重置时间戳（重复字段已合并）<br>
+<code>send_coupon_reset_ts</code>: Coupon 发放相关重置时间戳，改为过去时间可触发下次重置判断<br>
+<code>welcome_upgrade_booster</code>: 回归升级链路内 booster 奖励状态/次数<br>
+<code>welcome_upgrade_coins_ends</code>: 回归升级链路金币加成结束时间戳<br>
 <code>web_client_prize_collected</code> 0<br>
 <code>welcome</code> p4 end ts 0<br>
 <code>knight_race_status</code> {}<br>
-<code>knight_race_type</code><br>
+<code>knight_race_type</code>: Knight Race 当前参与类型（用于区分不同赛道或活动分组）<br>
 <code>vip_point_clear_flag</code> 2022<br>
 <code>bind_phone</code> 93415154612<br>
 <code>client_online_update_flag</code> 1<br>
@@ -375,14 +381,14 @@
 <code>spin_up_close_reward_flag</code> 0<br>
 <code>language_id</code> 默认选择的语言：英语：0，繁中：1，日语：9，德语：4<br>
 <code>unlock_tag</code> 3<br>
-<code>cg_limie_sale</code> {"42": {"limit_count": 1, "active_ts": 1686119285, "limit_count_all": 1, "active_limit": 1, "buy_date": "2023-06-07", "item_id": "42", "limit_end_ts": 1686133685}}<br>
+<code>cg_limie_sale</code>: Cash Go 限时促销数据（字段名为历史拼写，勿改 key 名）{"42": {"limit_count": 1, "active_ts": 1686119285, "limit_count_all": 1, "active_limit": 1, "buy_date": "2023-06-07", "item_id": "42", "limit_end_ts": 1686133685}}<br>
 <code>cg_inbox_fb_gift_ts</code> 1686196800<br>
 <code>last_purchase_id</code> 3231<br>
 <code>mp_send_eggs_flag</code> 1<br>
 <code>cg_steal_uid</code> cash go攻击/偷钱目标的id<br>
-<code>mp_buy_bundle_season</code> MP最后一次购买bundle的赛季<br>
+<code>mp_buy_bundle_season</code>: MP 最后一次购买 bundle 的赛季（建议以此条说明为准）<br>
 <code>cg_total_purchase</code> cash go里的总付费<br>
-<code>cg_recent_purchase</code> <br>
+<code>cg_recent_purchase</code>: Cash Go 最近一次付费记录（常用于促销触发与分层判断）<br>
 <code>novice_rlevel</code> 新手基金 r level等级<br>
 <code>new_ad_theme_gm_limit</code> 0<br>
 <code>new_ad_theme_gm_ts</code> 0<br>
@@ -765,7 +771,7 @@ a = [i for i in range(101)] #迭代0 ~ 100
 - HH-OO 用户有固定逻辑才会开启广告<br>
 <code>p_user_ad_type</code>: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
 <code>purchase_type: 2</code>: （HH用户 = 1，LL用户 = 2 ，OO用户 = 3）0=非广告用户<br>
-<code>new_ad_3h_counter 12</code>: <br>
+<code>new_ad_3h_counter 12</code>: 3 小时广告计数器（用于限制短周期内广告触发频次）<br>
 <code>new_ad_soc_premium_ts 0</code>: soc广告倒计时<br>
 <code>new_ad_pachinko_premium_ts 0</code>: 博青哥广告倒计时<br>
 <code>new_ad_atw_ts 0</code>: atw广告倒计时<br>
@@ -846,17 +852,17 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <code>_shield_num</code>: 盾牌数量<br>
 <code>_crown_num</code>: 皇冠数量<br>
 <code>_energy_points</code>: 基础能量(50封顶，会随着时间流逝恢复)<br>
-<code>_last_energy_update_ts</code>: .上次更新能量的时间<br>
-<code>_extra_energy_points</code>: 额外能量(基础能量封顶后获得的能量，无法通过时间流逝恢复<br>
+<code>_last_energy_update_ts</code>: 上次更新能量的时间戳<br>
+<code>_extra_energy_points</code>: 额外能量（基础能量封顶后获得；不会随时间自然恢复）<br>
 <code>_activity_symbol_num</code>: 活动的symbol编号(目前没用)<br>
 <code>_activity_reset_ts</code>: 活动重制时间(目前没用)<br>
 <code>_pet_protect_ts</code>: 宠物保护的结束时间<br>
 <code>_active_pet</code>: 激活的宠物<br>
-<code>message_list_data</code>: <br>
+<code>message_list_data</code>: Cash Go 主界面消息队列数据（公告、攻击提示、领奖提示等）<br>
 <code>_kingdom_index</code>: 小岛等级<br>
 <code>_kingdom_status_data</code>: 当前小岛状态<br>
 <code>_season</code>: 赛季<br>
-<code>_kingdom_index_other</code>: 额外村庄进度(所有小岛完成后开始累计这个进度,每完成一个<br>
+<code>_kingdom_index_other</code>: 额外村庄进度（所有小岛完成后开始累计，每完成一个小岛递增）<br>
 <code>_new_user_guide_part_data</code> cash go的引导：{"p2": 10, "p3": 5, "p1": 4, "prize": 1, "p4": 2}<br>
 <code>_auto_flag</code> 1<br>
 <code>_new_user_spin_count</code> 新手spin次数，大于50进入可被攻击偷钱的随机列表<br>
@@ -911,7 +917,7 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <code>fb_flag</code> 0<br>
 <code>normal_invite_ls_info_data</code> []<br>
 <code>fb_invite_ls_info_data</code> []<br>
-<code>invited_from</code><br></p>
+<code>invited_from</code>: 邀请来源 UID 或渠道标记（用于邀请归因）<br></p>
 <h3 id="cash-go-first-promotion">Cash Go First Promotion</h3>
 <p><code>_limit_ts</code> 破冰促销倒计时<br>
 <code>_store_item</code> 破冰促销数据<br></p>
@@ -924,7 +930,7 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <code>Double XP</code>: LEVEL UP XP*2 双倍经验的booster的倒计时<br>
 <code>Cashback Balance</code>: 是cash back当前存下来的金币数量<br>
 <code>Cashback Date</code>: 上次cash back发奖日期<br>
-<code>Bundle Count</code>: <br>
+<code>Bundle Count</code>: 当日/当期 booster 相关 bundle 的触发或购买计数（用于限制弹窗与售卖频率）<br>
 <code>Cashback Ratio List</code>: cash back的按bet存下来的比率的列表<br>
 <code>Spin Reward coins</code>: spin_reward存下来的金币数量<br>
 <code>Spin Reward Date</code>: spin_reward上次的发奖日期<br>
@@ -932,7 +938,7 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <code>Spin Reward Lounge TS</code>: 上次spin_reward和lounge_ts同步的时间, 主要逻辑是在获得lounge_ts的时候同时给一些spin_reward的时间<br>
 <code>Triple XP</code>: LEVEL UP XP 3X booster 倒计时<br>
 <code>Storage Double XP</code>: 开启3X booster时，2X booster时间暂停，暂存在此（秒）<br>
-<code>Storgae Triple XP</code>: 暂存 3X booster 的持续时间<br></p>
+<code>Storage Triple XP</code>: 暂存 3X booster 的持续时间（秒）<br></p>
 <h2 id="limited-offer">Limited Offer 商店侧边栏促销</h2>
 <p><code>Season Pack Available Count</code> 1 <br>
 <code>Season Pack End Ts</code> 1680148799 <br>
@@ -945,13 +951,13 @@ a = [i for i in range(101)] #迭代0 ~ 100
 <code>Bundle Pack Count</code> 2<br>
 <code>Bundle Pack End Ts</code> 1680321600<br></p>
 <h2 id="bonus-voucher">Bonus Voucher</h2>
-<p><code>card level</code>礼品卡的等级一共1,2,3,4,5,6这些状态, 其中6是开启活动21038时候会触发的特殊状态<br>
-<code>card dollar</code> 礼品卡的价值, 根据礼品卡的等级有所不同<br>
-<code>reset ts</code> 是每天重制bonus_voucher的时间戳<br>
-<code>inbox limit</code> 当天占用了领取次数多少次<br>
-<code>card num</code> 这次会发的礼品卡的数量,发送后<code>card_level</code>, <code>card_dollar</code>, <code>card_num</code>都会清0<br>
-<code>delta_limit</code> 收奖次数,也是花费第二货币后 获得的收奖次数<br>
-<code>open_reset_ts</code> 关闭bonus_voucher的时间戳<br></p>
+<p><code>card level</code>: 礼品卡等级，常见为 1~6；其中 6 为活动 21038 的特殊等级<br>
+<code>card dollar</code>: 礼品卡面值（随 <code>card level</code> 变化）<br>
+<code>reset ts</code>: bonus voucher 每日重置时间戳<br>
+<code>inbox limit</code>: 当天已占用的 inbox 领奖次数；改为 <code>0</code> 可重置当日次数<br>
+<code>card num</code>: 本次待发礼品卡数量；发送后 <code>card_level</code> / <code>card_dollar</code> / <code>card_num</code> 会清零<br>
+<code>delta_limit</code>: 额外收奖次数（通常由第二货币消费累计）<br>
+<code>open_reset_ts</code>: bonus voucher 关闭或重开流程的时间戳（控制活动开关节奏）<br></p>
 <h2 id="behaviour">Behaviour</h2>
 <p><code>last_30days_login_flag_data</code> 30天登录次数<br>
 <code>last_30days_spin_times_data</code> 30天日spin次数<br></p>
@@ -1006,7 +1012,50 @@ collect_flag 0
 spin_flag 0
 close_flag 1
 last_one_dollar 43200000000
-abtest_flag</p></div>
+abtest_flag</p>
+<h2 id="_3">财富系统（字段释义）</h2>
+<blockquote>
+<p>适用场景：财富系统数据排查、赛季状态验证、排名与抽奖链路调试。</p>
+</blockquote>
+<p><code>_season</code>: 游戏赛季标识，格式通常为“年份+赛季编号”（示例：<code>2025503</code>）<br>
+<code>_saved_coins</code>: 已存入金币数量（示例：<code>8116918699435</code>）<br>
+<code>_saved_times</code>: 存钱次数（示例：<code>94</code>）<br>
+<code>_save_point</code>: 存钱进度<br>
+<code>_push_progress</code>: 推图/进度条进度<br>
+<code>_total_ratio</code>: 总收益率（玩家当前金币收益率）<br>
+<code>_limit_bet</code>: 当前最大允许下注金额<br>
+<code>_rank_prize_flag</code>: 排名奖励领取状态（<code>0</code> 未领取，<code>1</code> 已领取）<br>
+<code>_rank_num_final</code>: 最终排名（<code>-1</code> 一般表示赛季未结束）<br>
+<code>_end_datetime</code>: 当前赛季结束时间（示例：<code>2025-12-15 23:59:59.000000</code>）<br>
+<code>_robot_num</code>: 机器人玩家数量<br>
+<code>_today_lottery</code>: 今日抽奖状态（<code>0</code> 常表示未抽奖或次数已用完）<br>
+<code>_season_purchase</code>: 赛季相关购买状态（<code>0</code> 未购买）<br>
+<code>_version_flag</code>: 版本/功能开关标识<br>
+<code>_ratio_temp</code>: 临时收益率（活动期加成常用）<br>
+<code>_rank_difficult_lv</code>: 排名难度等级（<code>0</code> 基础难度）<br>
+<code>_percent</code>: 百分比进度值（通常表示任务/活动完成度）<br>
+<code>_p_line</code>: 排名线/奖励线阈值（示例值：<code>2500</code>）<br>
+<code>_punish_score</code>: 惩罚分数（行为相关惩罚累计）<br>
+<code>_act_score</code>: 活动分数（当前活动表现）<br>
+<code>_nw_huge_fix</code>: 网络/系统修复标识<br>
+<code>_p_fix</code>: 参数修复标识<br>
+<code>_rank_last</code>: 上次记录排名<br>
+<code>_rank_save</code>: 保存的排名快照（常用于排名变化比较）<br>
+<code>_rank_real</code>: 真实排名（修正后的实际排名）<br>
+<code>_rank_goal_up</code>: 期望上升排名目标<br>
+<code>_rank_goal_down</code>: 期望避免的下降排名目标<br>
+<code>_rank_start_ts</code>: 排名系统开始计算时间戳（示例：<code>1765342800</code>）<br>
+<code>_last_rank_change_interval</code>: 上次排名变化时间戳<br>
+<code>_rank_step_interval</code>: 排名更新间隔（单位以服务端实现为准）<br>
+<code>_last_robot_change_interval</code>: 上次机器人数据更新时间戳<br>
+<code>_robot_step_interval</code>: 机器人数据更新间隔（单位以服务端实现为准）<br>
+<code>_daily_lottery_res</code>: 每日抽奖结果（示例：<code>FTFFF</code>，<code>T</code> 中奖，<code>F</code> 未中）<br>
+<code>_daily_lottery_res_before</code>: 前一日抽奖结果（示例：<code>TFFFF</code>）<br>
+<code>_daily_lottery_generate_datetime</code>: 每日抽奖结果生成时间（<code>2016-01-01...</code> 常见为初始值）<br>
+<code>_daily_lottery_last_datetime</code>: 上次每日抽奖时间（<code>2016-01-01...</code> 常见为初始值）<br>
+<code>_daily_like_last_datetime</code>: 上次每日点赞时间（<code>2016-01-01...</code> 常见为初始值）<br>
+<code>_daily_like_last_update_ts</code>: 上次每日点赞数据更新时间戳（示例：<code>1765350923</code>）<br>
+<code>_daily_save_ratio_last_datetime</code>: 上次每日存钱比率更新时间（示例：<code>2025-12-10 02:20:59.694411</code>）<br></p></div>
             </div>
         </div>
 

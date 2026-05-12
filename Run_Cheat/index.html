@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="xxl">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Run作弊 - CF Wiki</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">CF Wiki</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">主页</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../quest/" class="nav-link">新手</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../System/" class="nav-link">系统</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Run作弊</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../A_Activity/" class="nav-link">A级活动</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../B_Activity/" class="nav-link">B级活动</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../C_Activity/" class="nav-link">C级活动</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../Activity/" class="nav-link">活动配置</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../inbox/" class="nav-link">Inbox</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../Tools/" class="nav-link">Tools</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../System/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../A_Activity/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#run" class="nav-link">Run 作弊调试</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#cf-run" class="nav-link">CF Run 作弊调试</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#mt-run" class="nav-link">MT Run 作弊调试</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="run">Run 作弊调试</h1>
+<blockquote>
+<p>适用场景：本地调试 / 测试服验证。<br />
+风险提示：以下脚本可能绕过正常触发条件或 CD，避免在正式服账号执行。</p>
+</blockquote>
+<h2 id="cf-run">CF Run 作弊调试</h2>
+<h3 id="1-facebook">1) Facebook 点位弹窗相关</h3>
+<p><code>检测是否满足 FB 点位弹窗条件</code></p>
+<pre><code class="language-lua">bole.showMessageBox(json.encode({
+Facebook:getInstance():isLoggedIn() ,
+UserGuideControl:getInstance():getCollectStoreFreeCoinsRecord() ,
+User:getInstance():isFBEnterFlag() ,
+LobbyControl:getInstance():canPopUGFacebook(),
+}))
+</code></pre>
+<p><code>重置 FB 绑定弹窗 CD</code></p>
+<pre><code class="language-lua">LobbyControl:getInstance().canShowUGFacebook = 1
+LobbyControl:getInstance().binding_type_pop_time = 0
+</code></pre>
+<p><code>无视 CD 直弹 3 种 FB 点位弹窗</code></p>
+<pre><code class="language-lua">PopupController:getInstance():popupDialogDirectly(&quot;userguide_facebook_inbox&quot;, {fromDaily = true, delay = 0.5, from = &quot;test&quot;}, callback)
+PopupController:getInstance():popupDialogDirectly(&quot;userguide_facebook_store&quot;, {fromDaily = true, delay = 0.5, from = &quot;test&quot;}, callback)
+PopupController:getInstance():popupDialogDirectly(&quot;userguide_facebook_stamp&quot;, {fromDaily = true, delay = 0.5, from = &quot;test&quot;}, callback)
+</code></pre>
+<h3 id="2">2) 广告触发与次数限制</h3>
+<p><code>将主题赢钱广告触发概率改为 100%</code></p>
+<pre><code class="language-lua">ADSControl:getInstance():setWinTypePR()
+</code></pre>
+<p><code>重置前端每天 5 次广告限制</code></p>
+<pre><code class="language-lua">ADSControl:getInstance():clearBigwinAdTag()
+</code></pre>
+<p><code>deal 弹窗后广告弹窗无 CD（强制可弹）</code></p>
+<pre><code class="language-lua">function StoreControl:canShowStoreOrSpAdAd()
+    do return true end
+end
+</code></pre>
+<h3 id="3">3) 资源与本地标记重置</h3>
+<p><code>重进游戏后检查删除 B 级老赛季资源（过去时间戳）</code></p>
+<pre><code class="language-lua">libMM.setStringForKey(&quot;b_season_clear_ts&quot;, 1725530111)
+</code></pre>
+<p><code>重置 loading 下载气泡标记</code></p>
+<pre><code class="language-lua">cc.UserDefault:getInstance():setIntegerForKey(&quot;saved_send_update_long_reward_time&quot;, 0)
+</code></pre>
+<p><code>清除新手 coupon 首次进店弹出标记</code></p>
+<pre><code class="language-lua">libMM.setValueForCurrUser(libMM.VALUE.INTEGER, &quot;beginner_coupon_first_enter_store&quot;, 0)
+</code></pre>
+<p><code>清除 B 级内公会挑战弹出标记</code></p>
+<pre><code class="language-lua">libMM.setIntegerForKey(&quot;last_club_challenge_pop&quot;, 0)
+</code></pre>
+<p><code>清除个人中心头像红点标记</code></p>
+<pre><code class="language-lua">libMM.setValueForCurrUser(libMM.VALUE.INTEGER, &quot;fv_header_red&quot;, 1)
+</code></pre>
+<h3 id="4">4) 活动资源与调试信息输出</h3>
+<p><code>打印所有活动类型对应资源名</code></p>
+<pre><code class="language-lua">local ActivityCenterControl = ActivityCenterControl or {}
+local config = ActivityCenterControl.getInstance and ActivityCenterControl:getInstance():getActivityConfig() or {}
+local data = {}
+local max_len_type = 0
+local max_len_res = 0
+
+if type(config) == &quot;table&quot; and next(config) then
+    for _, v in pairs(config) do
+        if type(v) == &quot;table&quot; then
+            local resource_key = v.resource_key or &quot;未配置资源名&quot;
+            local activity_types = v.activity_type or {}
+            if type(activity_types) == &quot;table&quot; then
+                for _, id in pairs(activity_types) do
+                    if type(id) == &quot;string&quot; or type(id) == &quot;number&quot; then
+                        local type_str = tostring(id)
+                        local res_str = tostring(resource_key)
+                        table.insert(data, {type_str, res_str})
+                        max_len_type = math.max(max_len_type, #type_str)
+                        max_len_res = math.max(max_len_res, #res_str)
+                    end
+                end
+            else
+                local type_str = &quot;无活动类型&quot;
+                local res_str = tostring(resource_key)
+                table.insert(data, {type_str, res_str})
+                max_len_type = math.max(max_len_type, #type_str)
+                max_len_res = math.max(max_len_res, #res_str)
+            end
+        end
+    end
+end
+
+if #data &gt; 0 then
+    local header_fmt = string.format(&quot;%%-%ds | %%-%ds&quot;, max_len_type, max_len_res)
+    print(string.format(header_fmt, &quot;活动类型&quot;, &quot;资源名&quot;))
+    print(string.rep(&quot;-&quot;, max_len_type + max_len_res + 3))
+    local row_fmt = string.format(&quot;%%-%ds | %%-%ds&quot;, max_len_type, max_len_res)
+    for _, row in ipairs(data) do
+        print(string.format(row_fmt, row[1], row[2]))
+    end
+else
+    print(&quot;未获取到有效活动配置数据&quot;)
+end
+</code></pre>
+<p><code>打印 OpenGL 版本</code></p>
+<pre><code class="language-lua">print(&quot;openGL Version：&quot;, bole.getGLESVersion())
+</code></pre>
+<h3 id="5">5) 弹窗与主题实验</h3>
+<p><code>本地推送弹出（60s 后；仍需满足业务弹窗条件）</code></p>
+<pre><code class="language-lua">DeepLinkControl:getInstance():setLocalNotificationTestDelayTime(delay, &quot;test&quot;, true)
+</code></pre>
+<p><code>弹出主题内 MB 首次集满气泡</code></p>
+<pre><code class="language-lua">UserGuideControl:getInstance():createUserGuideMoneyBankTips()
+</code></pre>
+<p><code>主题结算弹窗（out_theme_rating_pop）</code></p>
+<pre><code class="language-lua">local data = {
+score = 80, -- 分数
+settlement_level = 1, -- 结算等级
+max_win = 9223372036856, -- 最大赢钱
+tid = 357, -- 主题id
+total_win = 239223372036854, -- 总赢钱
+total_bet = 239223372036, -- 总下注
+}
+PopupController:getInstance():addDialogToPopupTail(&quot;out_theme_rating_pop&quot;, data)
+</code></pre>
+<p><code>主题选 bet 实验组强制开启</code></p>
+<pre><code class="language-lua">function LobbyThemeControl:isLobbyBetShowTestB()
+    return true
+end
+</code></pre>
+<h3 id="6-cash-go">6) Cash Go 专项调试</h3>
+<p><code>Cash Go 转盘倒计时改为 86455</code></p>
+<pre><code class="language-lua">local DataConfig = CashGoController:getInstance():getObjectClassFromRes(&quot;data/DataConfig&quot;)
+local RollBallData = CashGoController:getInstance():getDataMgr():getDataByKey(DataConfig.Enum.DataKey.RollBallData)
+RollBallData.getActivationRollCd = function(this)
+    return 86455
+end
+</code></pre>
+<h2 id="mt-run">MT Run 作弊调试</h2>
+<h3 id="1">1) 好友列表与请求数据</h3>
+<p><code>打印 inbox 好友列表</code></p>
+<pre><code class="language-lua">bole.showMessageBox(json.encode(FriendsCtl:getInboxList()))
+</code></pre>
+<p><code>分别打印好友 / 请求 / 推荐列表</code></p>
+<pre><code class="language-lua">local friends_list = FriendsCtl:getFriendsList()
+local request_list = FriendsCtl:getRequestList()
+local recommended_list = FriendsCtl:getRecommendedList()
+local ret = &quot;好友:  &quot;
+for i, v in ipairs(friends_list) do
+    ret = ret .. tostring(v.user_id) .. &quot;, &quot;
+end
+ret = ret .. &quot;\n请求:  &quot;
+for i, v in ipairs(request_list) do
+    ret = ret .. tostring(v.user_id) .. &quot;, &quot;
+end
+ret = ret .. &quot;\n推荐:  &quot;
+for i, v in ipairs(recommended_list) do
+    ret = ret .. tostring(v.user_id) .. &quot;, &quot;
+end
+bole.showMessageBox(ret)
+</code></pre>
+<h3 id="2-inbox">2) Inbox 与资料编辑弹窗</h3>
+<p><code>请求一次 inbox 奖励数据</code></p>
+<pre><code class="language-lua">SettingCtl:getTycoonInboxList()
+</code></pre>
+<p><code>弹出首次更改头像/昵称引导弹窗</code></p>
+<pre><code class="language-lua">SettingCtl:popupEditProfileRenameHotpopDialog()
+</code></pre>
+<h3 id="3-cd">3) 气泡与本地 CD 重置</h3>
+<p><code>重置 Max bet 气泡 CD</code></p>
+<pre><code class="language-lua">libMM.setValueForCurrUser(libMM.VALUE.STRING, &quot;slot_bet_tip_cd&quot;, &quot;0&quot;)
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/jquery-3.6.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
