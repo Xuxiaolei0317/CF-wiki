@@ -110,7 +110,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>JSON数据处理 - mission_ls字段修改</h1>
+        <h1>JSON数据处理 - current字段修改</h1>
         
         <!-- 原始数据输入区 -->
         <div class="section">
@@ -122,7 +122,7 @@
         
         <!-- 处理按钮 -->
         <div class="btn-container">
-            <button class="process-btn" onclick="processData()">🔧 处理数据（current设为target值）</button>
+            <button class="process-btn" onclick="processData()">🔧 处理数据（current设为对应target值）</button>
         </div>
         
         <!-- 结果展示区 -->
@@ -154,19 +154,33 @@
             try {
                 let data = JSON.parse(originalText);
                 
-                if (!data.mission_ls || !Array.isArray(data.mission_ls)) {
-                    document.getElementById('errorTip').textContent = '错误：数据中未找到有效的mission_ls数组！';
-                    return;
+                let processedCount = 0;
+
+                function syncCurrentWithTarget(value) {
+                    if (Array.isArray(value)) {
+                        value.forEach(syncCurrentWithTarget);
+                        return;
+                    }
+
+                    if (!value || typeof value !== 'object') {
+                        return;
+                    }
+
+                    if (Object.prototype.hasOwnProperty.call(value, 'current') &&
+                        Object.prototype.hasOwnProperty.call(value, 'target')) {
+                        value.current = value.target;
+                        processedCount += 1;
+                    }
+
+                    Object.values(value).forEach(syncCurrentWithTarget);
                 }
 
-                // 核心逻辑：current设为target，collect保持原有逻辑（可根据需求调整）
-                data.mission_ls.forEach(mission => {
-                    if (mission.hasOwnProperty('target')) {
-                        mission.current = mission.target;
-                    }
-                    // 如果你需要自定义collect的值，可在这里修改，示例中collect有1/0两种值
-                    // mission.collect = 0; // 如需强制设为0，取消注释；如需保留原逻辑则删除这行
-                });
+                syncCurrentWithTarget(data);
+
+                if (processedCount === 0) {
+                    document.getElementById('errorTip').textContent = '提示：未找到同时包含current和target的对象。';
+                    return;
+                }
 
                 // 关键：JSON.stringify使用4空格缩进，保证和示例格式完全一致
                 const formattedResult = JSON.stringify(data, null, 4);
