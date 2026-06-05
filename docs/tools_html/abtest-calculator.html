@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AB 测试计算</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
     <style>
         body {
             font-family: '微软雅黑', sans-serif;
@@ -92,19 +94,9 @@
             box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
         }
 
-        /* 新增返回按钮样式 */
-        #back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: auto;
-            padding: 0.5rem 1rem;
-        }
     </style>
 </head>
 <body>
-    <!-- 新增返回按钮 -->
-    <button id="back-button">返回上一级</button>
     <div class="container">
         <h2>AB 测试计算</h2>
         <label for="id_input">输入要计算的 ID：多个 ID 使用空格隔开</label>
@@ -149,10 +141,6 @@
             }
         });
 
-        // 为返回按钮添加点击事件
-        document.getElementById('back-button').addEventListener('click', function() {
-            history.back();
-        });
     </script>
 </body>
 </html>

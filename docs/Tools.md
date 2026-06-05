@@ -1,11 +1,9 @@
 ## [ABtest 计算器](tools_html/abtest-calculator.html)
 ## [金币计算](tools_html/coins-calculator.html)
-<!-- ## [bigwin转轮计算](tools_html/bigwin-calculator.html) -->
-<!-- ## [财富系统计算](tools_html/income-calculator.html) -->
-<!-- ## [财富系统利率计算](tools_html/ratio-calculator.html) -->
 ## [跨天验证内容](tools_html/cross-day-validator.html)
 ## [系统关联图](tools_html/cf-system.html)
 ## [时间戳工具](tools_html/time-test.html)
 ## [模块解锁状态](tools_html/mt-unlock.html)
+## [活动配置生成工具](tools_html/activity-config-generator.html)
 ## [字体预览器](tools_html/fontPreviewer.html)
 

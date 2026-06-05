@@ -54,7 +54,11 @@
         最后一列的☑: 默认勾选就等于开启，不勾选则对应B级入口显示维护状态
 
 ## C级活动配置
-![B级功能配置](images/C_config1.png)
+![C级功能配置](images/C_config1.png)
     1. 左侧列表打开 `Configuration` 页签  
     2. 选择 `System Activate Config`页签  
     3. 选择 `Daily Config`
+    4. 根据需要选择对应的 C 级活动配置项
+    5. 点击 `+ 号` 按钮，选择活动添加配置
+    6. 点击已经配置好的 `活动` ，可以直接去掉对应活动配置
+    7. 配置完成后，点击右上绿色 `Submit` 按钮进行保存配置

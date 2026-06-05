@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动配置生成工具</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #1f2937;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            text-align: center;
+            color: #2563eb;
+        }
+
+        .subtitle {
+            margin: 0;
+            text-align: center;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+        }
+
+        textarea {
+            min-height: 320px;
+            resize: vertical;
+            font-family: Consolas, Monaco, monospace;
+            line-height: 1.5;
+        }
+
+        textarea:focus,
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 16px;
+            color: #fff;
+            background: #2563eb;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.15s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button.secondary {
+            background: #64748b;
+        }
+
+        button.secondary:hover {
+            background: #475569;
+        }
+
+        button.success {
+            background: #16a34a;
+        }
+
+        button.success:hover {
+            background: #15803d;
+        }
+
+        .tip {
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .warning {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #fff7ed;
+            color: #9a3412;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .summary {
+            margin-top: 12px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .grid,
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .page {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="card">
+            <h1>活动配置生成工具</h1>
+            <p class="subtitle">批量输入活动 ID，生成 Daily Config Detail JSON。日期默认当天 00:00，形如 10001-2 的活动会自动输出 activity_id=10001、theme_id=2。</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="form-row">
+                    <div>
+                        <label for="startDate">开始时间</label>
+                        <input id="startDate" type="datetime-local">
+                    </div>
+                    <div>
+                        <label for="endDate">结束时间</label>
+                        <input id="endDate" type="datetime-local">
+                    </div>
+                </div>
+
+                <label for="activityIds">活动 ID</label>
+                <textarea id="activityIds" placeholder="示例：
+10101、10104、10202
+10203
+10001-2"></textarea>
+                <p class="tip">支持中文逗号、英文逗号、空格、换行分隔。带主题的 ID 请直接输入完整格式，例如 10001-2。</p>
+
+                <div class="actions">
+                    <button onclick="generateConfig()">生成 JSON</button>
+                    <button class="secondary" onclick="fillExample()">填入示例</button>
+                    <button class="secondary" onclick="clearAll()">清空</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <label for="output">Daily Config Detail</label>
+                <textarea id="output" readonly placeholder="生成结果会显示在这里..."></textarea>
+                <div class="actions">
+                    <button class="success" onclick="copyResult()">复制结果</button>
+                </div>
+                <div id="summary" class="summary"></div>
+                <div id="warning" class="warning"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const activityOverview = [
+            { id: '20018', name: '1+1FREE(通用）', themeId: '' },
+            { id: '20005-0', name: '1+2free', themeId: '0' },
+            { id: '10303-0', name: '10303偷东西', themeId: '0' },
+            { id: '20008-0', name: '3+1free', themeId: '0' },
+            { id: '20020', name: '5日促销', themeId: '' },
+            { id: '20006', name: '6合1', themeId: '' },
+            { id: '30002', name: '6日活动', themeId: '' },
+            { id: '10201-0', name: '拔钥匙', themeId: '0' },
+            { id: '20019', name: '冰冻宝箱', themeId: '' },
+            { id: '10001-8', name: '唱片', themeId: '8' },
+            { id: '10002-5', name: '超市', themeId: '5' },
+            { id: '10001-9', name: '冲浪板', themeId: '9' },
+            { id: '10106', name: '打地鼠', themeId: '' },
+            { id: '10302', name: '伐木', themeId: '' },
+            { id: '20022', name: '飞镖卡包', themeId: '' },
+            { id: '20004-0', name: '付费礼包', themeId: '0' },
+            { id: '20007-0', name: '付费转轮', themeId: '0' },
+            { id: '10207-0', name: '高尔夫收集', themeId: '0' },
+            { id: '10108', name: '割草寻宝', themeId: '' },
+            { id: '40001', name: '公会挑战', themeId: '' },
+            { id: '10103', name: '刮刮卡', themeId: '' },
+            { id: '10301', name: '合作活动-大猩猩', themeId: '' },
+            { id: '10001-7', name: '黑胶', themeId: '7' },
+            { id: '10001-10', name: '花环', themeId: '10' },
+            { id: '10304', name: '金字塔合作', themeId: '' },
+            { id: '30003', name: '惊喜传送带-Lucky River', themeId: '' },
+            { id: '10002-4', name: '咖啡拉花', themeId: '4' },
+            { id: '20012', name: '砍价促销-水果忍者', themeId: '' },
+            { id: '20015-0', name: '矿山Pick', themeId: '0' },
+            { id: '10001-6', name: '毛线', themeId: '6' },
+            { id: '10002-0', name: '每日排行榜', themeId: '0' },
+            { id: '10002-1', name: '每日排行榜-挤牛奶', themeId: '1' },
+            { id: '10002-2', name: '每日排行榜-自行车', themeId: '2' },
+            { id: '10202-0', name: '披萨转轮', themeId: '0' },
+            { id: '20017-0', name: '拼图挑战', themeId: '0' },
+            { id: '10203', name: '敲砖块', themeId: '' },
+            { id: '20014-0', name: '任务4选3-火箭发射', themeId: '0' },
+            { id: '10004', name: '收集徽章', themeId: '' },
+            { id: '10001-0', name: '收集symbol活动', themeId: '0' },
+            { id: '10001-1', name: '手柄', themeId: '1' },
+            { id: '20013-0', name: '双档位pass', themeId: '0' },
+            { id: '10001-5', name: '围巾', themeId: '5' },
+            { id: '20003-0', name: '无尽促销', themeId: '0' },
+            { id: '20021', name: '无尽促销-沉船', themeId: '' },
+            { id: '20016', name: '小羊Bingo', themeId: '' },
+            { id: '30001', name: '雪天小狗', themeId: '' },
+            { id: '10102', name: '饮料pick', themeId: '' },
+            { id: '10001-3', name: '鱼竿', themeId: '3' },
+            { id: '10001-4', name: '鱼箱', themeId: '4' },
+            { id: '10002-3', name: '纸飞机', themeId: '3' },
+            { id: '10001-2', name: '主机', themeId: '2' },
+            { id: '10101', name: 'bingo', themeId: '' },
+            { id: '20010-0', name: 'bundle购买加倍率', themeId: '0' },
+            { id: '10402', name: 'Catch Loot', themeId: '' },
+            { id: '10210', name: 'Coral Trail', themeId: '' },
+            { id: '10104-0', name: 'Cube Blast', themeId: '0' },
+            { id: '10107', name: 'DRILL RUSH', themeId: '' },
+            { id: '10403', name: 'Free Spin', themeId: '' },
+            { id: '10105', name: 'Merge', themeId: '' },
+            { id: '10209', name: 'Mud Blast', themeId: '' },
+            { id: '20009', name: 'oos促销', themeId: '' },
+            { id: '20002-0', name: 'pick one buy all', themeId: '0' },
+            { id: '10204', name: 'plinko', themeId: '' },
+            { id: '10206-0', name: 'rocket', themeId: '0' },
+            { id: '10401', name: 'Ruby Market', themeId: '' },
+            { id: '20011-0', name: 'spins促销', themeId: '0' },
+            { id: '10208', name: 'SUSHI SPIN RUSH', themeId: '' },
+            { id: '20001-0', name: 'three_order_buy', themeId: '0' },
+            { id: '10005', name: 'token无尽促销', themeId: '' },
+            { id: '10205', name: 'Ultimate Survivor', themeId: '' },
+            { id: '30004', name: 'Weekend Dash', themeId: '' },
+            { id: '20023', name: 'WILD促销', themeId: '' }
+        ];
+
+        const exactMap = new Map(activityOverview.map(item => [item.id, item]));
+        const baseMap = activityOverview.reduce((map, item) => {
+            const baseId = item.id.split('-')[0];
+            if (!map.has(baseId)) {
+                map.set(baseId, []);
+            }
+            map.get(baseId).push(item);
+            return map;
+        }, new Map());
+
+        function getTodayAtMidnight() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}T00:00`;
+        }
+
+        function initDefaultDate() {
+            const today = getTodayAtMidnight();
+            document.getElementById('startDate').value = today;
+            document.getElementById('endDate').value = today;
+        }
+
+        function normalizeDateTime(value) {
+            if (!value) {
+                return '';
+            }
+
+            const parts = value.split(':');
+            return parts.length > 2 ? parts.slice(0, 2).join(':') : value;
+        }
+
+        function parseIds(text) {
+            return text
+                .split(/[\s,，、;；]+/)
+                .map(item => item.trim())
+                .filter(Boolean);
+        }
+
+        function resolveActivity(rawId) {
+            const match = rawId.match(/^(\d+)(?:-(\d+))?$/);
+            if (!match) {
+                return { error: `活动 ID 格式不正确：${rawId}` };
+            }
+
+            const baseId = match[1];
+            const themeFromInput = match[2] ?? null;
+            const exact = exactMap.get(rawId);
+            const sameBase = baseMap.get(baseId) || [];
+            const inferred = exact || (sameBase.length === 1 ? sameBase[0] : null);
+            const themeId = themeFromInput ?? (inferred ? inferred.themeId : '');
+            const themeKey = `${baseId}-${themeId}`;
+            const themedRecord = themeId !== '' ? exactMap.get(themeKey) : null;
+            const record = exact || themedRecord || inferred;
+            const warnings = [];
+
+            if (!record) {
+                warnings.push(`未在活动总览中找到：${rawId}`);
+            }
+
+            if (!themeFromInput && sameBase.length > 1) {
+                warnings.push(`活动 ${baseId} 有多个主题，请输入完整 ID，例如：${sameBase.map(item => item.id).join('、')}`);
+            }
+
+            return {
+                config: {
+                    activity_id: baseId,
+                    activity_name: record ? record.name : '',
+                    start_date: normalizeDateTime(document.getElementById('startDate').value),
+                    end_date: normalizeDateTime(document.getElementById('endDate').value),
+                    theme_id: themeId
+                },
+                warnings
+            };
+        }
+
+        function generateConfig() {
+            const ids = parseIds(document.getElementById('activityIds').value);
+            const output = document.getElementById('output');
+            const warning = document.getElementById('warning');
+            const summary = document.getElementById('summary');
+
+            if (!ids.length) {
+                alert('请先输入活动 ID');
+                return;
+            }
+
+            const configs = [];
+            const warnings = [];
+
+            ids.forEach(id => {
+                const result = resolveActivity(id);
+                if (result.error) {
+                    warnings.push(result.error);
+                    return;
+                }
+                configs.push(result.config);
+                warnings.push(...result.warnings);
+            });
+
+            output.value = JSON.stringify(configs, null, 2);
+            summary.textContent = `已生成 ${configs.length} 条配置`;
+            warning.style.display = warnings.length ? 'block' : 'none';
+            warning.textContent = warnings.join('\n');
+        }
+
+        function fillExample() {
+            document.getElementById('activityIds').value = '10101、10104、10202、10203、10205、10206、10207、10208、10209、10301、10302、10303、10402、30001';
+            generateConfig();
+        }
+
+        function clearAll() {
+            document.getElementById('activityIds').value = '';
+            document.getElementById('output').value = '';
+            document.getElementById('summary').textContent = '';
+            document.getElementById('warning').style.display = 'none';
+            document.getElementById('warning').textContent = '';
+        }
+
+        function copyResult() {
+            const output = document.getElementById('output');
+            if (!output.value) {
+                alert('暂无可复制内容');
+                return;
+            }
+
+            output.select();
+            document.execCommand('copy');
+            alert('复制成功');
+        }
+
+        initDefaultDate();
+    </script>
+</body>
+</html>
