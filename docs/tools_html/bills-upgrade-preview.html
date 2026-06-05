@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bills 升级预览工具</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #1f2937;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+        }
+
+        .page {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            text-align: center;
+            color: #2563eb;
+        }
+
+        .subtitle {
+            margin: 0;
+            text-align: center;
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #334155;
+            font-weight: 700;
+        }
+
+        input,
+        select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+        }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 16px;
+            color: #fff;
+            background: #2563eb;
+            font-size: 15px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .stat {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            background: #f8fafc;
+        }
+
+        .stat-value {
+            margin-top: 4px;
+            color: #0f172a;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .note {
+            margin: 12px 0 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .node {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .node-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 14px 16px;
+            background: linear-gradient(90deg, #eff6ff, #f8fafc);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .node-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1d4ed8;
+        }
+
+        .node-count {
+            color: #475569;
+            font-weight: 700;
+        }
+
+        .upgrade-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+            padding: 14px;
+        }
+
+        .upgrade {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px;
+            background: #fff;
+        }
+
+        .feature-name {
+            margin-bottom: 4px;
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .feature-alias {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .level-line {
+            margin: 10px 0;
+            color: #334155;
+            font-weight: 700;
+        }
+
+        .value-line {
+            display: grid;
+            grid-template-columns: 88px 1fr;
+            gap: 8px;
+            margin-top: 6px;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        .value-label {
+            color: #64748b;
+        }
+
+        .display-value {
+            color: #16a34a;
+            font-weight: 800;
+        }
+
+        .empty {
+            padding: 32px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+            .toolbar,
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .page {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="card">
+            <h1>Bills 升级预览工具</h1>
+            <p class="subtitle">数据快照来自钉钉数值配置表“新版”页签。按 bills 节点汇总：到达该节点时，哪些功能会升级、表内 value 是多少、游戏里应展示成什么。</p>
+        </div>
+
+        <div class="card">
+            <div class="toolbar">
+                <div>
+                    <label for="searchInput">搜索功能 / bills</label>
+                    <input id="searchInput" type="search" placeholder="例如：266K、偷钱、Mega Heist">
+                </div>
+                <div>
+                    <label for="featureFilter">功能筛选</label>
+                    <select id="featureFilter"></select>
+                </div>
+                <div>
+                    <label for="maxBillsInput">只看 bills ≤</label>
+                    <input id="maxBillsInput" type="text" placeholder="例如：1000K / 1,000,000，留空显示全部">
+                </div>
+                <button type="button" onclick="resetFilters()">重置</button>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div>功能数量</div>
+                    <div class="stat-value" id="featureCount">0</div>
+                </div>
+                <div class="stat">
+                    <div>bills 节点</div>
+                    <div class="stat-value" id="nodeCount">0</div>
+                </div>
+                <div class="stat">
+                    <div>升级项</div>
+                    <div class="stat-value" id="upgradeCount">0</div>
+                </div>
+                <div class="stat">
+                    <div>最高 bills</div>
+                    <div class="stat-value" id="maxBills">0</div>
+                </div>
+            </div>
+            <p class="note">说明：表内 value 会按功能转换为游戏展示值，例如 12 显示为 1.2X，1.1 显示为 110%，5/30min 显示为 5 Spins。卡片中同时保留“表内值”，方便核对原表。</p>
+        </div>
+
+        <div id="nodeList"></div>
+    </div>
+
+    <script>
+        const featureData = [{"name":"偷钱金币加成","entries":[{"level":"0","bills":"0","value":"10"},{"level":"1","bills":"136000","value":"12"},{"level":"2","bills":"266000","value":"14"},{"level":"3","bills":"358000","value":"16"},{"level":"4","bills":"518000","value":"18"},{"level":"5","bills":"583000","value":"20"},{"level":"6","bills":"675000","value":"22"},{"level":"7","bills":"762000","value":"23"},{"level":"8","bills":"922000","value":"24"},{"level":"9","bills":"1088000","value":"26"},{"level":"10","bills":"1244000","value":"31"},{"level":"11","bills":"1409000","value":"38"},{"level":"12","bills":"1547000","value":"46"},{"level":"13","bills":"1682000","value":"57"},{"level":"14","bills":"1771000","value":"70"},{"level":"15","bills":"1963000","value":"88"},{"level":"16","bills":"2147000","value":"110"},{"level":"17","bills":"2281000","value":"140"},{"level":"18","bills":"2461000","value":"180"},{"level":"19","bills":"2560000","value":"220"},{"level":"20","bills":"2697000","value":"280"},{"level":"21","bills":"2833000","value":"360"},{"level":"22","bills":"2942000","value":"460"},{"level":"23","bills":"3107000","value":"590"},{"level":"24","bills":"3253000","value":"750"},{"level":"25","bills":"3380000","value":"960"},{"level":"26","bills":"3548000","value":"1220"},{"level":"27","bills":"3651000","value":"1560"},{"level":"28","bills":"3791000","value":"2000"},{"level":"29","bills":"3911000","value":"2560"},{"level":"30","bills":"4021000","value":"3280"},{"level":"31","bills":"4131000","value":"4200"},{"level":"32","bills":"4251000","value":"5380"},{"level":"33","bills":"4371000","value":"6900"},{"level":"34","bills":"4552000","value":"8830"},{"level":"35","bills":"4642000","value":"11300"},{"level":"36","bills":"4752000","value":"14500"},{"level":"37","bills":"4932000","value":"18600"},{"level":"38","bills":"5027000","value":"23800"},{"level":"39","bills":"5142000","value":"30500"},{"level":"40","bills":"5326000","value":"39100"},{"level":"41","bills":"5435000","value":"50100"},{"level":"42","bills":"5563000","value":"64200"},{"level":"43","bills":"5693000","value":"82300"},{"level":"44","bills":"5793000","value":"105400"},{"level":"45","bills":"5943000","value":"135100"},{"level":"46","bills":"6083000","value":"173100"},{"level":"47","bills":"6212000","value":"221800"},{"level":"48","bills":"6382000","value":"284200"},{"level":"49","bills":"6508000","value":"364200"},{"level":"50","bills":"6578000","value":"466700"},{"level":"51","bills":"6754000","value":"598100"}]},{"name":"攻击金币加成","entries":[{"level":"0","bills":"0","value":"10"},{"level":"1","bills":"136000","value":"12"},{"level":"2","bills":"266000","value":"14"},{"level":"3","bills":"358000","value":"16"},{"level":"4","bills":"518000","value":"18"},{"level":"5","bills":"583000","value":"20"},{"level":"6","bills":"675000","value":"22"},{"level":"7","bills":"762000","value":"23"},{"level":"8","bills":"922000","value":"24"},{"level":"9","bills":"1088000","value":"26"},{"level":"10","bills":"1244000","value":"31"},{"level":"11","bills":"1409000","value":"38"},{"level":"12","bills":"1547000","value":"46"},{"level":"13","bills":"1682000","value":"57"},{"level":"14","bills":"1771000","value":"70"},{"level":"15","bills":"1963000","value":"88"},{"level":"16","bills":"2147000","value":"110"},{"level":"17","bills":"2281000","value":"140"},{"level":"18","bills":"2461000","value":"180"},{"level":"19","bills":"2560000","value":"220"},{"level":"20","bills":"2697000","value":"280"},{"level":"21","bills":"2833000","value":"360"},{"level":"22","bills":"2942000","value":"460"},{"level":"23","bills":"3107000","value":"590"},{"level":"24","bills":"3253000","value":"750"},{"level":"25","bills":"3380000","value":"960"},{"level":"26","bills":"3548000","value":"1220"},{"level":"27","bills":"3651000","value":"1560"},{"level":"28","bills":"3791000","value":"2000"},{"level":"29","bills":"3911000","value":"2560"},{"level":"30","bills":"4021000","value":"3280"},{"level":"31","bills":"4131000","value":"4200"},{"level":"32","bills":"4251000","value":"5380"},{"level":"33","bills":"4371000","value":"6900"},{"level":"34","bills":"4552000","value":"8830"},{"level":"35","bills":"4642000","value":"11300"},{"level":"36","bills":"4752000","value":"14500"},{"level":"37","bills":"4932000","value":"18600"},{"level":"38","bills":"5027000","value":"23800"},{"level":"39","bills":"5142000","value":"30500"},{"level":"40","bills":"5326000","value":"39100"},{"level":"41","bills":"5435000","value":"50100"},{"level":"42","bills":"5563000","value":"64200"},{"level":"43","bills":"5693000","value":"82300"},{"level":"44","bills":"5793000","value":"105400"},{"level":"45","bills":"5943000","value":"135100"},{"level":"46","bills":"6083000","value":"173100"},{"level":"47","bills":"6212000","value":"221800"},{"level":"48","bills":"6382000","value":"284200"},{"level":"49","bills":"6508000","value":"364200"},{"level":"50","bills":"6578000","value":"466700"},{"level":"51","bills":"6754000","value":"598100"}]},{"name":"小老虎机金币加成","entries":[{"level":"0","bills":"0","value":"10"},{"level":"1","bills":"121000","value":"12"},{"level":"2","bills":"236000","value":"14"},{"level":"3","bills":"327000","value":"16"},{"level":"4","bills":"484000","value":"18"},{"level":"5","bills":"575000","value":"20"},{"level":"6","bills":"665000","value":"22"},{"level":"7","bills":"734000","value":"23"},{"level":"8","bills":"888000","value":"24"},{"level":"9","bills":"1042000","value":"26"},{"level":"10","bills":"1209000","value":"31"},{"level":"11","bills":"1367000","value":"38"},{"level":"12","bills":"1519000","value":"46"},{"level":"13","bills":"1633000","value":"57"},{"level":"14","bills":"1750000","value":"70"},{"level":"15","bills":"1909000","value":"88"},{"level":"16","bills":"2107000","value":"110"},{"level":"17","bills":"2248000","value":"140"},{"level":"18","bills":"2417000","value":"180"},{"level":"19","bills":"2527000","value":"220"},{"level":"20","bills":"2656000","value":"280"},{"level":"21","bills":"2795000","value":"360"},{"level":"22","bills":"2916000","value":"460"},{"level":"23","bills":"3062000","value":"590"},{"level":"24","bills":"3210000","value":"750"},{"level":"25","bills":"3355000","value":"960"},{"level":"26","bills":"3503000","value":"1220"},{"level":"27","bills":"3615000","value":"1560"},{"level":"28","bills":"3751000","value":"2000"},{"level":"29","bills":"3871000","value":"2560"},{"level":"30","bills":"3986000","value":"3280"},{"level":"31","bills":"4101000","value":"4200"},{"level":"32","bills":"4231000","value":"5380"},{"level":"33","bills":"4346000","value":"6900"},{"level":"34","bills":"4502000","value":"8830"},{"level":"35","bills":"4612000","value":"11300"},{"level":"36","bills":"4717000","value":"14500"},{"level":"37","bills":"4882000","value":"18600"},{"level":"38","bills":"4996000","value":"23800"},{"level":"39","bills":"5106000","value":"30500"},{"level":"40","bills":"5276000","value":"39100"},{"level":"41","bills":"5401000","value":"50100"},{"level":"42","bills":"5524000","value":"64200"},{"level":"43","bills":"5678000","value":"82300"},{"level":"44","bills":"5773000","value":"105400"},{"level":"45","bills":"5903000","value":"135100"},{"level":"46","bills":"6063000","value":"173100"},{"level":"47","bills":"6187000","value":"221800"},{"level":"48","bills":"6332000","value":"284200"},{"level":"49","bills":"6480000","value":"364200"},{"level":"50","bills":"6563000","value":"466700"},{"level":"51","bills":"6707000","value":"598100"},{"level":"52","bills":"6754000","value":"766400"}]},{"name":"商店能量增加","entries":[{"level":"0","bills":"0","value":"10"},{"level":"1","bills":"105000","value":"11"},{"level":"2","bills":"205000","value":"12"},{"level":"3","bills":"296000","value":"13"},{"level":"4","bills":"449000","value":"14"},{"level":"5","bills":"566000","value":"15"},{"level":"6","bills":"654000","value":"16"},{"level":"7","bills":"705000","value":"17"},{"level":"8","bills":"853000","value":"18"},{"level":"9","bills":"996000","value":"19"},{"level":"10","bills":"1173000","value":"20"},{"level":"11","bills":"1324000","value":"21"},{"level":"12","bills":"1490000","value":"22"},{"level":"13","bills":"1583000","value":"23"},{"level":"14","bills":"1728000","value":"24"},{"level":"15","bills":"1855000","value":"25"},{"level":"16","bills":"2067000","value":"26"},{"level":"17","bills":"2214000","value":"27"},{"level":"18","bills":"2372000","value":"28"},{"level":"19","bills":"2493000","value":"29"},{"level":"20","bills":"2615000","value":"30"},{"level":"21","bills":"2757000","value":"31"},{"level":"22","bills":"2890000","value":"32"},{"level":"23","bills":"3016000","value":"33"},{"level":"24","bills":"3166000","value":"34"},{"level":"25","bills":"3330000","value":"35"},{"level":"26","bills":"3457000","value":"36"},{"level":"27","bills":"3578000","value":"37"},{"level":"28","bills":"3711000","value":"38"},{"level":"29","bills":"3831000","value":"39"},{"level":"30","bills":"3951000","value":"40"},{"level":"31","bills":"4071000","value":"41"},{"level":"32","bills":"4211000","value":"42"},{"level":"33","bills":"4320000","value":"43"},{"level":"34","bills":"4452000","value":"44"},{"level":"35","bills":"4582000","value":"45"},{"level":"36","bills":"4682000","value":"46"},{"level":"37","bills":"4832000","value":"47"},{"level":"38","bills":"4965000","value":"48"},{"level":"39","bills":"5069000","value":"49"},{"level":"40","bills":"5226000","value":"50"},{"level":"41","bills":"5366000","value":"51"},{"level":"42","bills":"5485000","value":"52"},{"level":"43","bills":"5663000","value":"53"},{"level":"44","bills":"5753000","value":"54"},{"level":"45","bills":"5863000","value":"55"},{"level":"46","bills":"6043000","value":"56"},{"level":"47","bills":"6162000","value":"57"},{"level":"48","bills":"6282000","value":"58"},{"level":"49","bills":"6451000","value":"59"},{"level":"50","bills":"6548000","value":"60"},{"level":"51","bills":"6659000","value":"61"},{"level":"52","bills":"6754000","value":"62"}]},{"name":"商店金币增加","entries":[{"level":"0","bills":"0","value":"10"},{"level":"1","bills":"105000","value":"11"},{"level":"2","bills":"205000","value":"11"},{"level":"3","bills":"296000","value":"12"},{"level":"4","bills":"449000","value":"13"},{"level":"5","bills":"566000","value":"14"},{"level":"6","bills":"654000","value":"16"},{"level":"7","bills":"705000","value":"18"},{"level":"8","bills":"853000","value":"21"},{"level":"9","bills":"996000","value":"24"},{"level":"10","bills":"1173000","value":"29"},{"level":"11","bills":"1324000","value":"34"},{"level":"12","bills":"1490000","value":"42"},{"level":"13","bills":"1583000","value":"51"},{"level":"14","bills":"1728000","value":"63"},{"level":"15","bills":"1855000","value":"79"},{"level":"16","bills":"2067000","value":"98"},{"level":"17","bills":"2214000","value":"124"},{"level":"18","bills":"2372000","value":"156"},{"level":"19","bills":"2493000","value":"197"},{"level":"20","bills":"2615000","value":"251"},{"level":"21","bills":"2757000","value":"319"},{"level":"22","bills":"2890000","value":"406"},{"level":"23","bills":"3016000","value":"518"},{"level":"24","bills":"3166000","value":"661"},{"level":"25","bills":"3330000","value":"845"},{"level":"26","bills":"3457000","value":"1081"},{"level":"27","bills":"3578000","value":"1382"},{"level":"28","bills":"3711000","value":"1769"},{"level":"29","bills":"3831000","value":"2265"},{"level":"30","bills":"3951000","value":"2900"},{"level":"31","bills":"4071000","value":"3714"},{"level":"32","bills":"4211000","value":"4756"},{"level":"33","bills":"4320000","value":"6093"},{"level":"34","bills":"4452000","value":"7805"},{"level":"35","bills":"4582000","value":"10000"},{"level":"36","bills":"4682000","value":"12812"},{"level":"37","bills":"4832000","value":"16416"},{"level":"38","bills":"4965000","value":"21033"},{"level":"39","bills":"5069000","value":"26951"},{"level":"40","bills":"5226000","value":"34534"},{"level":"41","bills":"5366000","value":"44252"},{"level":"42","bills":"5485000","value":"56705"},{"level":"43","bills":"5663000","value":"72663"},{"level":"44","bills":"5753000","value":"93112"},{"level":"45","bills":"5863000","value":"119317"},{"level":"46","bills":"6043000","value":"152897"},{"level":"47","bills":"6162000","value":"195929"},{"level":"48","bills":"6282000","value":"251073"},{"level":"49","bills":"6451000","value":"321738"},{"level":"50","bills":"6548000","value":"412291"},{"level":"51","bills":"6659000","value":"528333"},{"level":"52","bills":"6754000","value":"677035"}]},{"name":"飞艇奖励增加","entries":[{"level":"0","bills":"0","value":"10"},{"level":"1","bills":"484000","value":"14"},{"level":"2","bills":"734000","value":"17"},{"level":"3","bills":"1209000","value":"20"},{"level":"4","bills":"1633000","value":"23"},{"level":"5","bills":"2107000","value":"26"},{"level":"6","bills":"2527000","value":"29"},{"level":"7","bills":"2916000","value":"32"},{"level":"8","bills":"3355000","value":"35"},{"level":"9","bills":"3751000","value":"38"},{"level":"10","bills":"4101000","value":"41"},{"level":"11","bills":"4502000","value":"44"},{"level":"12","bills":"4882000","value":"47"},{"level":"13","bills":"5276000","value":"50"},{"level":"14","bills":"5678000","value":"53"},{"level":"15","bills":"6063000","value":"56"},{"level":"16","bills":"6480000","value":"59"},{"level":"17","bills":"6754000","value":"62"}]},{"name":"维修费用降低","entries":[{"level":"0","bills":"0","value":"0"},{"level":"1","bills":"327000","value":"2"},{"level":"2","bills":"665000","value":"4"},{"level":"3","bills":"1042000","value":"6"},{"level":"4","bills":"1519000","value":"8"},{"level":"5","bills":"1909000","value":"10"},{"level":"6","bills":"2417000","value":"12"},{"level":"7","bills":"2795000","value":"14"},{"level":"8","bills":"3210000","value":"16"},{"level":"9","bills":"3615000","value":"18"},{"level":"10","bills":"3986000","value":"20"},{"level":"11","bills":"4346000","value":"22"},{"level":"12","bills":"4717000","value":"24"},{"level":"13","bills":"5106000","value":"26"},{"level":"14","bills":"5524000","value":"28"},{"level":"15","bills":"5903000","value":"30"},{"level":"16","bills":"6332000","value":"32"},{"level":"17","bills":"6707000","value":"34"},{"level":"18","bills":"","value":"36"},{"level":"19","bills":"","value":"38"},{"level":"20","bills":"","value":"40"},{"level":"21","bills":"","value":"42"},{"level":"22","bills":"","value":"44"},{"level":"23","bills":"","value":"46"},{"level":"24","bills":"","value":"48"},{"level":"25","bills":"","value":"50"},{"level":"26","bills":"","value":"（暂满）"}]},{"name":"免费转轮","entries":[{"level":"0","bills":"0","value":"10"},{"level":"1","bills":"236000","value":"12"},{"level":"2","bills":"575000","value":"15"},{"level":"3","bills":"888000","value":"18"},{"level":"4","bills":"1367000","value":"21"},{"level":"5","bills":"1750000","value":"24"},{"level":"6","bills":"2248000","value":"27"},{"level":"7","bills":"2656000","value":"30"},{"level":"8","bills":"3062000","value":"33"},{"level":"9","bills":"3503000","value":"36"},{"level":"10","bills":"3871000","value":"39"},{"level":"11","bills":"4231000","value":"42"},{"level":"12","bills":"4612000","value":"45"},{"level":"13","bills":"4996000","value":"48"},{"level":"14","bills":"5401000","value":"51"},{"level":"15","bills":"5773000","value":"54"},{"level":"16","bills":"6187000","value":"57"},{"level":"17","bills":"6563000","value":"60"}]},{"name":"能量积累上限增加","entries":[{"level":"0","bills":"0","value":"50"},{"level":"1","bills":"3100000","value":"55"},{"level":"2","bills":"4500000","value":"60"},{"level":"3","bills":"","value":"65"},{"level":"4","bills":"","value":"70"},{"level":"5","bills":"","value":"（满）"}]},{"name":"能量恢复速度增加","entries":[{"level":"0","bills":"0","value":"5/30min"},{"level":"1","bills":"5500000","value":"6/30min"},{"level":"2","bills":"","value":"7/30min"},{"level":"3","bills":"","value":"（满）"}]},{"name":"盾牌最大数量增加","entries":[{"level":"0","bills":"0","value":"3"},{"level":"1","bills":"4000000","value":"4"},{"level":"2","bills":"","value":"5"},{"level":"3","bills":"","value":"（满）"}]},{"name":"营收金币速度增加","entries":[{"level":"0","bills":"0","value":"1"},{"level":"1","bills":"853000","value":"1.1"},{"level":"2","bills":"1583000","value":"1.2"},{"level":"3","bills":"2493000","value":"1.3"},{"level":"4","bills":"3166000","value":"1.4"},{"level":"5","bills":"3951000","value":"1.5"},{"level":"6","bills":"4582000","value":"1.6"},{"level":"7","bills":"5366000","value":"1.7"},{"level":"8","bills":"6083000","value":"1.8"},{"level":"11","bills":"","value":"（待定）"}]},{"name":"地图宝箱奖励加成","entries":[{"level":"0","bills":"0","value":"高级宝箱概率-低"},{"level":"1","bills":"200000","value":"高级宝箱概率-中"},{"level":"2","bills":"1200000","value":"高级宝箱概率-高"},{"level":"3","bills":"","value":"（满）"}]},{"name":"能量瓶奖励增加","entries":[{"level":"0","bills":"0","value":"5"},{"level":"1","bills":"4552000","value":"6"},{"level":"2","bills":"待定","value":"7"},{"level":"3","bills":"","value":"（满）"}]}];
+
+        const featureMeta = {
+            '偷钱金币加成': { alias: 'Mega Heist', formatter: 'tenthsMultiplier' },
+            '攻击金币加成': { alias: 'Super Attack', formatter: 'tenthsMultiplier' },
+            '小老虎机金币加成': { alias: 'Coin Boost', formatter: 'tenthsMultiplier' },
+            '商店能量增加': { alias: 'Shop Energy', formatter: 'plain' },
+            '商店金币增加': { alias: 'Shop Coins', formatter: 'tenthsMultiplier' },
+            '飞艇奖励增加': { alias: 'Blimp Reward', formatter: 'tenthsMultiplier' },
+            '维修费用降低': { alias: 'Repair Discount', formatter: 'percent' },
+            '免费转轮': { alias: 'Free Spin', formatter: 'tenthsPercent' },
+            '能量积累上限增加': { alias: 'Max Spins', formatter: 'plain' },
+            '能量恢复速度增加': { alias: 'Quick Spin', formatter: 'spinRate' },
+            '盾牌最大数量增加': { alias: 'Ultra Shield', formatter: 'plain' },
+            '营收金币速度增加': { alias: 'Income Surge', formatter: 'multiplierPercent' },
+            '地图宝箱奖励加成': { alias: 'Prime Gift', formatter: 'chestPercent' },
+            '能量瓶奖励增加': { alias: 'Spins Boost', formatter: 'bottlePercent' }
+        };
+
+        const featureFilter = document.getElementById('featureFilter');
+        const searchInput = document.getElementById('searchInput');
+        const maxBillsInput = document.getElementById('maxBillsInput');
+        const nodeList = document.getElementById('nodeList');
+
+        function parseBills(value) {
+            const text = String(value || '').trim();
+            if (!text || /待定|满/.test(text)) {
+                return Number.NaN;
+            }
+
+            const normalized = text.replace(/,/g, '').toUpperCase();
+            const match = normalized.match(/^(\d+(?:\.\d+)?)(K|M)?$/);
+            if (!match) {
+                return Number.NaN;
+            }
+
+            const number = Number(match[1]);
+            const unit = match[2];
+            if (unit === 'M') {
+                return number * 1000000;
+            }
+            if (unit === 'K') {
+                return number * 1000;
+            }
+            return number;
+        }
+
+        function formatBills(value) {
+            const number = Number(value);
+            if (!Number.isFinite(number)) {
+                return value || '-';
+            }
+            if (number >= 1000000) {
+                const text = (number / 1000000).toFixed(number % 1000000 === 0 ? 0 : 3).replace(/\.0+$/, '').replace(/(\.\d*?)0+$/, '$1');
+                return `${text}M`;
+            }
+            if (number >= 1000) {
+                const text = (number / 1000).toFixed(number % 1000 === 0 ? 0 : 1).replace(/\.0$/, '');
+                return `${text}K`;
+            }
+            return String(number);
+        }
+
+        function formatValue(featureName, value) {
+            const raw = String(value || '').trim();
+            if (!raw || /待定|满/.test(raw)) {
+                return raw || '-';
+            }
+
+            const formatter = featureMeta[featureName]?.formatter || 'plain';
+            const number = Number(raw);
+
+            if (formatter === 'tenthsMultiplier' && Number.isFinite(number)) {
+                return `${Number((number / 10).toFixed(2))}X`;
+            }
+            if (formatter === 'tenthsPercent' && Number.isFinite(number)) {
+                return `${Math.round(number * 10)}%`;
+            }
+            if (formatter === 'percent' && Number.isFinite(number)) {
+                return `${number}%`;
+            }
+            if (formatter === 'multiplierPercent' && Number.isFinite(number)) {
+                return `${Math.round(number * 100)}%`;
+            }
+            if (formatter === 'bottlePercent' && Number.isFinite(number)) {
+                return `${Math.round((number / 5) * 100)}%`;
+            }
+            if (formatter === 'spinRate') {
+                const match = raw.match(/^(\d+)\/30min$/);
+                return match ? `${match[1]} Spins` : raw;
+            }
+            if (formatter === 'chestPercent') {
+                if (raw.includes('低')) return '10%';
+                if (raw.includes('中')) return '20%';
+                if (raw.includes('高')) return '30%';
+            }
+            return raw;
+        }
+
+        function buildUpgrades() {
+            const nodes = new Map();
+
+            featureData.forEach(feature => {
+                feature.entries.forEach((entry, index) => {
+                    const billsNumber = parseBills(entry.bills);
+                    if (!Number.isFinite(billsNumber) || billsNumber <= 0) {
+                        return;
+                    }
+
+                    const previous = feature.entries[index - 1] || null;
+                    const upgrade = {
+                        featureName: feature.name,
+                        alias: featureMeta[feature.name]?.alias || '',
+                        bills: billsNumber,
+                        level: entry.level,
+                        fromLevel: previous?.level ?? '-',
+                        tableValue: entry.value,
+                        previousTableValue: previous?.value ?? '',
+                        displayValue: formatValue(feature.name, entry.value),
+                        previousDisplayValue: previous ? formatValue(feature.name, previous.value) : '-'
+                    };
+
+                    if (!nodes.has(billsNumber)) {
+                        nodes.set(billsNumber, []);
+                    }
+                    nodes.get(billsNumber).push(upgrade);
+                });
+            });
+
+            return Array.from(nodes.entries())
+                .map(([bills, upgrades]) => ({ bills, upgrades }))
+                .sort((a, b) => a.bills - b.bills);
+        }
+
+        const allNodes = buildUpgrades();
+
+        function initFilters() {
+            featureFilter.innerHTML = '<option value="">全部功能</option>' + featureData
+                .map(feature => {
+                    const alias = featureMeta[feature.name]?.alias;
+                    const label = alias ? `${feature.name} / ${alias}` : feature.name;
+                    return `<option value="${feature.name}">${label}</option>`;
+                })
+                .join('');
+        }
+
+        function getFilteredNodes() {
+            const keyword = searchInput.value.trim().toLowerCase();
+            const featureName = featureFilter.value;
+            const maxBills = parseBills(maxBillsInput.value);
+
+            return allNodes
+                .filter(node => !Number.isFinite(maxBills) || node.bills <= maxBills)
+                .map(node => {
+                    const upgrades = node.upgrades.filter(upgrade => {
+                        if (featureName && upgrade.featureName !== featureName) {
+                            return false;
+                        }
+                        if (!keyword) {
+                            return true;
+                        }
+                        const haystack = [
+                            upgrade.featureName,
+                            upgrade.alias,
+                            upgrade.tableValue,
+                            upgrade.displayValue,
+                            formatBills(node.bills),
+                            String(node.bills)
+                        ].join(' ').toLowerCase();
+                        return haystack.includes(keyword);
+                    });
+                    return { ...node, upgrades };
+                })
+                .filter(node => node.upgrades.length > 0);
+        }
+
+        function renderStats(nodes) {
+            const upgradeCount = nodes.reduce((sum, node) => sum + node.upgrades.length, 0);
+            const maxNode = nodes.length ? nodes[nodes.length - 1].bills : 0;
+            document.getElementById('featureCount').textContent = featureData.length;
+            document.getElementById('nodeCount').textContent = nodes.length;
+            document.getElementById('upgradeCount').textContent = upgradeCount;
+            document.getElementById('maxBills').textContent = formatBills(maxNode);
+        }
+
+        function renderNodes() {
+            const nodes = getFilteredNodes();
+            renderStats(nodes);
+
+            if (!nodes.length) {
+                nodeList.innerHTML = '<div class="card empty">没有匹配的升级节点</div>';
+                return;
+            }
+
+            nodeList.innerHTML = nodes.map(node => `
+                <section class="node">
+                    <div class="node-header">
+                        <div class="node-title">Bills ${formatBills(node.bills)} <span class="feature-alias">(${node.bills.toLocaleString()})</span></div>
+                        <div class="node-count">${node.upgrades.length} 个功能升级</div>
+                    </div>
+                    <div class="upgrade-grid">
+                        ${node.upgrades.map(renderUpgrade).join('')}
+                    </div>
+                </section>
+            `).join('');
+        }
+
+        function renderUpgrade(upgrade) {
+            const alias = upgrade.alias ? `<div class="feature-alias">${upgrade.alias}</div>` : '';
+            return `
+                <article class="upgrade">
+                    <div class="feature-name">${upgrade.featureName}</div>
+                    ${alias}
+                    <div class="level-line">Lv.${upgrade.fromLevel} → Lv.${upgrade.level}</div>
+                    <div class="value-line">
+                        <span class="value-label">游戏展示</span>
+                        <span><span class="display-value">${upgrade.previousDisplayValue}</span> → <span class="display-value">${upgrade.displayValue}</span></span>
+                    </div>
+                    <div class="value-line">
+                        <span class="value-label">表内 value</span>
+                        <span>${upgrade.previousTableValue || '-'} → ${upgrade.tableValue || '-'}</span>
+                    </div>
+                </article>
+            `;
+        }
+
+        function resetFilters() {
+            searchInput.value = '';
+            featureFilter.value = '';
+            maxBillsInput.value = '';
+            renderNodes();
+        }
+
+        searchInput.addEventListener('input', renderNodes);
+        featureFilter.addEventListener('change', renderNodes);
+        maxBillsInput.addEventListener('input', renderNodes);
+
+        initFilters();
+        renderNodes();
+    </script>
+</body>
+</html>

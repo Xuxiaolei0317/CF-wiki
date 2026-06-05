@@ -5,5 +5,6 @@
 ## [时间戳工具](tools_html/time-test.html)
 ## [模块解锁状态](tools_html/mt-unlock.html)
 ## [活动配置生成工具](tools_html/activity-config-generator.html)
+## [Bills 升级预览工具](tools_html/bills-upgrade-preview.html)
 ## [字体预览器](tools_html/fontPreviewer.html)
 
