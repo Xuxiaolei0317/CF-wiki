@@ -257,7 +257,7 @@
                     <div class="stat-value" id="maxBills">0</div>
                 </div>
             </div>
-            <p class="note">说明：表内 value 会按功能转换为游戏展示值，例如 12 显示为 1.2X，1.1 显示为 110%，5/30min 显示为 5 Spins。卡片中同时保留“表内值”，方便核对原表。</p>
+            <p class="note">说明：表内 value 会按功能转换为游戏展示值，例如 12 显示为 1.2X，2 显示为 -2%，1.1 显示为 110%，5/30min 显示为 5 Spins。卡片中同时保留“表内值”，方便核对原表。</p>
         </div>
 
         <div id="nodeList"></div>
@@ -270,11 +270,11 @@
             '偷钱金币加成': { alias: 'Mega Heist', formatter: 'tenthsMultiplier' },
             '攻击金币加成': { alias: 'Super Attack', formatter: 'tenthsMultiplier' },
             '小老虎机金币加成': { alias: 'Coin Boost', formatter: 'tenthsMultiplier' },
-            '商店能量增加': { alias: 'Shop Energy', formatter: 'plain' },
+            '商店能量增加': { alias: 'Shop Energy', formatter: 'tenthsMultiplier' },
             '商店金币增加': { alias: 'Shop Coins', formatter: 'tenthsMultiplier' },
             '飞艇奖励增加': { alias: 'Blimp Reward', formatter: 'tenthsMultiplier' },
-            '维修费用降低': { alias: 'Repair Discount', formatter: 'percent' },
-            '免费转轮': { alias: 'Free Spin', formatter: 'tenthsPercent' },
+            '维修费用降低': { alias: 'Repair Discount', formatter: 'negativePercent' },
+            '免费转轮': { alias: 'Free Spin', formatter: 'tenthsMultiplier' },
             '能量积累上限增加': { alias: 'Max Spins', formatter: 'plain' },
             '能量恢复速度增加': { alias: 'Quick Spin', formatter: 'spinRate' },
             '盾牌最大数量增加': { alias: 'Ultra Shield', formatter: 'plain' },
@@ -342,8 +342,8 @@
             if (formatter === 'tenthsPercent' && Number.isFinite(number)) {
                 return `${Math.round(number * 10)}%`;
             }
-            if (formatter === 'percent' && Number.isFinite(number)) {
-                return `${number}%`;
+            if (formatter === 'negativePercent' && Number.isFinite(number)) {
+                return `${number === 0 ? 0 : -number}%`;
             }
             if (formatter === 'multiplierPercent' && Number.isFinite(number)) {
                 return `${Math.round(number * 100)}%`;
