@@ -105,6 +105,10 @@
             background: #f8fafc;
         }
 
+        .result-wide {
+            grid-column: 1 / -1;
+        }
+
         .result-title {
             color: #64748b;
             font-size: 13px;
@@ -200,85 +204,13 @@
     <main class="page">
         <section class="hero">
             <h1>Super Vault Heist 数值计算工具</h1>
-            <p class="subtitle">根据钉钉表格“Super Vault Heist_数值配置”整理。用于快速核对展示倍率区间、活动触发概率、高 bet 抑制、bank 扣除和 prize id 映射。</p>
+            <p class="subtitle">根据钉钉表格“Super Vault Heist_数值配置”整理。用于快速核对通用 EB、展示倍率区间、活动触发概率、高 bet 抑制、bank 扣除和 prize id 映射。</p>
         </section>
 
         <section class="grid">
-            <div class="card">
-                <h2>展示目标区间</h2>
+            <div class="card section-full">
+                <h2>通用 EB 计算</h2>
                 <div class="form-grid">
-                    <div>
-                        <label for="normalMulti">normal_multi</label>
-                        <input id="normalMulti" type="number" min="0" step="0.01" data-default-key="normalMulti">
-                    </div>
-                    <div>
-                        <label for="superMulti">super_multi</label>
-                        <input id="superMulti" type="number" min="0" step="0.01" data-default-key="superMulti">
-                    </div>
-                    <div>
-                        <label for="displayPrizeBase">prize_base</label>
-                        <input id="displayPrizeBase" type="number" min="0" step="1" data-default-key="prizeBase">
-                    </div>
-                    <div>
-                        <label for="displayBet">bet</label>
-                        <input id="displayBet" type="number" min="0" step="1" data-default-key="bet">
-                    </div>
-                    <div>
-                        <label for="displayInflation">膨胀系数</label>
-                        <input id="displayInflation" type="number" min="0" step="1" data-default-key="inflation">
-                    </div>
-                </div>
-                <div class="result-grid">
-                    <div class="result">
-                        <div class="result-title">q = super / normal</div>
-                        <div id="qValue" class="result-value">-</div>
-                    </div>
-                    <div class="result">
-                        <div class="result-title">展示倍率范围</div>
-                        <div id="multiRange" class="result-value">-</div>
-                        <div id="multiRule" class="result-note"></div>
-                    </div>
-                    <div class="result">
-                        <div class="result-title">展示金币范围</div>
-                        <div id="coinRange" class="result-value">-</div>
-                        <div class="result-note">金币 = floor(倍率 * prize_base * bet * 膨胀系数)</div>
-                    </div>
-                </div>
-                <p class="note">需求规则：展示倍率在 normal_multi * (q+1)/4 到 normal_multi * 3(q+1)/4；当 q >= 10 时，上限改为 normal_multi * (q+1)/3。</p>
-            </div>
-
-            <div class="card">
-                <h2>活动触发概率</h2>
-                <div class="form-grid">
-                    <div>
-                        <label for="triggerBet">bet</label>
-                        <input id="triggerBet" type="number" min="0" step="1" data-default-key="bet">
-                    </div>
-                    <div>
-                        <label id="triggerAbLabel" for="triggerAb">近 N 次 ab</label>
-                        <input id="triggerAb" type="number" min="0" step="1" data-default-key="recentAb">
-                    </div>
-                    <div>
-                        <label for="pityValue">保底 x</label>
-                        <input id="pityValue" type="number" min="0" step="1" data-default-key="pity">
-                    </div>
-                    <div>
-                        <label for="payerType">OOS 玩家类型</label>
-                        <select id="payerType">
-                            <option value="5">大 R，OOS x5</option>
-                            <option value="4">中 R，OOS x4</option>
-                            <option value="3">小 R，OOS x3</option>
-                            <option value="3">非 R，OOS x3</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="oosState">OOS 条件</label>
-                        <select id="oosState">
-                            <option value="off">不启用 OOS</option>
-                            <option value="eligible">非注册前三天，且 24H 未触发 OOS</option>
-                            <option value="blocked">注册前三天或 24H 内已触发</option>
-                        </select>
-                    </div>
                     <div>
                         <label for="royalCoins">_royal_coins</label>
                         <input id="royalCoins" type="number" min="0" step="1" data-default-key="royalCoins">
@@ -302,6 +234,80 @@
                 </div>
                 <div class="result-grid">
                     <div class="result">
+                        <div class="result-title">金币 EB</div>
+                        <div id="coinsEb" class="result-value">-</div>
+                        <div class="result-note">_royal_coins / one_dollar_coins</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">能量 EB</div>
+                        <div id="energyEb" class="result-value">-</div>
+                        <div class="result-note">(_battery_num + _extra_battery_points) / one_dollar_energy</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">EB 概览</div>
+                        <div id="ebSummary" class="result-value">-</div>
+                        <div class="result-note">通用基础项，后续类似 MT 的计算工具优先保留</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>展示目标区间</h2>
+                <div class="form-grid">
+                    <div>
+                        <label for="normalMulti">normal_multi</label>
+                        <input id="normalMulti" type="number" min="0" step="0.01" data-default-key="normalMulti">
+                    </div>
+                    <div>
+                        <label for="superMulti">super_multi</label>
+                        <input id="superMulti" type="number" min="0" step="0.01" data-default-key="superMulti">
+                    </div>
+                    <div>
+                        <label for="displayPrizeBase">prize_base</label>
+                        <input id="displayPrizeBase" type="number" min="0" step="1" data-default-key="prizeBase">
+                    </div>
+                    <div>
+                        <label for="displayBet">bet</label>
+                        <input id="displayBet" type="number" min="0" step="1" data-default-key="bet">
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="result">
+                        <div class="result-title">q = super / normal</div>
+                        <div id="qValue" class="result-value">-</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">展示倍率范围</div>
+                        <div id="multiRange" class="result-value">-</div>
+                        <div id="multiRule" class="result-note"></div>
+                    </div>
+                    <div class="result result-wide">
+                        <div class="result-title">展示金币范围</div>
+                        <div id="coinRange" class="result-value">-</div>
+                        <div class="result-note">金币 = floor(倍率 * prize_base * bet)</div>
+                    </div>
+                </div>
+                <p class="note">需求规则：展示倍率在 normal_multi * (q+1)/4 到 normal_multi * 3(q+1)/4；当 q >= 10 时，上限改为 normal_multi * (q+1)/3。金币展示按倍率区间乘 prize_base 和 bet 后取整。</p>
+            </div>
+
+            <div class="card">
+                <h2>活动触发概率</h2>
+                <div class="form-grid">
+                    <div>
+                        <label for="triggerBet">bet</label>
+                        <input id="triggerBet" type="number" min="0" step="1" data-default-key="bet">
+                    </div>
+                    <div>
+                        <label id="triggerAbLabel" for="triggerAb">近 N 次 ab</label>
+                        <input id="triggerAb" type="number" min="0" step="1" data-default-key="recentAb">
+                    </div>
+                    <div>
+                        <label for="pityValue">保底 x</label>
+                        <input id="pityValue" type="number" min="0" step="1" data-default-key="pity">
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="result">
                         <div class="result-title">bet / ab</div>
                         <div id="triggerRatio" class="result-value">-</div>
                     </div>
@@ -314,11 +320,6 @@
                         <div class="result-title">未触发后的 x</div>
                         <div id="nextPity" class="result-value">-</div>
                         <div id="triggerStatus" class="result-note"></div>
-                    </div>
-                    <div class="result">
-                        <div class="result-title">金币 EB / 能量 EB</div>
-                        <div id="ebValue" class="result-value">-</div>
-                        <div class="result-note">金币 EB = _royal_coins / one_dollar_coins；能量 EB = (_battery_num + _extra_battery_points) / one_dollar_energy</div>
                     </div>
                 </div>
                 <p id="triggerRuleNote" class="note"></p>
@@ -474,8 +475,7 @@
                 pityDouble: 150,
                 pityBonus: 50,
                 pityBonusMultiplier: 1.5,
-                targetMultiSuppress: 20,
-                oosEnergyBetMultiplier: 3
+                targetMultiSuppress: 20
             },
             baseSuppressWeights: { "super loot": 35, "grand loot": 15, "major loot": 5 }
         };
@@ -575,12 +575,22 @@
             return buckets.find((bucket) => ratio >= bucket.min && ratio < bucket.max) || buckets[buckets.length - 1];
         }
 
+        function calculateEb() {
+            const oneDollarCoins = num("oneDollarCoins");
+            const oneDollarEnergy = num("oneDollarEnergy");
+            const coinsEb = oneDollarCoins > 0 ? num("royalCoins") / oneDollarCoins : NaN;
+            const energyEb = oneDollarEnergy > 0 ? (num("batteryNum") + num("extraBatteryPoints")) / oneDollarEnergy : NaN;
+
+            text("coinsEb", formatNumber(coinsEb, 4));
+            text("energyEb", formatNumber(energyEb, 4));
+            text("ebSummary", `${formatNumber(coinsEb, 4)} / ${formatNumber(energyEb, 4)}`);
+        }
+
         function calculateDisplayRange() {
             const normal = num("normalMulti");
             const superMulti = num("superMulti");
             const prizeBase = num("displayPrizeBase");
             const bet = num("displayBet");
-            const inflation = num("displayInflation") || 1;
 
             if (normal <= 0) {
                 text("qValue", "normal 需 > 0");
@@ -593,8 +603,8 @@
             const q = superMulti / normal;
             const minMulti = normal * (q + 1) / 4;
             const maxMulti = q >= 10 ? normal * (q + 1) / 3 : normal * 3 * (q + 1) / 4;
-            const minCoins = Math.floor(minMulti * prizeBase * bet * inflation);
-            const maxCoins = Math.floor(maxMulti * prizeBase * bet * inflation);
+            const minCoins = Math.floor(minMulti * prizeBase * bet);
+            const maxCoins = Math.floor(maxMulti * prizeBase * bet);
 
             text("qValue", formatNumber(q, 4));
             text("multiRange", `${formatNumber(minMulti, 4)} ~ ${formatNumber(maxMulti, 4)}`);
@@ -609,16 +619,11 @@
                 pityGuaranteed,
                 pityDouble,
                 pityBonus,
-                pityBonusMultiplier,
-                oosEnergyBetMultiplier
+                pityBonusMultiplier
             } = CONFIG.rules;
             const bet = num("triggerBet");
             const ab = num("triggerAb");
             const x = Math.max(0, Math.floor(num("pityValue")));
-            const oneDollarCoins = num("oneDollarCoins");
-            const oneDollarEnergy = num("oneDollarEnergy");
-            const coinsEb = oneDollarCoins > 0 ? num("royalCoins") / oneDollarCoins : 0;
-            const energyEb = oneDollarEnergy > 0 ? (num("batteryNum") + num("extraBatteryPoints")) / oneDollarEnergy : 0;
             const ratio = ab > 0 ? bet / ab : Infinity;
             const minEligibleBet = Math.max(triggerAbRatio * ab, minTriggerBet);
             const eligible = ab > 0 && bet >= minEligibleBet;
@@ -637,16 +642,6 @@
                     chance *= pityBonusMultiplier;
                     detail += `；${pityBonus} <= x < ${pityDouble}，概率 x${pityBonusMultiplier}`;
                 }
-
-                const oosState = document.getElementById("oosState").value;
-                const oosEligible = oosState === "eligible" && energyEb <= oosEnergyBetMultiplier * bet && bet >= minEligibleBet;
-                if (oosEligible) {
-                    const multiplier = Number(document.getElementById("payerType").value);
-                    chance *= multiplier;
-                    detail += `；OOS 生效，能量 EB <= ${oosEnergyBetMultiplier}bet，概率 x${multiplier}`;
-                } else if (oosState === "eligible") {
-                    detail += `；OOS 未满足能量 EB <= ${oosEnergyBetMultiplier}bet`;
-                }
             }
 
             chance = Math.min(1, chance);
@@ -657,7 +652,6 @@
             text("triggerDetail", `${detail}${chance > 0 && chance < 1 ? `；期望 ${formatNumber(1 / chance, 1)} 次` : ""}`);
             text("nextPity", String(nextX));
             text("triggerStatus", eligible ? "如果本次未中，x += 1；中到 super 状态结束后重置为 0" : "不改变概率，也不改变 x");
-            text("ebValue", `${formatNumber(coinsEb, 4)} / ${formatNumber(energyEb, 4)}`);
         }
 
         function calculateSuppression() {
@@ -722,6 +716,7 @@
         }
 
         function calculateAll() {
+            calculateEb();
             calculateDisplayRange();
             calculateTrigger();
             calculateSuppression();
