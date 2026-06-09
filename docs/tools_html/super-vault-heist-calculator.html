@@ -298,8 +298,8 @@
                         <input id="triggerBet" type="number" min="0" step="1" data-default-key="bet">
                     </div>
                     <div>
-                        <label id="triggerAbLabel" for="triggerAb">近 N 次 ab</label>
-                        <input id="triggerAb" type="number" min="0" step="1" data-default-key="recentAb">
+                        <label for="triggerAb">AVG_BET</label>
+                        <input id="triggerAb" type="number" min="0" step="1" data-default-key="avgBet">
                     </div>
                     <div>
                         <label for="pityValue">保底 x</label>
@@ -308,7 +308,7 @@
                 </div>
                 <div class="result-grid">
                     <div class="result">
-                        <div class="result-title">bet / ab</div>
+                        <div class="result-title">bet / AVG_BET</div>
                         <div id="triggerRatio" class="result-value">-</div>
                     </div>
                     <div class="result">
@@ -333,8 +333,8 @@
                         <input id="suppressBet" type="number" min="0" step="1" data-default-key="highBet">
                     </div>
                     <div>
-                        <label id="suppressAbLabel" for="suppressAb">近 N 次 ab</label>
-                        <input id="suppressAb" type="number" min="0" step="1" data-default-key="recentAb">
+                        <label for="suppressAb">AVG_BET</label>
+                        <input id="suppressAb" type="number" min="0" step="1" data-default-key="avgBet">
                     </div>
                     <div>
                         <label for="targetMulti">展示目标倍率</label>
@@ -343,7 +343,7 @@
                 </div>
                 <div class="result-grid">
                     <div class="result">
-                        <div class="result-title">bet / ab 档位</div>
+                        <div class="result-title">bet / AVG_BET 档位</div>
                         <div id="suppressBucket" class="result-value">-</div>
                     </div>
                     <div class="result">
@@ -448,14 +448,13 @@
 
     <script>
         const CONFIG = {
-            recentAbWindow: 300,
             defaultValues: {
                 normalMulti: 10,
                 superMulti: 100,
                 prizeBase: 375,
                 bet: 20,
                 highBet: 100,
-                recentAb: 20,
+                avgBet: 20,
                 inflation: 1,
                 pity: 0,
                 royalCoins: 0,
@@ -549,11 +548,8 @@
 
         function renderRuleNotes() {
             const { minTriggerBet, triggerAbRatio, pityGuaranteed, targetMultiSuppress } = CONFIG.rules;
-            const recentAbLabel = `近 ${CONFIG.recentAbWindow} 次 ab`;
-            text("triggerAbLabel", recentAbLabel);
-            text("suppressAbLabel", recentAbLabel);
-            text("triggerRuleNote", `只有 bet >= max(${triggerAbRatio}ab, ${minTriggerBet}) 时才参与概率和保底 x 变化；x >= ${pityGuaranteed} 时本次概率直接为 1。`);
-            text("suppressRuleNote", `需求规则：展示目标倍率 >= ${targetMultiSuppress} 时，按 bet/ab 档位调整 super loot、grand loot、major loot 权重。`);
+            text("triggerRuleNote", `只有 bet >= max(${triggerAbRatio} * AVG_BET, ${minTriggerBet}) 时才参与概率和保底 x 变化；x >= ${pityGuaranteed} 时本次概率直接为 1。`);
+            text("suppressRuleNote", `需求规则：展示目标倍率 >= ${targetMultiSuppress} 时，按 bet / AVG_BET 档位调整 super loot、grand loot、major loot 权重。`);
         }
 
         function formatNumber(value, digits = 2) {
@@ -622,14 +618,14 @@
                 pityBonusMultiplier
             } = CONFIG.rules;
             const bet = num("triggerBet");
-            const ab = num("triggerAb");
+            const avgBet = num("triggerAb");
             const x = Math.max(0, Math.floor(num("pityValue")));
-            const ratio = ab > 0 ? bet / ab : Infinity;
-            const minEligibleBet = Math.max(triggerAbRatio * ab, minTriggerBet);
-            const eligible = ab > 0 && bet >= minEligibleBet;
+            const ratio = avgBet > 0 ? bet / avgBet : Infinity;
+            const minEligibleBet = Math.max(triggerAbRatio * avgBet, minTriggerBet);
+            const eligible = avgBet > 0 && bet >= minEligibleBet;
             const bucket = findBucket(ratio, triggerBuckets);
             let chance = eligible ? bucket.chance : 0;
-            let detail = eligible ? `基础档位 ${bucket.label}：${formatPercent(bucket.chance)}` : `未满足 bet >= max(${triggerAbRatio}ab, ${minTriggerBet})`;
+            let detail = eligible ? `基础档位 ${bucket.label}：${formatPercent(bucket.chance)}` : `未满足 bet >= max(${triggerAbRatio} * AVG_BET, ${minTriggerBet})`;
 
             if (eligible) {
                 if (x >= pityGuaranteed) {
@@ -657,9 +653,9 @@
         function calculateSuppression() {
             const { targetMultiSuppress } = CONFIG.rules;
             const bet = num("suppressBet");
-            const ab = num("suppressAb");
+            const avgBet = num("suppressAb");
             const targetMulti = num("targetMulti");
-            const ratio = ab > 0 ? bet / ab : Infinity;
+            const ratio = avgBet > 0 ? bet / avgBet : Infinity;
             const bucket = findBucket(ratio, suppressBuckets);
             const enabled = targetMulti >= targetMultiSuppress;
             const weights = enabled ? bucket.weights : CONFIG.baseSuppressWeights;
