@@ -268,7 +268,7 @@
                     </div>
                     <div>
                         <label for="displayBet">bet</label>
-                        <input id="displayBet" type="number" min="0" step="1" data-default-key="bet">
+                        <input id="displayBet" type="number" min="0" step="1" data-default-key="bet" data-sync-key="bet">
                     </div>
                 </div>
                 <div class="result-grid">
@@ -295,11 +295,11 @@
                 <div class="form-grid">
                     <div>
                         <label for="triggerBet">bet</label>
-                        <input id="triggerBet" type="number" min="0" step="1" data-default-key="bet">
+                        <input id="triggerBet" type="number" min="0" step="1" data-default-key="bet" data-sync-key="bet">
                     </div>
                     <div>
                         <label for="triggerAb">AVG_BET</label>
-                        <input id="triggerAb" type="number" min="0" step="1" data-default-key="avgBet">
+                        <input id="triggerAb" type="number" min="0" step="1" data-default-key="avgBet" data-sync-key="avgBet">
                     </div>
                     <div>
                         <label for="pityValue">保底 x</label>
@@ -330,11 +330,11 @@
                 <div class="form-grid">
                     <div>
                         <label for="suppressBet">bet</label>
-                        <input id="suppressBet" type="number" min="0" step="1" data-default-key="highBet">
+                        <input id="suppressBet" type="number" min="0" step="1" data-default-key="bet" data-sync-key="bet">
                     </div>
                     <div>
                         <label for="suppressAb">AVG_BET</label>
-                        <input id="suppressAb" type="number" min="0" step="1" data-default-key="avgBet">
+                        <input id="suppressAb" type="number" min="0" step="1" data-default-key="avgBet" data-sync-key="avgBet">
                     </div>
                     <div>
                         <label for="targetMulti">展示目标倍率</label>
@@ -383,7 +383,7 @@
                     </div>
                     <div>
                         <label for="bankBet">当前 bet</label>
-                        <input id="bankBet" type="number" min="0" step="1" data-default-key="bet">
+                        <input id="bankBet" type="number" min="0" step="1" data-default-key="bet" data-sync-key="bet">
                     </div>
                     <div>
                         <label for="inflationCoef">e_c_inflation_coef</label>
@@ -454,7 +454,6 @@
                 superMulti: 100,
                 prizeBase: 375,
                 bet: 20,
-                highBet: 100,
                 avgBet: 20,
                 inflation: 1,
                 pity: 0,
@@ -565,6 +564,30 @@
             }
         }
 
+        function syncGroupedValue(source) {
+            const key = source.dataset.syncKey;
+            if (!key) {
+                return;
+            }
+
+            document.querySelectorAll(`[data-sync-key="${key}"]`).forEach((element) => {
+                if (element !== source) {
+                    element.value = source.value;
+                }
+            });
+        }
+
+        function syncAllGroups() {
+            const handledKeys = new Set();
+            document.querySelectorAll("[data-sync-key]").forEach((element) => {
+                const key = element.dataset.syncKey;
+                if (!handledKeys.has(key)) {
+                    syncGroupedValue(element);
+                    handledKeys.add(key);
+                }
+            });
+        }
+
         function initializeDefaults() {
             document.querySelectorAll("[data-default-key]").forEach((element) => {
                 const key = element.dataset.defaultKey;
@@ -577,6 +600,7 @@
                     element.value = cachedValues[element.id];
                 }
             });
+            syncAllGroups();
         }
 
         function renderRuleNotes() {
@@ -758,10 +782,12 @@
 
         formControls().forEach((element) => {
             element.addEventListener("input", () => {
+                syncGroupedValue(element);
                 saveCachedValues();
                 calculateAll();
             });
             element.addEventListener("change", () => {
+                syncGroupedValue(element);
                 saveCachedValues();
                 calculateAll();
             });
