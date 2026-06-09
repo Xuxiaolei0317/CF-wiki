@@ -448,6 +448,7 @@
 
     <script>
         const CONFIG = {
+            cacheKey: "super-vault-heist-calculator:v1",
             defaultValues: {
                 normalMulti: 10,
                 superMulti: 100,
@@ -539,10 +540,42 @@
             document.getElementById(id).textContent = value;
         }
 
+        function formControls() {
+            return Array.from(document.querySelectorAll("input, select")).filter((element) => element.id);
+        }
+
+        function readCachedValues() {
+            try {
+                return JSON.parse(localStorage.getItem(CONFIG.cacheKey)) || {};
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function saveCachedValues() {
+            const values = formControls().reduce((result, element) => {
+                result[element.id] = element.value;
+                return result;
+            }, {});
+
+            try {
+                localStorage.setItem(CONFIG.cacheKey, JSON.stringify(values));
+            } catch (error) {
+                // Ignore storage failures, for example private browsing restrictions.
+            }
+        }
+
         function initializeDefaults() {
             document.querySelectorAll("[data-default-key]").forEach((element) => {
                 const key = element.dataset.defaultKey;
                 element.value = CONFIG.defaultValues[key];
+            });
+
+            const cachedValues = readCachedValues();
+            formControls().forEach((element) => {
+                if (Object.prototype.hasOwnProperty.call(cachedValues, element.id)) {
+                    element.value = cachedValues[element.id];
+                }
             });
         }
 
@@ -723,9 +756,15 @@
         initializeDefaults();
         renderRuleNotes();
 
-        document.querySelectorAll("input, select").forEach((element) => {
-            element.addEventListener("input", calculateAll);
-            element.addEventListener("change", calculateAll);
+        formControls().forEach((element) => {
+            element.addEventListener("input", () => {
+                saveCachedValues();
+                calculateAll();
+            });
+            element.addEventListener("change", () => {
+                saveCachedValues();
+                calculateAll();
+            });
         });
 
         calculateAll();
