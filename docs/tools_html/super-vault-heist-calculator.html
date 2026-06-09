@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Vault Heist 数值计算工具</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #0f172a;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+        }
+
+        .page {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .hero,
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 22px rgba(15, 23, 42, 0.08);
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            color: #2563eb;
+            text-align: center;
+        }
+
+        h2 {
+            margin: 0 0 14px;
+            color: #1d4ed8;
+            font-size: 20px;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: #64748b;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #334155;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            padding: 10px 12px;
+            background: #fff;
+            color: #0f172a;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .result {
+            min-height: 76px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            background: #f8fafc;
+        }
+
+        .result-title {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .result-value {
+            margin-top: 6px;
+            color: #0f172a;
+            font-size: 22px;
+            font-weight: 800;
+            word-break: break-all;
+        }
+
+        .result-note {
+            margin-top: 4px;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .warn {
+            color: #dc2626;
+            font-weight: 800;
+        }
+
+        .ok {
+            color: #16a34a;
+            font-weight: 800;
+        }
+
+        .note {
+            margin: 12px 0 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 9px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e40af;
+            position: sticky;
+            top: 0;
+        }
+
+        .table-wrap {
+            max-height: 380px;
+            overflow: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
+
+        .section-full {
+            grid-column: 1 / -1;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: 1fr 180px;
+            gap: 12px;
+            align-items: end;
+        }
+
+        @media (max-width: 980px) {
+            .grid,
+            .form-grid,
+            .result-grid,
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .page {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="hero">
+            <h1>Super Vault Heist 数值计算工具</h1>
+            <p class="subtitle">根据钉钉表格“Super Vault Heist_数值配置”整理。用于快速核对展示倍率区间、活动触发概率、高 bet 抑制、bank 扣除和 prize id 映射。</p>
+        </section>
+
+        <section class="grid">
+            <div class="card">
+                <h2>展示目标区间</h2>
+                <div class="form-grid">
+                    <div>
+                        <label for="normalMulti">normal_multi</label>
+                        <input id="normalMulti" type="number" min="0" step="0.01" data-default-key="normalMulti">
+                    </div>
+                    <div>
+                        <label for="superMulti">super_multi</label>
+                        <input id="superMulti" type="number" min="0" step="0.01" data-default-key="superMulti">
+                    </div>
+                    <div>
+                        <label for="displayPrizeBase">prize_base</label>
+                        <input id="displayPrizeBase" type="number" min="0" step="1" data-default-key="prizeBase">
+                    </div>
+                    <div>
+                        <label for="displayBet">bet</label>
+                        <input id="displayBet" type="number" min="0" step="1" data-default-key="bet">
+                    </div>
+                    <div>
+                        <label for="displayInflation">膨胀系数</label>
+                        <input id="displayInflation" type="number" min="0" step="1" data-default-key="inflation">
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="result">
+                        <div class="result-title">q = super / normal</div>
+                        <div id="qValue" class="result-value">-</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">展示倍率范围</div>
+                        <div id="multiRange" class="result-value">-</div>
+                        <div id="multiRule" class="result-note"></div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">展示金币范围</div>
+                        <div id="coinRange" class="result-value">-</div>
+                        <div class="result-note">金币 = floor(倍率 * prize_base * bet * 膨胀系数)</div>
+                    </div>
+                </div>
+                <p class="note">需求规则：展示倍率在 normal_multi * (q+1)/4 到 normal_multi * 3(q+1)/4；当 q >= 10 时，上限改为 normal_multi * (q+1)/3。</p>
+            </div>
+
+            <div class="card">
+                <h2>活动触发概率</h2>
+                <div class="form-grid">
+                    <div>
+                        <label for="triggerBet">bet</label>
+                        <input id="triggerBet" type="number" min="0" step="1" data-default-key="bet">
+                    </div>
+                    <div>
+                        <label id="triggerAbLabel" for="triggerAb">近 N 次 ab</label>
+                        <input id="triggerAb" type="number" min="0" step="1" data-default-key="recentAb">
+                    </div>
+                    <div>
+                        <label for="pityValue">保底 x</label>
+                        <input id="pityValue" type="number" min="0" step="1" data-default-key="pity">
+                    </div>
+                    <div>
+                        <label for="payerType">OOS 玩家类型</label>
+                        <select id="payerType">
+                            <option value="5">大 R，OOS x5</option>
+                            <option value="4">中 R，OOS x4</option>
+                            <option value="3">小 R，OOS x3</option>
+                            <option value="3">非 R，OOS x3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="oosState">OOS 条件</label>
+                        <select id="oosState">
+                            <option value="off">不启用 OOS</option>
+                            <option value="eligible">非注册前三天，且 24H 未触发 OOS</option>
+                            <option value="blocked">注册前三天或 24H 内已触发</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="royalCoins">_royal_coins</label>
+                        <input id="royalCoins" type="number" min="0" step="1" data-default-key="royalCoins">
+                    </div>
+                    <div>
+                        <label for="oneDollarCoins">one_dollar_coins</label>
+                        <input id="oneDollarCoins" type="number" min="0" step="1" data-default-key="oneDollarCoins">
+                    </div>
+                    <div>
+                        <label for="batteryNum">_battery_num</label>
+                        <input id="batteryNum" type="number" min="0" step="1" data-default-key="batteryNum">
+                    </div>
+                    <div>
+                        <label for="extraBatteryPoints">_extra_battery_points</label>
+                        <input id="extraBatteryPoints" type="number" min="0" step="1" data-default-key="extraBatteryPoints">
+                    </div>
+                    <div>
+                        <label for="oneDollarEnergy">one_dollar_energy</label>
+                        <input id="oneDollarEnergy" type="number" min="0" step="1" data-default-key="oneDollarEnergy">
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="result">
+                        <div class="result-title">bet / ab</div>
+                        <div id="triggerRatio" class="result-value">-</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">最终触发概率</div>
+                        <div id="triggerChance" class="result-value">-</div>
+                        <div id="triggerDetail" class="result-note"></div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">未触发后的 x</div>
+                        <div id="nextPity" class="result-value">-</div>
+                        <div id="triggerStatus" class="result-note"></div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">金币 EB / 能量 EB</div>
+                        <div id="ebValue" class="result-value">-</div>
+                        <div class="result-note">金币 EB = _royal_coins / one_dollar_coins；能量 EB = (_battery_num + _extra_battery_points) / one_dollar_energy</div>
+                    </div>
+                </div>
+                <p id="triggerRuleNote" class="note"></p>
+            </div>
+
+            <div class="card">
+                <h2>高 bet 抑制</h2>
+                <div class="form-grid">
+                    <div>
+                        <label for="suppressBet">bet</label>
+                        <input id="suppressBet" type="number" min="0" step="1" data-default-key="highBet">
+                    </div>
+                    <div>
+                        <label id="suppressAbLabel" for="suppressAb">近 N 次 ab</label>
+                        <input id="suppressAb" type="number" min="0" step="1" data-default-key="recentAb">
+                    </div>
+                    <div>
+                        <label for="targetMulti">展示目标倍率</label>
+                        <input id="targetMulti" type="number" min="0" step="0.01" data-default-key="targetMulti">
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="result">
+                        <div class="result-title">bet / ab 档位</div>
+                        <div id="suppressBucket" class="result-value">-</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">抑制是否生效</div>
+                        <div id="suppressState" class="result-value">-</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">权重合计</div>
+                        <div id="suppressTotal" class="result-value">-</div>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>奖项</th>
+                                <th>权重</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suppressTable"></tbody>
+                    </table>
+                </div>
+                <p id="suppressRuleNote" class="note"></p>
+            </div>
+
+            <div class="card">
+                <h2>Bank 扣除</h2>
+                <div class="form-grid">
+                    <div>
+                        <label for="stealEx">steal_ex</label>
+                        <input id="stealEx" type="number" min="0" step="1" data-default-key="stealEx">
+                    </div>
+                    <div>
+                        <label for="targetStealEx">target_steal_ex_3</label>
+                        <input id="targetStealEx" type="number" min="0" step="1" data-default-key="targetStealEx">
+                    </div>
+                    <div>
+                        <label for="bankBet">当前 bet</label>
+                        <input id="bankBet" type="number" min="0" step="1" data-default-key="bet">
+                    </div>
+                    <div>
+                        <label for="inflationCoef">e_c_inflation_coef</label>
+                        <input id="inflationCoef" type="number" min="0" step="1" data-default-key="inflation">
+                    </div>
+                    <div>
+                        <label for="currentBank">当前 bank（可选）</label>
+                        <input id="currentBank" type="number" step="1" data-default-key="currentBank">
+                    </div>
+                </div>
+                <div class="result-grid">
+                    <div class="result">
+                        <div class="result-title">扣除值</div>
+                        <div id="bankCost" class="result-value">-</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">扣除后 bank</div>
+                        <div id="bankAfter" class="result-value">-</div>
+                    </div>
+                    <div class="result">
+                        <div class="result-title">比较结果</div>
+                        <div id="bankCompare" class="result-value">-</div>
+                    </div>
+                </div>
+                <p class="note">需求公式：if steal_ex &gt; target_steal_ex_3，bank -= (steal_ex - target_steal_ex_3) / e_c_inflation_coef / 当前 bet。</p>
+            </div>
+
+            <div class="card section-full">
+                <h2>Prize ID / 新作弊映射</h2>
+                <div class="toolbar">
+                    <div>
+                        <label for="prizeSearch">搜索 prize id / 描述 / 映射</label>
+                        <input id="prizeSearch" type="search" placeholder="例如：104、999X、super loot、115">
+                    </div>
+                    <div>
+                        <label for="prizeTypeFilter">类型</label>
+                        <select id="prizeTypeFilter">
+                            <option value="all">全部</option>
+                            <option value="随机">随机</option>
+                            <option value="固定结果">固定结果</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>类型</th>
+                                <th>prize id</th>
+                                <th>1级 ev</th>
+                                <th>rtp</th>
+                                <th>描述</th>
+                                <th>映射到新作弊</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prizeTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const CONFIG = {
+            recentAbWindow: 300,
+            defaultValues: {
+                normalMulti: 10,
+                superMulti: 100,
+                prizeBase: 375,
+                bet: 20,
+                highBet: 100,
+                recentAb: 20,
+                inflation: 1,
+                pity: 0,
+                royalCoins: 0,
+                oneDollarCoins: 1,
+                batteryNum: 999999,
+                extraBatteryPoints: 0,
+                oneDollarEnergy: 1,
+                targetMulti: 20,
+                stealEx: 100000,
+                targetStealEx: 75000,
+                currentBank: 0
+            },
+            rules: {
+                minTriggerBet: 20,
+                triggerAbRatio: 0.8,
+                pityGuaranteed: 300,
+                pityDouble: 150,
+                pityBonus: 50,
+                pityBonusMultiplier: 1.5,
+                targetMultiSuppress: 20,
+                oosEnergyBetMultiplier: 3
+            },
+            baseSuppressWeights: { "super loot": 35, "grand loot": 15, "major loot": 5 }
+        };
+
+        const triggerBuckets = [
+            { label: "(0, 0.2)", min: 0, max: 0.2, chance: 0 },
+            { label: "[0.2, 0.3)", min: 0.2, max: 0.3, chance: 0.000666666666666667 },
+            { label: "[0.3, 0.5)", min: 0.3, max: 0.5, chance: 0.00111111111111111 },
+            { label: "[0.5, 0.8)", min: 0.5, max: 0.8, chance: 0.002 },
+            { label: "[0.8, 1.25)", min: 0.8, max: 1.25, chance: 0.005 },
+            { label: "[1.25, 2)", min: 1.25, max: 2, chance: 0.00625 },
+            { label: "[2, 3)", min: 2, max: 3, chance: 0.00833333333333333 },
+            { label: "[3, +∞)", min: 3, max: Infinity, chance: 0.01 }
+        ];
+
+        const suppressBuckets = [
+            { label: "(0, 1.5)", min: 0, max: 1.5, weights: { "super loot": 35, "grand loot": 15, "major loot": 5 } },
+            { label: "[1.5, 3)", min: 1.5, max: 3, weights: { "super loot": 30, "grand loot": 20, "major loot": 5 } },
+            { label: "[3, 5)", min: 3, max: 5, weights: { "super loot": 25, "grand loot": 25, "major loot": 5 } },
+            { label: "[5, 10)", min: 5, max: 10, weights: { "super loot": 15, "grand loot": 35, "major loot": 5 } },
+            { label: "[10, 20)", min: 10, max: 20, weights: { "super loot": 5, "grand loot": 45, "major loot": 5 } },
+            { label: "[20, +∞)", min: 20, max: Infinity, weights: { "super loot": 0, "grand loot": 50, "major loot": 5 } }
+        ];
+
+        const prizeRows = [
+            ["随机", 0, "", 0, "金币 rtp=1，near miss 占比=", ""],
+            ["随机", 1, "", 0, "金币和活动同时存在，活动占比 30%，且 rtp 为 3", ""],
+            ["随机", 2, "", 0, "金币和活动同时存在，活动占比 30%，且 rtp 为 10", ""],
+            ["随机", 3, "", 0, "金币和活动同时存在，活动占比 30%，且 rtp 为 20", ""],
+            ["固定结果", 100, "", 0, "偷（随机）", ""],
+            ["固定结果", 101, 3000, 6, "偷（minor loot）", ""],
+            ["固定结果", 102, 6000, 12, "偷（major loot）", ""],
+            ["固定结果", 103, "", 0, "偷（grand loot，倍数随机）", ""],
+            ["固定结果", 104, 12000, 24, "偷（grand loot，2X）", 115],
+            ["固定结果", 105, "", 0, "偷（grand loot，4X）", 115],
+            ["固定结果", 106, 18000, 36, "偷（grand loot，3X）", 115],
+            ["固定结果", 107, 30000, 60, "偷（grand loot，5X）", 115],
+            ["固定结果", 108, 48000, 96, "偷（grand loot，8X）", 116],
+            ["固定结果", 109, 60000, 120, "偷（grand loot，10X）", 117],
+            ["固定结果", 110, 120000, 240, "偷（grand loot，20X）", 119],
+            ["固定结果", 111, 300000, 600, "偷（grand loot，50X）", 120],
+            ["固定结果", 112, 600000, 1200, "偷（grand loot，100X）", 121],
+            ["固定结果", 113, 3000000, 6000, "偷（grand loot，500X）", 123],
+            ["固定结果", 114, 5994000, 11988, "偷（grand loot，999X）", 124],
+            ["固定结果", 115, 37500, 75, "偷（super loot，5X）", ""],
+            ["固定结果", 116, 60000, 120, "偷（super loot，8X）", ""],
+            ["固定结果", 117, 75000, 150, "偷（super loot，10X）", ""],
+            ["固定结果", 118, 112500, 225, "偷（super loot，15X）", ""],
+            ["固定结果", 119, 150000, 300, "偷（super loot，20X）", ""],
+            ["固定结果", 120, 375000, 750, "偷（super loot，50X）", ""],
+            ["固定结果", 121, 750000, 1500, "偷（super loot，100X）", ""],
+            ["固定结果", 122, 1500000, 3000, "偷（super loot，200X）", ""],
+            ["固定结果", 123, 7492500, 14985, "偷（super loot，999X）", ""]
+        ];
+
+        function num(id) {
+            const value = Number(document.getElementById(id).value);
+            return Number.isFinite(value) ? value : 0;
+        }
+
+        function text(id, value) {
+            document.getElementById(id).textContent = value;
+        }
+
+        function initializeDefaults() {
+            document.querySelectorAll("[data-default-key]").forEach((element) => {
+                const key = element.dataset.defaultKey;
+                element.value = CONFIG.defaultValues[key];
+            });
+        }
+
+        function renderRuleNotes() {
+            const { minTriggerBet, triggerAbRatio, pityGuaranteed, targetMultiSuppress } = CONFIG.rules;
+            const recentAbLabel = `近 ${CONFIG.recentAbWindow} 次 ab`;
+            text("triggerAbLabel", recentAbLabel);
+            text("suppressAbLabel", recentAbLabel);
+            text("triggerRuleNote", `只有 bet >= max(${triggerAbRatio}ab, ${minTriggerBet}) 时才参与概率和保底 x 变化；x >= ${pityGuaranteed} 时本次概率直接为 1。`);
+            text("suppressRuleNote", `需求规则：展示目标倍率 >= ${targetMultiSuppress} 时，按 bet/ab 档位调整 super loot、grand loot、major loot 权重。`);
+        }
+
+        function formatNumber(value, digits = 2) {
+            if (!Number.isFinite(value)) {
+                return "-";
+            }
+            const fixed = Math.abs(value) >= 1000 ? 0 : digits;
+            return value.toLocaleString("zh-CN", { maximumFractionDigits: fixed });
+        }
+
+        function formatPercent(value) {
+            if (!Number.isFinite(value)) {
+                return "-";
+            }
+            return `${(value * 100).toFixed(4)}%`;
+        }
+
+        function findBucket(ratio, buckets) {
+            return buckets.find((bucket) => ratio >= bucket.min && ratio < bucket.max) || buckets[buckets.length - 1];
+        }
+
+        function calculateDisplayRange() {
+            const normal = num("normalMulti");
+            const superMulti = num("superMulti");
+            const prizeBase = num("displayPrizeBase");
+            const bet = num("displayBet");
+            const inflation = num("displayInflation") || 1;
+
+            if (normal <= 0) {
+                text("qValue", "normal 需 > 0");
+                text("multiRange", "-");
+                text("coinRange", "-");
+                text("multiRule", "");
+                return;
+            }
+
+            const q = superMulti / normal;
+            const minMulti = normal * (q + 1) / 4;
+            const maxMulti = q >= 10 ? normal * (q + 1) / 3 : normal * 3 * (q + 1) / 4;
+            const minCoins = Math.floor(minMulti * prizeBase * bet * inflation);
+            const maxCoins = Math.floor(maxMulti * prizeBase * bet * inflation);
+
+            text("qValue", formatNumber(q, 4));
+            text("multiRange", `${formatNumber(minMulti, 4)} ~ ${formatNumber(maxMulti, 4)}`);
+            text("coinRange", `${formatNumber(minCoins)} ~ ${formatNumber(maxCoins)}`);
+            text("multiRule", q >= 10 ? "q >= 10，使用收窄上限 (q+1)/3" : "q < 10，使用常规上限 3(q+1)/4");
+        }
+
+        function calculateTrigger() {
+            const {
+                minTriggerBet,
+                triggerAbRatio,
+                pityGuaranteed,
+                pityDouble,
+                pityBonus,
+                pityBonusMultiplier,
+                oosEnergyBetMultiplier
+            } = CONFIG.rules;
+            const bet = num("triggerBet");
+            const ab = num("triggerAb");
+            const x = Math.max(0, Math.floor(num("pityValue")));
+            const oneDollarCoins = num("oneDollarCoins");
+            const oneDollarEnergy = num("oneDollarEnergy");
+            const coinsEb = oneDollarCoins > 0 ? num("royalCoins") / oneDollarCoins : 0;
+            const energyEb = oneDollarEnergy > 0 ? (num("batteryNum") + num("extraBatteryPoints")) / oneDollarEnergy : 0;
+            const ratio = ab > 0 ? bet / ab : Infinity;
+            const minEligibleBet = Math.max(triggerAbRatio * ab, minTriggerBet);
+            const eligible = ab > 0 && bet >= minEligibleBet;
+            const bucket = findBucket(ratio, triggerBuckets);
+            let chance = eligible ? bucket.chance : 0;
+            let detail = eligible ? `基础档位 ${bucket.label}：${formatPercent(bucket.chance)}` : `未满足 bet >= max(${triggerAbRatio}ab, ${minTriggerBet})`;
+
+            if (eligible) {
+                if (x >= pityGuaranteed) {
+                    chance = 1;
+                    detail += `；x >= ${pityGuaranteed}，本次必触发`;
+                } else if (x >= pityDouble) {
+                    chance *= 2;
+                    detail += `；x >= ${pityDouble}，概率 x2`;
+                } else if (x >= pityBonus) {
+                    chance *= pityBonusMultiplier;
+                    detail += `；${pityBonus} <= x < ${pityDouble}，概率 x${pityBonusMultiplier}`;
+                }
+
+                const oosState = document.getElementById("oosState").value;
+                const oosEligible = oosState === "eligible" && energyEb <= oosEnergyBetMultiplier * bet && bet >= minEligibleBet;
+                if (oosEligible) {
+                    const multiplier = Number(document.getElementById("payerType").value);
+                    chance *= multiplier;
+                    detail += `；OOS 生效，能量 EB <= ${oosEnergyBetMultiplier}bet，概率 x${multiplier}`;
+                } else if (oosState === "eligible") {
+                    detail += `；OOS 未满足能量 EB <= ${oosEnergyBetMultiplier}bet`;
+                }
+            }
+
+            chance = Math.min(1, chance);
+            const nextX = eligible && chance < 1 ? x + 1 : x;
+
+            text("triggerRatio", formatNumber(ratio, 4));
+            text("triggerChance", formatPercent(chance));
+            text("triggerDetail", `${detail}${chance > 0 && chance < 1 ? `；期望 ${formatNumber(1 / chance, 1)} 次` : ""}`);
+            text("nextPity", String(nextX));
+            text("triggerStatus", eligible ? "如果本次未中，x += 1；中到 super 状态结束后重置为 0" : "不改变概率，也不改变 x");
+            text("ebValue", `${formatNumber(coinsEb, 4)} / ${formatNumber(energyEb, 4)}`);
+        }
+
+        function calculateSuppression() {
+            const { targetMultiSuppress } = CONFIG.rules;
+            const bet = num("suppressBet");
+            const ab = num("suppressAb");
+            const targetMulti = num("targetMulti");
+            const ratio = ab > 0 ? bet / ab : Infinity;
+            const bucket = findBucket(ratio, suppressBuckets);
+            const enabled = targetMulti >= targetMultiSuppress;
+            const weights = enabled ? bucket.weights : CONFIG.baseSuppressWeights;
+            const total = Object.values(weights).reduce((sum, value) => sum + value, 0);
+
+            text("suppressBucket", formatNumber(ratio, 4));
+            text("suppressState", enabled ? "生效" : "不生效");
+            document.getElementById("suppressState").className = `result-value ${enabled ? "ok" : "warn"}`;
+            text("suppressTotal", String(total));
+
+            document.getElementById("suppressTable").innerHTML = Object.entries(weights).map(([name, weight]) => `
+                <tr>
+                    <td>${name}</td>
+                    <td>${weight}</td>
+                    <td>${total > 0 ? formatPercent(weight / total) : "-"}</td>
+                </tr>
+            `).join("");
+        }
+
+        function calculateBank() {
+            const stealEx = num("stealEx");
+            const target = num("targetStealEx");
+            const bet = num("bankBet");
+            const coef = num("inflationCoef");
+            const currentBank = num("currentBank");
+            const canDeduct = stealEx > target && bet > 0 && coef > 0;
+            const cost = canDeduct ? (stealEx - target) / coef / bet : 0;
+
+            text("bankCost", formatNumber(cost, 4));
+            text("bankAfter", formatNumber(currentBank - cost, 4));
+            text("bankCompare", stealEx > target ? "steal_ex 更大" : "无需扣除");
+            document.getElementById("bankCompare").className = `result-value ${stealEx > target ? "warn" : "ok"}`;
+        }
+
+        function renderPrizeTable() {
+            const keyword = document.getElementById("prizeSearch").value.trim().toLowerCase();
+            const type = document.getElementById("prizeTypeFilter").value;
+            const rows = prizeRows.filter((row) => {
+                const matchType = type === "all" || row[0] === type;
+                const matchKeyword = !keyword || row.join(" ").toLowerCase().includes(keyword);
+                return matchType && matchKeyword;
+            });
+
+            document.getElementById("prizeTable").innerHTML = rows.map((row) => `
+                <tr>
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2] === "" ? "" : formatNumber(Number(row[2]))}</td>
+                    <td>${row[3]}</td>
+                    <td>${row[4]}</td>
+                    <td>${row[5] || ""}</td>
+                </tr>
+            `).join("");
+        }
+
+        function calculateAll() {
+            calculateDisplayRange();
+            calculateTrigger();
+            calculateSuppression();
+            calculateBank();
+            renderPrizeTable();
+        }
+
+        initializeDefaults();
+        renderRuleNotes();
+
+        document.querySelectorAll("input, select").forEach((element) => {
+            element.addEventListener("input", calculateAll);
+            element.addEventListener("change", calculateAll);
+        });
+
+        calculateAll();
+    </script>
+</body>
+</html>

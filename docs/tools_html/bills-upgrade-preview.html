@@ -234,8 +234,8 @@
                     <select id="featureFilter"></select>
                 </div>
                 <div>
-                    <label for="maxBillsInput">只看 bills ≤</label>
-                    <input id="maxBillsInput" type="text" placeholder="例如：1000K / 1,000,000，留空显示全部">
+                    <label for="currentBillsInput">当前 bills</label>
+                    <input id="currentBillsInput" type="text" placeholder="例如：1000K / 1,000,000，留空显示全部">
                 </div>
                 <button type="button" onclick="resetFilters()">重置</button>
             </div>
@@ -283,9 +283,16 @@
             '能量瓶奖励增加': { alias: 'Spins Boost', formatter: 'bottlePercent' }
         };
 
+        const disabledUpgradeKeys = new Set([
+            '偷钱金币加成|51|6754000|598100',
+            '攻击金币加成|51|6754000|598100',
+            '商店能量增加|52|6754000|62',
+            '商店金币增加|52|6754000|677035'
+        ]);
+
         const featureFilter = document.getElementById('featureFilter');
         const searchInput = document.getElementById('searchInput');
-        const maxBillsInput = document.getElementById('maxBillsInput');
+        const currentBillsInput = document.getElementById('currentBillsInput');
         const nodeList = document.getElementById('nodeList');
 
         function parseBills(value) {
@@ -363,17 +370,37 @@
             return raw;
         }
 
+        function getUpgradeKey(featureName, entry) {
+            return `${featureName}|${entry.level}|${String(entry.bills || '').replace(/,/g, '')}|${entry.value}`;
+        }
+
+        function isDisabledUpgrade(featureName, entry) {
+            return disabledUpgradeKeys.has(getUpgradeKey(featureName, entry));
+        }
+
+        function isLastBillsEntry(featureName, entries, index) {
+            return !entries.slice(index + 1).some(entry => (
+                !isDisabledUpgrade(featureName, entry) && Number.isFinite(parseBills(entry.bills))
+            ));
+        }
+
+        function formatDisplayValue(featureName, value, isMax) {
+            const displayValue = formatValue(featureName, value);
+            return isMax ? `MAX（${displayValue}）` : displayValue;
+        }
+
         function buildUpgrades() {
             const nodes = new Map();
 
             featureData.forEach(feature => {
                 feature.entries.forEach((entry, index) => {
                     const billsNumber = parseBills(entry.bills);
-                    if (!Number.isFinite(billsNumber) || billsNumber <= 0) {
+                    if (!Number.isFinite(billsNumber) || billsNumber <= 0 || isDisabledUpgrade(feature.name, entry)) {
                         return;
                     }
 
                     const previous = feature.entries[index - 1] || null;
+                    const isMax = isLastBillsEntry(feature.name, feature.entries, index);
                     const upgrade = {
                         featureName: feature.name,
                         alias: featureMeta[feature.name]?.alias || '',
@@ -382,7 +409,7 @@
                         fromLevel: previous?.level ?? '-',
                         tableValue: entry.value,
                         previousTableValue: previous?.value ?? '',
-                        displayValue: formatValue(feature.name, entry.value),
+                        displayValue: formatDisplayValue(feature.name, entry.value, isMax),
                         previousDisplayValue: previous ? formatValue(feature.name, previous.value) : '-'
                     };
 
@@ -413,10 +440,10 @@
         function getFilteredNodes() {
             const keyword = searchInput.value.trim().toLowerCase();
             const featureName = featureFilter.value;
-            const maxBills = parseBills(maxBillsInput.value);
+            const currentBills = parseBills(currentBillsInput.value);
 
             return allNodes
-                .filter(node => !Number.isFinite(maxBills) || node.bills <= maxBills)
+                .filter(node => !Number.isFinite(currentBills) || node.bills > currentBills)
                 .map(node => {
                     const upgrades = node.upgrades.filter(upgrade => {
                         if (featureName && upgrade.featureName !== featureName) {
@@ -493,13 +520,13 @@
         function resetFilters() {
             searchInput.value = '';
             featureFilter.value = '';
-            maxBillsInput.value = '';
+            currentBillsInput.value = '';
             renderNodes();
         }
 
         searchInput.addEventListener('input', renderNodes);
         featureFilter.addEventListener('change', renderNodes);
-        maxBillsInput.addEventListener('input', renderNodes);
+        currentBillsInput.addEventListener('input', renderNodes);
 
         initFilters();
         renderNodes();
