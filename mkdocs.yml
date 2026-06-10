@@ -3,7 +3,6 @@ site_author: xxl
 
 nav:
     - 主页: index.md
-    - 新手: quest.md
     - 系统: System.md
     - Run作弊: Run_Cheat.md
     - A级活动: A_Activity.md
