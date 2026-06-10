@@ -93,6 +93,34 @@
             line-height: 1.6;
         }
 
+        .symbol-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .symbol-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .symbol-table th,
+        .symbol-table td {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 10px 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .symbol-table th {
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+        }
+
+        .symbol-table tr:last-child td {
+            border-bottom: 0;
+        }
+
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -169,11 +197,42 @@
         </section>
 
         <section class="card">
+            <label>Symbol ID 说明</label>
+            <div class="symbol-table-wrapper">
+                <table class="symbol-table">
+                    <thead>
+                        <tr>
+                            <th>字母</th>
+                            <th>ID</th>
+                            <th>英文名</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A</td><td>1</td><td>Shield</td><td>盾牌</td></tr>
+                        <tr><td>B</td><td>2</td><td>Steal</td><td>偷钱</td></tr>
+                        <tr><td>C</td><td>3</td><td>Attack</td><td>攻击</td></tr>
+                        <tr><td>D</td><td>4</td><td>Energy</td><td>能量(电池)</td></tr>
+                        <tr><td>E</td><td>5</td><td>Wild</td><td>Wild，和其他图标一起展示时会转换成其他图标</td></tr>
+                        <tr><td>F</td><td>6</td><td>Gold</td><td>大钱袋</td></tr>
+                        <tr><td>G</td><td>7</td><td>Coins</td><td>小金币</td></tr>
+                        <tr><td>H</td><td>8</td><td>Chest</td><td>宝箱，spin bet 大于等于 50 时才能使用</td></tr>
+                        <tr><td>I</td><td>9</td><td>CollectSymbol</td><td>活动收集道具 - 10001, 10007</td></tr>
+                        <tr><td>J</td><td>10</td><td>GoldenKeySymbol</td><td>活动钥匙道具 - 从 10201 到 10209</td></tr>
+                        <tr><td>K</td><td>11</td><td>DoublePassSymbol</td><td>活动钥匙道具 - 20013</td></tr>
+                        <tr><td>L</td><td>12</td><td>CooperativeTaskSymbol</td><td>合作任务道具 - 从 10301 到 10304</td></tr>
+                        <tr><td>M</td><td>13</td><td>FreeSpinSymbol</td><td>free_spin 活动 symbol - 10403</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card">
             <div class="form-grid">
                 <div class="field">
                     <label for="prizeId">Prize ID / 图标 ID</label>
                     <input id="prizeId" type="number" value="3" step="1">
-                    <div class="hint">目标图标 ID。钉钉表格基础 symbol 配置中可见 ID 0-8，示例里 3 对应 [3,3,3]。</div>
+                    <div class="hint">目标图标 ID。基础图标使用 1-7，没有 0；其中 5 是 wild，和其他图标一起展示时会转换成其他图标。</div>
                 </div>
 
                 <div class="field">
@@ -189,13 +248,13 @@
                         <option value="medium">中：2 个相同 ID + 1 个随机 ID</option>
                         <option value="small">小：1 个相同 ID + 2 个随机 ID</option>
                     </select>
-                    <div class="hint">随机 ID 会从候选池中排除当前 Prize ID 后抽取。</div>
+                    <div class="hint">随机 ID 会从候选池中排除当前 Prize ID 后抽取。默认不放入 5，避免 wild 把中/小结果转成更高连线。</div>
                 </div>
 
                 <div class="field">
                     <label for="candidateIds">随机候选 ID</label>
-                    <input id="candidateIds" type="text" value="0,1,2,3,4,5,6,7,8">
-                    <div class="hint">用英文逗号、空格或换行分隔。默认参考钉钉表格里的基础 symbol ID。</div>
+                    <input id="candidateIds" type="text" value="1,2,3,4,6,7">
+                    <div class="hint">用英文逗号、空格或换行分隔。默认使用 1-7，并排除 wild ID 5。</div>
                 </div>
             </div>
 
@@ -222,7 +281,7 @@
     </main>
 
     <script>
-        const DEFAULT_IDS = '0,1,2,3,4,5,6,7,8';
+        const DEFAULT_IDS = '1,2,3,4,6,7';
         const prizeInput = document.getElementById('prizeId');
         const countInput = document.getElementById('scriptCount');
         const sizeSelect = document.getElementById('sizeType');
