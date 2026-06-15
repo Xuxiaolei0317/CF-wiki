@@ -114,8 +114,8 @@
         
         <h2>初始设置:</h2>
         <div class="input-group">
-            <label for="initialState">输入当前字节序列，去GM搜索：解锁标记（如:\xff\x01\x00 ）:</label>
-            <input type="text" id="initialState" placeholder="输入字节序列，如: \x00\x00\x00" value="\x00\x00\x00">
+            <label for="initialState">输入当前字节序列，去GM搜索：解锁标记（如:\xff\x01\x00\x00 ）:</label>
+            <input type="text" id="initialState" placeholder="输入字节序列，如: \x00\x00\x00\x00" value="\x00\x00\x00\x00">
         </div>
         
         <h2>操作:输入字节序列后，先点击“重置”按钮，再操作模块索引</h2>
@@ -132,14 +132,14 @@
         <h2>当前状态:</h2>
         <div class="status-section">
             <div class="status-box">
-                <strong style="color: #ef4f05;">字节序列: { </strong> <span id="bytesStatus">\xa9\x01\x00</span><strong style="color: #ef4f05;"> }</strong>
+                <strong style="color: #ef4f05;">字节序列: { </strong> <span id="bytesStatus">\xa9\x01\x00\x00</span><strong style="color: #ef4f05;"> }</strong>
                 <button id="copyBytesBtn" style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">复制</button>
             </div>
             <div class="status-box">
-                <strong>十六进制表示:</strong> <span id="hexStatus">0xa90200</span>
+                <strong>十六进制表示:</strong> <span id="hexStatus">0xa9020000</span>
             </div>
             <div class="status-box">
-                <strong>二进制表示:</strong> <span id="binaryStatus">10101001 00000010 00000000</span>
+                <strong>二进制表示:</strong> <span id="binaryStatus">10101001 00000010 00000000 00000000</span>
             </div>
         </div>
         
@@ -254,6 +254,7 @@
                 21: '21-Growth Trail',
                 22: '22-unlock_nu_force_aid',
                 23: '23-new_island_two',
+                24: '24-超级偷钱',
             };
             
             // 获取最大模块索引
@@ -303,6 +304,13 @@
                         for (let i = 0; i < initialHex.length; i += 2) {
                             bytes[i / 2] = parseInt(initialHex.substr(i, 2), 16);
                         }
+                    }
+                    
+                    const requiredByteLength = Math.ceil((maxModuleIndex + 1) / 8);
+                    if (bytes.length < requiredByteLength) {
+                        const paddedBytes = new Uint8Array(requiredByteLength);
+                        paddedBytes.set(bytes);
+                        bytes = paddedBytes;
                     }
                     
                     manager = new ModuleUnlockManager(bytes);
