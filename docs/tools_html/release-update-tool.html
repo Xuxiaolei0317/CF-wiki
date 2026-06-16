@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>更新内容生成工具</title>
+  <link rel="stylesheet" href="./tool-common.css">
+  <script src="./tool-common.js" defer></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f7fb;
+      color: #1f2937;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+
+    .page-wrap {
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0;
+    }
+
+    main {
+      padding: 28px;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      color: #2563eb;
+      text-align: center;
+      font-size: 30px;
+    }
+
+    .desc {
+      margin: 0 0 24px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .tool-panel {
+      display: grid;
+      gap: 18px;
+      margin-top: 8px;
+    }
+
+    .panel {
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      background: #fafafa;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #111827;
+      font-weight: 700;
+    }
+
+    .project-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .project-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .project-option input {
+      width: auto;
+      margin: 0;
+    }
+
+    input[type="file"],
+    textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input[type="file"] {
+      padding: 12px;
+    }
+
+    textarea {
+      min-height: 260px;
+      padding: 14px 16px;
+      line-height: 1.7;
+      resize: vertical;
+    }
+
+    input[type="file"]:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .field-tip,
+    .tips {
+      margin: 8px 0 0;
+      color: #6b7280;
+      line-height: 1.7;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 6px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      min-width: 120px;
+      padding: 11px 18px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button.primary {
+      background: #2563eb;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.24);
+    }
+
+    button.primary:hover {
+      background: #1d4ed8;
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    button.secondary:hover {
+      background: #d1d5db;
+    }
+
+    .status {
+      min-height: 24px;
+      margin: 0;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .status.error {
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    @media (max-width: 640px) {
+      .page-wrap {
+        width: min(100% - 24px, 920px);
+        padding: 56px 0 24px;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <main>
+      <h1>更新内容生成工具</h1>
+      <p class="desc">上传 CF / MT 发布计划 Excel，读取 A、B 两列从第 3 行开始的内容，生成带序号的更新文本并复制。</p>
+
+      <div class="tool-panel">
+        <section class="panel">
+          <label>项目</label>
+          <div class="project-options">
+            <label class="project-option">
+              <input type="radio" name="project" value="CF" checked>
+              CF
+            </label>
+            <label class="project-option">
+              <input type="radio" name="project" value="MT">
+              MT
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <label for="excel-file">发布计划 Excel</label>
+          <input id="excel-file" type="file" accept=".xlsx,.xls">
+          <p class="field-tip">支持文件名类似 <code>CF项目组__发布计划_*.xlsx</code> 或 <code>MT项目组__发布计划_*.xlsx</code>。</p>
+        </section>
+
+        <div class="actions">
+          <button class="primary" type="button" id="generate-btn">生成内容</button>
+          <button class="secondary" type="button" id="copy-btn">复制结果</button>
+          <button class="secondary" type="button" id="clear-btn">清空</button>
+        </div>
+
+        <section>
+          <label for="result">生成结果</label>
+          <textarea id="result" placeholder="生成后的更新内容会显示在这里"></textarea>
+        </section>
+
+        <p class="status" id="status"></p>
+
+        <section class="panel">
+          <p class="tips">
+            生成规则与原脚本一致：标题为“当前月日 + 项目 + 更新内容”，例如 <code>6月16日CF 更新内容：</code>；
+            明细从 Excel 第 3 行开始读取 A、B 两列，两列都有内容时拼接为一行，并自动添加 <code>1、</code> 序号。
+          </p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    const fileInput = document.getElementById('excel-file');
+    const result = document.getElementById('result');
+    const statusEl = document.getElementById('status');
+    const generateBtn = document.getElementById('generate-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const clearBtn = document.getElementById('clear-btn');
+
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.classList.toggle('error', isError);
+    }
+
+    function getSelectedProject() {
+      return document.querySelector('input[name="project"]:checked').value;
+    }
+
+    function getDateLabel() {
+      const now = new Date();
+      return `${now.getMonth() + 1}月${now.getDate()}日`;
+    }
+
+    function normalizeCell(value) {
+      return String(value ?? '').trim();
+    }
+
+    async function parseWorkbook(file) {
+      const buffer = await file.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+
+      if (!sheetName) {
+        throw new Error('Excel 中没有可读取的工作表。');
+      }
+
+      const sheet = workbook.Sheets[sheetName];
+      return XLSX.utils.sheet_to_json(sheet, {
+        header: 1,
+        defval: '',
+        blankrows: true,
+        raw: false
+      });
+    }
+
+    async function generateContent() {
+      const file = fileInput.files[0];
+
+      if (!file) {
+        setStatus('请先选择发布计划 Excel。', true);
+        return;
+      }
+
+      try {
+        const rows = await parseWorkbook(file);
+        const project = getSelectedProject();
+        const lines = [`${getDateLabel()}${project} 更新内容：`];
+
+        rows.slice(2).forEach((row) => {
+          const first = normalizeCell(row[0]);
+          const second = normalizeCell(row[1]);
+
+          if (first && second) {
+            lines.push(`${lines.length}、${first} ${second}`);
+          }
+        });
+
+        if (lines.length === 1) {
+          result.value = '';
+          setStatus('未读取到有效内容，请确认第 3 行开始的 A、B 两列都有内容。', true);
+          return;
+        }
+
+        result.value = lines.join('\n');
+        result.focus();
+        result.select();
+        setStatus(`已生成 ${lines.length - 1} 条${project}更新内容。点击“复制结果”复制，或直接手动复制文本框内容。`);
+      } catch (error) {
+        result.value = '';
+        setStatus(error.message || '解析 Excel 失败，请确认文件格式。', true);
+      }
+    }
+
+    async function copyResult(showStatus = true) {
+      const text = result.value.trim();
+
+      if (!text) {
+        if (showStatus) {
+          setStatus('没有可复制的内容。', true);
+        }
+        return;
+      }
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          result.focus();
+          result.select();
+          document.execCommand('copy');
+        }
+      } catch (error) {
+        result.focus();
+        result.select();
+        setStatus('浏览器不允许自动复制，已选中文本，请按 Ctrl+C / Command+C 手动复制。', true);
+        return;
+      }
+
+      if (showStatus) {
+        setStatus('已复制到剪贴板。');
+      }
+    }
+
+    generateBtn.addEventListener('click', generateContent);
+    copyBtn.addEventListener('click', () => copyResult(true));
+    clearBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      result.value = '';
+      setStatus('');
+    });
+  </script>
+</body>
+</html>
