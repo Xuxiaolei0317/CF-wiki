@@ -1,0 +1,60 @@
+name: TAPD Weekly Release Plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "查询项目"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - both
+          - CF
+          - MT
+      date:
+        description: "查询日期，留空则使用当天，格式 YYYY-MM-DD"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  query:
+    runs-on: ubuntu-latest
+
+    env:
+      TAPD_ACCESS_TOKEN: ${{ secrets.TAPD_ACCESS_TOKEN }}
+      TAPD_API_USER: ${{ secrets.TAPD_API_USER }}
+      TAPD_API_PASSWORD: ${{ secrets.TAPD_API_PASSWORD }}
+      TAPD_API_BASE_URL: ${{ vars.TAPD_API_BASE_URL || 'https://api.tapd.cn' }}
+      TAPD_BASE_URL: ${{ vars.TAPD_BASE_URL || 'https://www.tapd.cn' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install tools
+        run: python -m pip install --upgrade mkdocs uv
+
+      - name: Query TAPD release plan
+        run: |
+          if [ -n "${{ inputs.date }}" ]; then
+            python3 tapd_weekly_release_plan.py \
+              --project "${{ inputs.project }}" \
+              --date "${{ inputs.date }}" \
+              --output-json docs/data/tapd-weekly-release-plan.json
+          else
+            python3 tapd_weekly_release_plan.py \
+              --project "${{ inputs.project }}" \
+              --output-json docs/data/tapd-weekly-release-plan.json
+          fi
+
+      - name: Deploy to GitHub Pages
+        run: mkdocs gh-deploy --force

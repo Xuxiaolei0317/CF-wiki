@@ -1,0 +1,9 @@
+{
+  "generated_at": "2026-06-17T12:00:00+08:00",
+  "query_date": "2026-06-17",
+  "week_start": "2026-06-15",
+  "week_end": "2026-06-21",
+  "project": "both",
+  "source": "placeholder",
+  "text": "6月17日系统更新内容：\n1、【VALUE】1115628 【优化】特殊vvip提供7日推送及保护\n2、【VALUE】1115613 【优化】财富系统产出及难度调整\n3、【SLO】1115364 【优化】Payment Link，二选一界面点击pl按钮时也触发cancel协议"
+}
