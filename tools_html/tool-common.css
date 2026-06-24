@@ -1,0 +1,41 @@
+.wiki-back-button {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #fff;
+    font: 600 14px/1.2 Arial, "Microsoft YaHei", sans-serif;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.28);
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.wiki-back-button:hover {
+    background: #1d4ed8;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.36);
+    transform: translateY(-1px);
+}
+
+.wiki-back-button:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.28);
+    outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+    .wiki-back-button {
+        left: 12px;
+        top: 12px;
+        padding: 7px 12px;
+        font-size: 13px;
+    }
+}
