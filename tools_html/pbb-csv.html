@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>2026值班排班表生成器（最终匹配版）</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei"}
+        body{max-width:900px;margin:30px auto;padding:0 20px;background:#f5f7fa}
+        .box{background:#fff;padding:25px;border-radius:10px;box-shadow:0 2px 10px #0001}
+        h2{text-align:center;color:#333;margin-bottom:20px}
+        textarea{width:100%;height:120px;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;margin-bottom:15px}
+        .item{margin-bottom:12px}
+        .item label{display:block;margin-bottom:5px;color:#555}
+        .item input{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px}
+        .btn{padding:12px 24px;background:#409eff;color:#fff;border:none;border-radius:6px;cursor:pointer;margin-right:10px}
+        .btn:hover{background:#337ecc}
+        .tip{margin-top:16px;color:#666;font-size:13px;line-height:1.6}
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2>2026值班排班表生成器（最终匹配版）</h2>
+
+    <div class="item">
+        <label>值班人员（已去掉华子骏，一行一个）</label>
+        <textarea id="names">苏磊
+梁煦
+孙一
+徐泽昊
+马旭妍</textarea>
+    </div>
+
+    <div class="item">
+        <label>开始日期 YYYY-MM-DD</label>
+        <input id="start" value="2026-04-16">
+    </div>
+    <div class="item">
+        <label>结束日期 YYYY-MM-DD</label>
+        <input id="end" value="2026-04-21">
+    </div>
+
+    <button class="btn" onclick="makeCSV()">一键生成CSV排班表</button>
+    <button class="btn" onclick="reset()">重置</button>
+
+    <div class="tip">
+        ✔ 工作日：9点跨天1人、6点跨天1人，周末/节假日列空<br>
+        ✔ 周末/节假日：仅周末/节假日列填2人（中文逗号分隔），9点/6点列空<br>
+        ✔ 自动备注：工作日/周末（周六/周日）/节假日<br>
+        ✔ 格式100%匹配你的Excel截图
+    </div>
+</div>
+
+<script>
+// 格式化日期 2026年04月16日
+function fmtDate(d){
+    const y=d.getFullYear(),m=(d.getMonth()+1).toString().padStart(2,0),da=d.getDate().toString().padStart(2,0);
+    return `${y}年${m}月${da}日`;
+}
+
+// 2026年法定节假日判断 + 备注
+function getHolidayRemark(d){
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    const w = d.getDay();
+
+    // 元旦：1月1日-1月3日
+    if(m===1 && day>=1 && day<=3) return "节假日（元旦）";
+    // 春节：1月22日-1月28日
+    if(m===1 && day>=22 && day<=28) return "节假日（春节）";
+    // 清明：4月4日-4月6日
+    if(m===4 && day>=4 && day<=6) return "节假日（清明）";
+    // 五一：5月1日-5月5日
+    if(m===5 && day>=1 && day<=5) return "节假日（五一）";
+    // 端午：5月30日-5月31日
+    if(m===5 && day>=30 && day<=31) return "节假日（端午）";
+    // 中秋：9月25日-9月27日
+    if(m===9 && day>=25 && day<=27) return "节假日（中秋）";
+    // 国庆：10月1日-10月7日
+    if(m===10 && day>=1 && day<=7) return "节假日（国庆）";
+    // 周末
+    if(w===6) return "周末（周六）";
+    if(w===0) return "周末（周日）";
+    // 工作日
+    return "工作日";
+}
+
+// 判断是否为 节假日/周末（特殊日）
+function isSpecialDay(d){
+    const rm = getHolidayRemark(d);
+    return rm.includes("节假日") || rm.includes("周末");
+}
+
+// 生成CSV核心函数（完全匹配截图格式）
+function makeCSV(){
+    const nameList=document.getElementById('names').value.trim().split('\n').map(s=>s.trim()).filter(s=>s);
+    const startStr=document.getElementById('start').value;
+    const endStr=document.getElementById('end').value;
+    
+    if(nameList.length<2)return alert('人员至少2人');
+    if(!startStr || !endStr)return alert('请填写起止日期');
+
+    // 表头严格匹配你的Excel
+    let csv="日期,周末/节假日,9点跨天（工）,6点跨天（工）,备注\n";
+    let cur=new Date(startStr);
+    const end=new Date(endStr);
+    let idx=0;
+    const totalPeople = nameList.length;
+
+    // 核心循环（完全匹配截图逻辑）
+    while(cur<=end){
+        const dateStr=fmtDate(cur);
+        const remark = getHolidayRemark(cur);
+        const isSpecial = isSpecialDay(cur);
+
+        let holidayCol = "";  // 周末/节假日列
+        let nineCol = "";     // 9点跨天列
+        let sixCol = "";      // 6点跨天列
+
+        if(isSpecial){
+            // ✅ 节假日/周末：仅周末/节假日列填2人（中文逗号分隔），9点/6点列空
+            holidayCol = `${nameList[idx % totalPeople]}，${nameList[(idx + 1) % totalPeople]}`;
+            nineCol = "";
+            sixCol = "";
+            idx += 2;
+        }else{
+            // ✅ 工作日：9点/6点列各1人，周末/节假日列空
+            holidayCol = "";
+            nineCol = nameList[idx % totalPeople];
+            sixCol = nameList[(idx + 1) % totalPeople];
+            idx += 2;
+        }
+
+        // 拼接行（严格匹配列顺序）
+        csv += `${dateStr},${holidayCol},${nineCol},${sixCol},${remark}\n`;
+        
+        // 日期+1
+        cur.setDate(cur.getDate() + 1);
+    }
+
+    // 下载CSV（解决中文乱码）
+    const bom = "\uFEFF";
+    const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '2026值班排班表_最终版.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+function reset(){
+    document.getElementById('names').value='苏磊\n梁煦\n孙一\n徐泽昊\n马旭妍';
+    document.getElementById('start').value='2026-04-16';
+    document.getElementById('end').value='2026-04-21';
+}
+</script>
+</body>
+</html>

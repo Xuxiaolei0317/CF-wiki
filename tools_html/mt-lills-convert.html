@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bills对应美金值查询</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            display: none;
+        }
+        .result h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .result-item {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #555;
+        }
+        .error {
+            color: #dc3545;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bills对应美金值查询</h1>
+        <div class="input-group">
+            <label for="billsInput">请输入当前Bills数值：</label>
+            <input type="number" id="billsInput" placeholder="例如：50000" min="0">
+        </div>
+        <button id="queryBtn">查询</button>
+        <div class="error" id="errorMsg">输入的Bills不在数据范围内，请检查！</div>
+        <div class="result" id="resultArea">
+            <h2>查询结果</h2>
+            <div class="result-item">1$ 能量：<span id="energyVal"></span></div>
+            <div class="result-item">1$ 能量金币：<span id="energyCoinVal"></span></div>
+            <div class="result-item">1$ 真实金币：<span id="realCoinVal"></span></div>
+            <div class="result-item">1$ 商店金币：<span id="storeCoinVal"></span></div>
+        </div>
+    </div>
+
+    <script>
+        // 整理后的核心数据（截取表格关键区间，完整数据可按需补充）
+        const billsData = [
+            { start: 0, end: 50000, energy: 20, energyCoin: 5000, realCoin: 100000, storeCoin: 10000 },
+            { start: 50000, end: 107000, energy: 20, energyCoin: 6000, realCoin: 120000, storeCoin: 10000 },
+            { start: 107000, end: 138000, energy: 22, energyCoin: 6000, realCoin: 132000, storeCoin: 11000 },
+            { start: 138000, end: 207000, energy: 24, energyCoin: 6000, realCoin: 144000, storeCoin: 11000 },
+            { start: 207000, end: 268000, energy: 24, energyCoin: 7000, realCoin: 168000, storeCoin: 11000 },
+            { start: 268000, end: 298000, energy: 26, energyCoin: 7000, realCoin: 182000, storeCoin: 12000 },
+            { start: 298000, end: 3457000, energy: 26, energyCoin: 8000, realCoin: 208000, storeCoin: 12000 },
+            { start: 3457000, end: 4154000, energy: 28, energyCoin: 8000, realCoin: 224000, storeCoin: 13000 },
+            { start: 4154000, end: 5859000, energy: 30, energyCoin: 9000, realCoin: 270000, storeCoin: 14000 },
+            { start: 5859000, end: 6066000, energy: 30, energyCoin: 10000, realCoin: 300000, storeCoin: 14000 },
+            { start: 6066000, end: 6545000, energy: 32, energyCoin: 10000, realCoin: 320000, storeCoin: 15000 },
+            { start: 6545000, end: 6757000, energy: 32, energyCoin: 11000, realCoin: 352000, storeCoin: 16000 },
+            { start: 6757000, end: 7052000, energy: 34, energyCoin: 11000, realCoin: 374000, storeCoin: 17000 },
+            { start: 7052000, end: 8523000, energy: 34, energyCoin: 11500, realCoin: 414000, storeCoin: 18000 },
+            { start: 8523000, end: 9222000, energy: 36, energyCoin: 12000, realCoin: 432000, storeCoin: 21000 },
+            // 如需完整数据，可继续补充表格中剩余的区间...
+        ];
+
+        // 获取DOM元素
+        const billsInput = document.getElementById('billsInput');
+        const queryBtn = document.getElementById('queryBtn');
+        const resultArea = document.getElementById('resultArea');
+        const errorMsg = document.getElementById('errorMsg');
+        const energyVal = document.getElementById('energyVal');
+        const energyCoinVal = document.getElementById('energyCoinVal');
+        const realCoinVal = document.getElementById('realCoinVal');
+        const storeCoinVal = document.getElementById('storeCoinVal');
+
+        // 查询逻辑
+        function queryBillsValue() {
+            // 重置显示状态
+            resultArea.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // 获取输入值并校验
+            const inputBills = Number(billsInput.value);
+            if (isNaN(inputBills) || inputBills < 0) {
+                errorMsg.textContent = '请输入有效的非负数字！';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // 匹配对应区间
+            let matchData = null;
+            for (const item of billsData) {
+                if (inputBills >= item.start && inputBills < item.end) {
+                    matchData = item;
+                    break;
+                }
+            }
+
+            // 展示结果或错误
+            if (matchData) {
+                energyVal.textContent = matchData.energy;
+                energyCoinVal.textContent = matchData.energyCoin.toLocaleString(); // 数字格式化
+                realCoinVal.textContent = matchData.realCoin.toLocaleString();
+                storeCoinVal.textContent = matchData.storeCoin.toLocaleString();
+                resultArea.style.display = 'block';
+            } else {
+                errorMsg.textContent = '输入的Bills不在数据范围内，请检查！';
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // 绑定按钮点击事件
+        queryBtn.addEventListener('click', queryBillsValue);
+        // 支持回车查询
+        billsInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                queryBillsValue();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提取人机的名字</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+        }
+        body {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 6px;
+            background-color: #f9fafb;
+        }
+        .result-title {
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .name-list {
+            list-style: none;
+        }
+        .name-item {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .name-item:last-child {
+            border-bottom: none;
+        }
+        .success {
+            color: #059669;
+        }
+        .info {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>提取5位数ID的名字</h1>
+        
+        <div class="result-section">
+            <div class="result-title success">提取结果：</div>
+            <ul class="name-list" id="nameList">
+                <!-- 结果将在这里显示 -->
+            </ul>
+            <div class="info" id="info"></div>
+        </div>
+    </div>
+
+    <script>
+        // 数据
+        const data = {
+          "unlock_point": 20,
+          "rank_ls": [
+            [143, 167, "Angelica", 10027, 5, "tag16"],
+            [146, 166, "Candice", 10096, 5, "tag16"],
+            [113, 156, "Megan", 4, 5, "tag16"],
+            [134, 128, "Olivia", 10432, 1, "tag16"],
+            [144, 123, "Chris", 10343, 1, "tag16"],
+            [148, 113, "Samuel", 10233, 4, "tag16"],
+            [115, 93, "Lonnie", 10333, 2, "tag16"],
+            [123, 72, "Nina", 10426, 3, "tag17"],
+            [102, 71, "Matthew", 7, 3, "tag16"],
+            [138, 71, "Grace", 10239, 1, "tag16"],
+            [100, 69, "Thomas", 10402, 3, "tag17"],
+            [104, 60, "Traci", 10512, 5, "tag17"],
+            [126, 60, "Jon", 10542, 1, "tag17"],
+            [132, 59, "Iris", 10269, 1, "tag17"],
+            [117, 53, "Aria", 10035, 5, "tag17"],
+            [133, 36, "Paul", 5, 1, "tag17"],
+            [135, 31, "Derrick", 10241, 5, "tag17"],
+            [114, 29, "Blanche", 10067, 4, "tag17"],
+            [145, 28, "Margaret", 2, 1, "tag17"],
+            [137, 27, "Wanda", 10523, 1, "tag17"],
+            [10700, 20, "XL 10700", 0, 5, "player"],
+            [139, 13, "Brandon", 10148, 1, "tag11"],
+            [105, 12, "Jane", 10279, 4, "tag11"],
+            [112, 12, "Troy", 10400, 3, "tag11"],
+            [116, 11, "Scott", 8, 5, "tag11"],
+            [124, 10, "Larry", 2, 5, "tag11"],
+            [127, 10, "Jason", 10072, 3, "tag11"],
+            [119, 9, "Alma", 10018, 5, "tag11"],
+            [121, 9, "Isaac", 10196, 4, "tag11"],
+            [129, 9, "Jade", 10277, 3, "tag11"],
+            [118, 8, "Ann", 10030, 4, "tag11"],
+            [101, 7, "George", 10313, 1, "tag11"],
+            [142, 7, "Sherri", 10479, 5, "tag11"],
+            [103, 5, "Jacob", 10, 1, "tag15"],
+            [106, 5, "Joseph", 10346, 5, "tag15"],
+            [107, 5, "Victoria", 10521, 3, "tag15"],
+            [125, 5, "Marcus", 10262, 3, "tag15"],
+            [130, 5, "Luke", 10374, 4, "tag15"],
+            [131, 5, "Heidi", 10259, 1, "tag15"],
+            [136, 5, "Raymond", 10200, 3, "tag15"],
+            [128, 4, "Willie", 10161, 3, "tag15"],
+            [141, 4, "Keith", 10234, 4, "tag15"],
+            [109, 3, "Haley", 5, 4, "tag15"],
+            [110, 3, "Seth", 8, 1, "tag15"],
+            [120, 3, "Faith", 10213, 3, "tag15"],
+            [140, 3, "Stephanie", 10490, 2, "tag15"],
+            [147, 3, "Diane", 10174, 2, "tag15"],
+            [108, 2, "Nora", 10430, 5, "tag15"],
+            [111, 2, "Kayla", 10325, 1, "tag15"],
+            [122, 2, "Ruben", 10235, 4, "tag15"]
+          ],
+          "last_fresh_ts": 1775551956,
+          "last_robot_ts": 1775551956,
+          "player_idx": 20,
+          "rank_lv": 0
+        };
+
+        // 提取5位数ID的名字
+        function extractNamesWith5DigitId() {
+            const rankList = data.rank_ls;
+            const namesWith5DigitId = [];
+            
+            rankList.forEach(item => {
+                const id = item[3]; // 第4个元素是ID
+                const name = item[2];
+                // 检查ID是否为5位数
+                if (id >= 10000 && id <= 99999) {
+                    namesWith5DigitId.push({ name });
+                }
+            });
+            
+            return namesWith5DigitId;
+        }
+
+        // 显示结果
+        function displayResults() {
+            const results = extractNamesWith5DigitId();
+            const nameListEl = document.getElementById('nameList');
+            const infoEl = document.getElementById('info');
+            
+            if (results.length > 0) {
+                results.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'name-item';
+                    li.textContent = `${item.name}`;
+                    nameListEl.appendChild(li);
+                });
+                infoEl.textContent = `共找到 ${results.length} 个5位数ID的名字`;
+            } else {
+                const li = document.createElement('li');
+                li.className = 'name-item';
+                li.textContent = '没有找到5位数ID的名字';
+                nameListEl.appendChild(li);
+            }
+        }
+
+        // 页面加载时执行
+        window.onload = displayResults;
+    </script>
+</body>
+</html>
