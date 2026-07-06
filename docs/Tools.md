@@ -10,6 +10,7 @@
 ## [字体预览器](../tools_html/fontPreviewer.html)
 ## [Spin 剧本生成工具](../tools_html/spin-script-generator.html)
 ## [更新内容生成工具](../tools_html/release-update-tool.html)
+## [成就数据生成工具](../tools_html/achievement-data-generator.html)
 
 <!-- ## [TAPD 系统更新内容](../tools_html/tapd-release-plan.html) -->
 
