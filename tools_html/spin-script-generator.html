@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin 剧本生成工具</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #1f2937;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: #2563eb;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: #64748b;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 11px 12px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+        }
+
+        textarea {
+            min-height: 260px;
+            resize: vertical;
+            font-family: Consolas, Monaco, monospace;
+            line-height: 1.55;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+        }
+
+        .hint {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .symbol-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .symbol-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .symbol-table th,
+        .symbol-table td {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 10px 12px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .symbol-table th {
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 700;
+        }
+
+        .symbol-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 16px;
+            color: #fff;
+            background: #2563eb;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.15s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button.secondary {
+            background: #64748b;
+        }
+
+        button.secondary:hover {
+            background: #475569;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 16px;
+        }
+
+        .summary {
+            margin: 0;
+            padding: 14px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #1e3a8a;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .error {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #fef2f2;
+            color: #b91c1c;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 760px) {
+            .form-grid,
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="card">
+            <h1>Spin 剧本生成工具</h1>
+            <p class="subtitle">按图标 ID、剧本次数和大小生成三列 spin 结果，例如：[[3,3,3],[3,3,3]]</p>
+        </section>
+
+        <section class="card">
+            <label>Symbol ID 说明</label>
+            <div class="symbol-table-wrapper">
+                <table class="symbol-table">
+                    <thead>
+                        <tr>
+                            <th>字母</th>
+                            <th>ID</th>
+                            <th>英文名</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A</td><td>1</td><td>Shield</td><td>盾牌</td></tr>
+                        <tr><td>B</td><td>2</td><td>Steal</td><td>偷钱</td></tr>
+                        <tr><td>C</td><td>3</td><td>Attack</td><td>攻击</td></tr>
+                        <tr><td>D</td><td>4</td><td>Energy</td><td>能量(电池)</td></tr>
+                        <tr><td>E</td><td>5</td><td>Wild</td><td>Wild，和其他图标一起展示时会转换成其他图标</td></tr>
+                        <tr><td>F</td><td>6</td><td>Gold</td><td>大钱袋</td></tr>
+                        <tr><td>G</td><td>7</td><td>Coins</td><td>小金币</td></tr>
+                        <tr><td>H</td><td>8</td><td>Chest</td><td>宝箱，spin bet 大于等于 50 时才能使用</td></tr>
+                        <tr><td>I</td><td>9</td><td>CollectSymbol</td><td>活动收集道具 - 10001, 10007</td></tr>
+                        <tr><td>J</td><td>10</td><td>GoldenKeySymbol</td><td>活动钥匙道具 - 从 10201 到 10209</td></tr>
+                        <tr><td>K</td><td>11</td><td>DoublePassSymbol</td><td>活动钥匙道具 - 20013</td></tr>
+                        <tr><td>L</td><td>12</td><td>CooperativeTaskSymbol</td><td>合作任务道具 - 从 10301 到 10304</td></tr>
+                        <tr><td>M</td><td>13</td><td>FreeSpinSymbol</td><td>free_spin 活动 symbol - 10403</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="form-grid">
+                <div class="field">
+                    <label for="prizeId">Prize ID / 图标 ID</label>
+                    <input id="prizeId" type="number" value="3" step="1">
+                    <div class="hint">目标图标 ID。基础图标使用 1-7，没有 0；其中 5 是 wild，和其他图标一起展示时会转换成其他图标。</div>
+                </div>
+
+                <div class="field">
+                    <label for="scriptCount">剧本次数</label>
+                    <input id="scriptCount" type="number" value="10" min="1" step="1">
+                    <div class="hint">生成多少个小数组，每个小数组固定 3 个位置。</div>
+                </div>
+
+                <div class="field">
+                    <label for="sizeType">大小</label>
+                    <select id="sizeType">
+                        <option value="big">大：3 个相同 ID</option>
+                        <option value="medium">中：2 个相同 ID + 1 个随机 ID</option>
+                        <option value="small">小：1 个相同 ID + 2 个随机 ID</option>
+                    </select>
+                    <div class="hint">随机 ID 会从候选池中排除当前 Prize ID 后抽取。默认不放入 5，避免 wild 把中/小结果转成更高连线。</div>
+                </div>
+
+                <div class="field">
+                    <label for="candidateIds">随机候选 ID</label>
+                    <input id="candidateIds" type="text" value="1,2,3,4,6,7">
+                    <div class="hint">用英文逗号、空格或换行分隔。默认使用 1-7，并排除 wild ID 5。</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="generateBtn" type="button">生成剧本</button>
+                <button id="copyBtn" type="button" class="secondary">复制结果</button>
+                <button id="resetBtn" type="button" class="secondary">恢复默认</button>
+            </div>
+            <div id="errorBox" class="error"></div>
+        </section>
+
+        <section class="card">
+            <div class="result-grid">
+                <div class="field">
+                    <label for="output">生成结果</label>
+                    <textarea id="output" readonly></textarea>
+                </div>
+                <div>
+                    <label>生成摘要</label>
+                    <p id="summary" class="summary">点击“生成剧本”后查看结果。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const DEFAULT_IDS = '1,2,3,4,6,7';
+        const prizeInput = document.getElementById('prizeId');
+        const countInput = document.getElementById('scriptCount');
+        const sizeSelect = document.getElementById('sizeType');
+        const candidateInput = document.getElementById('candidateIds');
+        const output = document.getElementById('output');
+        const summary = document.getElementById('summary');
+        const errorBox = document.getElementById('errorBox');
+
+        function parseInteger(value, label) {
+            const number = Number(value);
+            if (!Number.isInteger(number)) {
+                throw new Error(`${label} 必须是整数`);
+            }
+            return number;
+        }
+
+        function parseCandidateIds(value) {
+            const ids = value
+                .split(/[\s,，]+/)
+                .map(item => item.trim())
+                .filter(Boolean)
+                .map(item => parseInteger(item, '随机候选 ID'));
+
+            return [...new Set(ids)];
+        }
+
+        function getSameCount(size) {
+            if (size === 'big') {
+                return 3;
+            }
+            if (size === 'medium') {
+                return 2;
+            }
+            return 1;
+        }
+
+        function pickRandom(list) {
+            return list[Math.floor(Math.random() * list.length)];
+        }
+
+        function shuffle(list) {
+            const result = [...list];
+            for (let index = result.length - 1; index > 0; index -= 1) {
+                const target = Math.floor(Math.random() * (index + 1));
+                [result[index], result[target]] = [result[target], result[index]];
+            }
+            return result;
+        }
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.style.display = 'block';
+        }
+
+        function clearError() {
+            errorBox.textContent = '';
+            errorBox.style.display = 'none';
+        }
+
+        function generateScript() {
+            clearError();
+
+            try {
+                const prizeId = parseInteger(prizeInput.value, 'Prize ID');
+                const count = parseInteger(countInput.value, '剧本次数');
+                const sameCount = getSameCount(sizeSelect.value);
+                const candidates = parseCandidateIds(candidateInput.value);
+                const randomPool = candidates.filter(id => id !== prizeId);
+
+                if (count < 1) {
+                    throw new Error('剧本次数必须大于 0');
+                }
+                if (randomPool.length < 1 && sameCount < 3) {
+                    throw new Error('中/小结果需要至少 1 个不同于当前 Prize ID 的随机候选 ID');
+                }
+
+                const rows = Array.from({ length: count }, () => {
+                    const row = Array.from({ length: sameCount }, () => prizeId);
+                    while (row.length < 3) {
+                        row.push(pickRandom(randomPool));
+                    }
+                    return shuffle(row);
+                });
+
+                output.value = JSON.stringify(rows);
+                summary.textContent = [
+                    `目标 ID：${prizeId}`,
+                    `剧本次数：${count}`,
+                    `大小：${sizeSelect.options[sizeSelect.selectedIndex].text}`,
+                    `随机池：${sameCount === 3 ? '未使用' : randomPool.join(', ')}`
+                ].join('\n');
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        async function copyOutput() {
+            clearError();
+            if (!output.value) {
+                showError('请先生成剧本');
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(output.value);
+                summary.textContent = `${summary.textContent}\n\n已复制到剪贴板。`;
+            } catch (error) {
+                output.select();
+                document.execCommand('copy');
+                summary.textContent = `${summary.textContent}\n\n已复制到剪贴板。`;
+            }
+        }
+
+        function resetForm() {
+            prizeInput.value = '3';
+            countInput.value = '10';
+            sizeSelect.value = 'big';
+            candidateInput.value = DEFAULT_IDS;
+            output.value = '';
+            summary.textContent = '点击“生成剧本”后查看结果。';
+            clearError();
+        }
+
+        document.getElementById('generateBtn').addEventListener('click', generateScript);
+        document.getElementById('copyBtn').addEventListener('click', copyOutput);
+        document.getElementById('resetBtn').addEventListener('click', resetForm);
+
+        generateScript();
+    </script>
+</body>
+</html>

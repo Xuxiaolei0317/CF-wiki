@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TAPD 系统更新内容</title>
+  <link rel="stylesheet" href="./tool-common.css">
+  <script src="./tool-common.js" defer></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f7fb;
+      color: #1f2937;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+
+    .page-wrap {
+      width: min(960px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0;
+    }
+
+    main {
+      padding: 28px;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      color: #2563eb;
+      text-align: center;
+      font-size: 30px;
+    }
+
+    .desc {
+      margin: 0 0 24px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .tool-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      background: #fafafa;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #111827;
+      font-weight: 700;
+    }
+
+    .project-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .project-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    input[type="date"],
+    textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input[type="date"] {
+      max-width: 240px;
+      padding: 11px 12px;
+    }
+
+    textarea {
+      min-height: 360px;
+      padding: 14px 16px;
+      line-height: 1.7;
+      resize: vertical;
+      white-space: pre;
+    }
+
+    input[type="date"]:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button,
+    .action-link {
+      min-width: 120px;
+      padding: 11px 18px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover,
+    .action-link:hover {
+      transform: translateY(-1px);
+      text-decoration: none;
+    }
+
+    .primary {
+      background: #2563eb;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.24);
+    }
+
+    .primary:hover {
+      background: #1d4ed8;
+      color: #fff;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    .secondary:hover {
+      background: #d1d5db;
+      color: #1f2937;
+    }
+
+    .meta {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    .status {
+      min-height: 24px;
+      margin: 0;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .status.error {
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 6px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    @media (max-width: 640px) {
+      .page-wrap {
+        width: min(100% - 24px, 960px);
+        padding: 56px 0 24px;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      button,
+      .action-link {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <main>
+      <h1>TAPD 系统更新内容</h1>
+      <p class="desc">通过 GitHub Actions 查询 TAPD 发布计划，页面读取最新结果并生成可复制的系统更新内容。</p>
+
+      <div class="tool-panel">
+        <section class="panel">
+          <label>项目</label>
+          <div class="project-options">
+            <label class="project-option">
+              <input type="radio" name="project" value="both" checked>
+              全部
+            </label>
+            <label class="project-option">
+              <input type="radio" name="project" value="CF">
+              CF
+            </label>
+            <label class="project-option">
+              <input type="radio" name="project" value="MT">
+              MT
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <label for="query-date">查询日期</label>
+          <input id="query-date" type="date">
+          <p class="meta">按所选日期所在自然周查询。打开查询任务后，在 GitHub Actions 中选择相同项目和日期运行。</p>
+        </section>
+
+        <div class="actions">
+          <a class="action-link primary" id="workflow-link" href="https://github.com/Xuxiaolei0317/CF-wiki/actions/workflows/tapd-weekly-release-plan.yml" target="_blank" rel="noopener">打开查询任务</a>
+          <button class="secondary" type="button" id="wait-btn">等待最新结果</button>
+          <button class="secondary" type="button" id="refresh-btn">刷新最新结果</button>
+          <button class="secondary" type="button" id="copy-btn">复制结果</button>
+        </div>
+
+        <section class="panel">
+          <p class="meta" id="result-meta">尚未读取结果。</p>
+        </section>
+
+        <section>
+          <label for="result">查询结果</label>
+          <textarea id="result" placeholder="运行 GitHub Actions 查询任务后，点击“刷新最新结果”或“等待最新结果”。"></textarea>
+        </section>
+
+        <p class="status" id="status"></p>
+
+        <section class="panel">
+          <p class="meta">
+            GitHub Actions 会生成 <code>docs/data/tapd-weekly-release-plan.json</code>；
+            页面读取该 JSON，并把其中的文本填入上方结果框。
+          </p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const DATA_URL = '../data/tapd-weekly-release-plan.json';
+    const POLL_INTERVAL = 10000;
+    const POLL_TIMEOUT = 10 * 60 * 1000;
+    const queryDate = document.getElementById('query-date');
+    const result = document.getElementById('result');
+    const resultMeta = document.getElementById('result-meta');
+    const statusEl = document.getElementById('status');
+    const waitBtn = document.getElementById('wait-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    let pollTimer = null;
+
+    function todayString() {
+      const now = new Date();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${now.getFullYear()}-${month}-${day}`;
+    }
+
+    function getSelectedProject() {
+      return document.querySelector('input[name="project"]:checked').value;
+    }
+
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.classList.toggle('error', isError);
+    }
+
+    function formatTime(value) {
+      if (!value) {
+        return '未知';
+      }
+      return new Date(value).toLocaleString('zh-CN', { hour12: false });
+    }
+
+    async function loadLatestResult() {
+      const response = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`读取最新结果失败：HTTP ${response.status}。请先运行 GitHub Actions 查询任务。`);
+      }
+      return response.json();
+    }
+
+    function renderResult(data) {
+      const project = getSelectedProject();
+      let text = data.text || '';
+
+      result.value = text;
+      resultMeta.innerHTML = [
+        `生成时间：<code>${formatTime(data.generated_at)}</code>`,
+        `查询日期：<code>${data.query_date || queryDate.value}</code>`,
+        `查询周：<code>${data.week_start || '-'} ~ ${data.week_end || '-'}</code>`,
+        `查询项目：<code>${data.project || '-'}</code>`,
+        `数据来源：<code>${data.source || 'unknown'}</code>`
+      ].join('<br>');
+
+      if (data.project && data.project !== project) {
+        setStatus(`已读取最新结果，但结果项目是 ${data.project}，当前页面选择的是 ${project}。`, false);
+        return;
+      }
+      setStatus(text ? '已读取最新结果，可以复制。' : '当前结果没有可展示内容。', !text);
+    }
+
+    async function refreshResult() {
+      try {
+        setStatus('正在读取最新结果...');
+        const data = await loadLatestResult();
+        renderResult(data);
+      } catch (error) {
+        result.value = '';
+        setStatus(error.message || '读取结果失败。', true);
+      }
+    }
+
+    async function waitLatestResult() {
+      const waitStartedAt = Date.now();
+      const deadline = waitStartedAt + POLL_TIMEOUT;
+      waitBtn.disabled = true;
+
+      async function poll() {
+        try {
+          setStatus('正在等待 GitHub Actions 生成并部署最新结果...');
+          const data = await loadLatestResult();
+          const generatedAt = Date.parse(data.generated_at || '');
+          if (Number.isFinite(generatedAt) && generatedAt >= waitStartedAt) {
+            renderResult(data);
+            waitBtn.disabled = false;
+            return;
+          }
+        } catch (error) {
+          if (Date.now() >= deadline) {
+            setStatus(error.message || '等待最新结果超时。', true);
+            waitBtn.disabled = false;
+            return;
+          }
+        }
+
+        if (Date.now() >= deadline) {
+          setStatus('等待最新结果超时，请确认 GitHub Actions 是否运行成功。', true);
+          waitBtn.disabled = false;
+          return;
+        }
+
+        pollTimer = window.setTimeout(poll, POLL_INTERVAL);
+      }
+
+      if (pollTimer) {
+        window.clearTimeout(pollTimer);
+      }
+      pollTimer = window.setTimeout(poll, 1000);
+    }
+
+    function updateWorkflowHint() {
+      const project = getSelectedProject();
+      setStatus(`请在 GitHub Actions 中选择 project=${project}，date=${queryDate.value || '当天'} 后运行。`);
+    }
+
+    document.querySelectorAll('input[name="project"]').forEach((input) => {
+      input.addEventListener('change', updateWorkflowHint);
+    });
+
+    queryDate.addEventListener('change', updateWorkflowHint);
+
+    async function copyResult() {
+      const text = result.value.trim();
+      if (!text) {
+        setStatus('没有可复制的内容。', true);
+        return;
+      }
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          result.focus();
+          result.select();
+          document.execCommand('copy');
+        }
+        setStatus('已复制到剪贴板。');
+      } catch (error) {
+        result.focus();
+        result.select();
+        setStatus('浏览器不允许自动复制，已选中文本，请按 Ctrl+C / Command+C 手动复制。', true);
+      }
+    }
+
+    queryDate.value = todayString();
+    waitBtn.addEventListener('click', waitLatestResult);
+    refreshBtn.addEventListener('click', refreshResult);
+    copyBtn.addEventListener('click', copyResult);
+  </script>
+</body>
+</html>

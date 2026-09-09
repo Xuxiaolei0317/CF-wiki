@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块解锁状态转换工具</title>
+    <link rel="stylesheet" href="./tool-common.css">
+    <script src="./tool-common.js" defer></script>
+    <style>
+        /* 保持原有样式不变 */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h2, h3 {
+            color: #555;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.secondary {
+            background-color: #f44336;
+        }
+        button.secondary:hover {
+            background-color: #d32f2f;
+        }
+        button.reset {
+            background-color: #2196F3;
+        }
+        button.reset:hover {
+            background-color: #1976D2;
+        }
+        .status-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .status-box {
+            margin: 5px 0;
+        }
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .module-card {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .module-card.unlocked {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .module-card.locked {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .module-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .module-status {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>模块解锁状态转换工具</h1>
+        
+        <h2>初始设置:</h2>
+        <div class="input-group">
+            <label for="initialState">输入当前字节序列，去GM搜索：解锁标记（如:\xff\x01\x00\x00 ）:</label>
+            <input type="text" id="initialState" placeholder="输入字节序列，如: \x00\x00\x00\x00" value="\x00\x00\x00\x00">
+        </div>
+        
+        <h2>操作:输入字节序列后，先点击“重置”按钮，再操作模块索引</h2>
+        <div class="input-group">
+            <label for="moduleIndex">模块索引:</label>
+            <input type="number" id="moduleIndex" min="0" max="9" value="0">
+        </div>
+        <div class="input-group">
+            <button id="unlockBtn">解锁模块</button>
+            <button id="lockBtn">锁定模块</button>
+            <button id="resetBtn">重置</button>
+        </div>
+        
+        <h2>当前状态:</h2>
+        <div class="status-section">
+            <div class="status-box">
+                <strong style="color: #ef4f05;">字节序列: { </strong> <span id="bytesStatus">\xa9\x01\x00\x00</span><strong style="color: #ef4f05;"> }</strong>
+                <button id="copyBytesBtn" style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">复制</button>
+            </div>
+            <div class="status-box">
+                <strong>十六进制表示:</strong> <span id="hexStatus">0xa9020000</span>
+            </div>
+            <div class="status-box">
+                <strong>二进制表示:</strong> <span id="binaryStatus">10101001 00000010 00000000 00000000</span>
+            </div>
+        </div>
+        
+        <h3>模块状态:</h3>
+        <div class="modules-grid" id="modulesGrid">
+            <!-- 模块状态将通过JavaScript动态生成 -->
+        </div>
+    </div>
+    
+    <script>
+        // ModuleUnlockManager类的JavaScript实现
+        class ModuleUnlockManager {
+            // 保持原有实现不变
+            constructor(initialState) {
+                this._state = initialState;
+                this.num_modules = 8 * this._state.length;
+            }
+            
+            _get_bit_location(module_index) {
+                if (!(0 <= module_index < this.num_modules)) {
+                    throw new Error(`模块索引 ${module_index} 超出范围 (0-${this.num_modules - 1})。`);
+                }
+                
+                const byte_index = Math.floor(module_index / 8);
+                const bit_index = module_index % 8;
+                return { byte_index, bit_index };
+            }
+            
+            is_unlocked(module_index) {
+                const { byte_index, bit_index } = this._get_bit_location(module_index);
+                const mask = 1 << bit_index;
+                return (this._state[byte_index] & mask) !== 0;
+            }
+            
+            unlock(module_index) {
+                const { byte_index, bit_index } = this._get_bit_location(module_index);
+                const mask = 1 << bit_index;
+                
+                // 创建一个新的Uint8Array以修改值
+                const state_array = new Uint8Array(this._state);
+                state_array[byte_index] |= mask;
+                
+                this._state = state_array;
+            }
+            
+            lock(module_index) {
+                const { byte_index, bit_index } = this._get_bit_location(module_index);
+                const mask = 1 << bit_index;
+                
+                // 创建一个新的Uint8Array以修改值
+                const state_array = new Uint8Array(this._state);
+                state_array[byte_index] &= ~mask;
+                
+                this._state = state_array;
+            }
+            
+            getHexString() {
+                return '0x' + Array.from(this._state).map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+            
+            getBinaryString() {
+                return Array.from(this._state)
+                    .map(byte => byte.toString(2).padStart(8, '0'))
+                    .join(' ');
+            }
+            
+            getBytesString() {
+                // 返回不带b''的字节序列
+                return Array.from(this._state)
+                    .map(byte => '\\x' + byte.toString(16).padStart(2, '0'))
+                    .join('');
+            }
+        }
+        
+        // 页面相关的JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const initialStateInput = document.getElementById('initialState');
+            const moduleIndexInput = document.getElementById('moduleIndex');
+            const unlockBtn = document.getElementById('unlockBtn');
+            const lockBtn = document.getElementById('lockBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const hexStatus = document.getElementById('hexStatus');
+            const binaryStatus = document.getElementById('binaryStatus');
+            const bytesStatus = document.getElementById('bytesStatus');
+            const modulesGrid = document.getElementById('modulesGrid');
+            const copyBytesBtn = document.getElementById('copyBytesBtn');
+            
+            // 模块名称映射
+            const MODULE_NAMES = {
+                0: '0-每日任务',
+                1: '1-quest',
+                2: '2-MP',
+                3: '3-邮票',
+                4: '4-登录奖励',
+                5: '5-好友',
+                6: '6-C活动',
+                7: '7-OOS促销',
+                8: '8-推送奖励', 
+                9: '9-首次改名',
+                10: '10-首次10104',
+                11: '11-邮票赛季',
+                12: '12-邀请玩家',
+                13: '13-公会',
+                14: '14-老虎机JP',
+                15: '15-解锁盾牌',
+                16: '16-FB首次改名',
+                17: '17-首次宝箱',
+                18: '18-新岛屿一',
+                19: '19-每日任务',
+                20: '20-经营事件系统',
+                21: '21-Growth Trail',
+                22: '22-unlock_nu_force_aid',
+                23: '23-new_island_two',
+                24: '24-超级偷钱',
+            };
+            
+            // 获取最大模块索引
+            const maxModuleIndex = Math.max(...Object.keys(MODULE_NAMES).map(Number));
+            
+            // 更新输入框的max属性和标签文本
+            moduleIndexInput.max = maxModuleIndex;
+            const moduleIndexLabel = moduleIndexInput.previousElementSibling;
+            if (moduleIndexLabel && moduleIndexLabel.tagName === 'LABEL') {
+                moduleIndexLabel.textContent = `模块索引 (0 - ${maxModuleIndex}):`;
+            }
+            
+            let manager = null;
+            
+            // 初始化管理器
+            function initManager() {
+                // 保持原有实现不变
+                try {
+                    // 解析初始状态
+                    let initialValue = initialStateInput.value.trim();
+                    let bytes;
+                    
+                    // 检查是否是字节序列格式 (\xXX\xYY\xZZ)
+                    if (initialValue.includes('\\x')) {
+                        // 移除可能的b''前缀和后缀
+                        initialValue = initialValue.replace(/^b'|'$/g, '');
+                        // 匹配所有\xXX格式的十六进制数
+                        const matches = initialValue.match(/\\x([0-9a-fA-F]{2})/g);
+                        if (!matches) {
+                            throw new Error('无效的字节序列格式');
+                        }
+                        // 转换为字节数组
+                        bytes = new Uint8Array(matches.map(match => parseInt(match.slice(2), 16)));
+                    } else {
+                        // 保持原有十六进制解析逻辑
+                        let initialHex = initialValue;
+                        // 移除可能的0x前缀
+                        if (initialHex.startsWith('0x')) {
+                            initialHex = initialHex.slice(2);
+                        }
+                        // 确保长度为偶数
+                        if (initialHex.length % 2 !== 0) {
+                            initialHex = '0' + initialHex;
+                        }
+                        // 转换为字节数组
+                        bytes = new Uint8Array(initialHex.length / 2);
+                        for (let i = 0; i < initialHex.length; i += 2) {
+                            bytes[i / 2] = parseInt(initialHex.substr(i, 2), 16);
+                        }
+                    }
+                    
+                    const requiredByteLength = Math.ceil((maxModuleIndex + 1) / 8);
+                    if (bytes.length < requiredByteLength) {
+                        const paddedBytes = new Uint8Array(requiredByteLength);
+                        paddedBytes.set(bytes);
+                        bytes = paddedBytes;
+                    }
+                    
+                    manager = new ModuleUnlockManager(bytes);
+                    updateDisplay();
+                } catch (error) {
+                    alert('初始化失败: ' + error.message);
+                }
+            }
+            
+            // 更新显示
+            function updateDisplay() {
+                // 保持原有实现不变
+                hexStatus.textContent = manager.getHexString();
+                binaryStatus.textContent = manager.getBinaryString();
+                bytesStatus.textContent = manager.getBytesString();
+                
+                // 更新模块状态
+                updateModulesGrid();
+            }
+            
+            // 更新模块网格
+            function updateModulesGrid() {
+                // 清空现有模块
+                modulesGrid.innerHTML = '';
+                
+                // 生成每个模块的状态
+                for (let i = 0; i <= maxModuleIndex; i++) {
+                    const moduleCard = document.createElement('div');
+                    moduleCard.className = `module-card ${manager.is_unlocked(i) ? 'unlocked' : 'locked'}`;
+                    
+                    const moduleName = document.createElement('div');
+                    moduleName.className = 'module-name';
+                    moduleName.textContent = MODULE_NAMES[i] || `模块 ${i}`;
+                    
+                    const moduleStatus = document.createElement('div');
+                    moduleStatus.className = 'module-status';
+                    moduleStatus.textContent = manager.is_unlocked(i) ? '已解锁' : '已锁定';
+                    
+                    moduleCard.appendChild(moduleName);
+                    moduleCard.appendChild(moduleStatus);
+                    modulesGrid.appendChild(moduleCard);
+                }
+            }
+            
+            // 事件监听
+            unlockBtn.addEventListener('click', function() {
+                // 保持原有实现不变
+                try {
+                    const moduleIndex = parseInt(moduleIndexInput.value);
+                    manager.unlock(moduleIndex);
+                    updateDisplay();
+                } catch (error) {
+                    alert('解锁失败: ' + error.message);
+                }
+            });
+            
+            lockBtn.addEventListener('click', function() {
+                // 保持原有实现不变
+                try {
+                    const moduleIndex = parseInt(moduleIndexInput.value);
+                    manager.lock(moduleIndex);
+                    updateDisplay();
+                } catch (error) {
+                    alert('锁定失败: ' + error.message);
+                }
+            });
+            
+            resetBtn.addEventListener('click', initManager);
+            
+            // 复制字节序列按钮事件
+            copyBytesBtn.addEventListener('click', function() {
+                try {
+                    const bytesToCopy = bytesStatus.textContent;
+                    navigator.clipboard.writeText(bytesToCopy).then(function() {
+                        // 显示复制成功提示
+                        const originalText = copyBytesBtn.textContent;
+                        copyBytesBtn.textContent = '已复制!';
+                        copyBytesBtn.style.backgroundColor = '#4CAF50';
+                        setTimeout(function() {
+                            copyBytesBtn.textContent = originalText;
+                            copyBytesBtn.style.backgroundColor = '';
+                        }, 2000);
+                    }).catch(function(err) {
+                        console.error('复制失败:', err);
+                        alert('复制失败，请手动复制');
+                    });
+                } catch (error) {
+                    alert('复制失败: ' + error.message);
+                }
+            });
+            
+            // 初始加载
+            initManager();
+        });
+    </script>
+</body>
+</html>
